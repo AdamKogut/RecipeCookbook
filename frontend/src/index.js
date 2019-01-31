@@ -5,13 +5,17 @@ import App from "./components/App";
 import * as serviceWorker from "./serviceWorker";
 import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
-import reducers from './reducers';
+import { Router } from "react-router-dom";
+import reducers from "./reducers";
+import history from './history'
 
 const store = createStore(reducers, {}, applyMiddleware());
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <Router history={history}>
+      <App />
+    </Router>
   </Provider>,
   document.getElementById("root")
 );
