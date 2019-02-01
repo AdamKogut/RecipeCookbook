@@ -6,8 +6,8 @@ class mainGrocery extends Component {
 
   render() {
     return (
-      <div>
-
+      <div className='BigDivArea'>
+        Grocery
       </div>
     );
   }

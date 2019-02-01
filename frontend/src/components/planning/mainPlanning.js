@@ -6,8 +6,8 @@ class mainPlanning extends Component {
 
   render() {
     return (
-      <div>
-
+      <div className='BigDivArea'>
+        Planning
       </div>
     );
   }

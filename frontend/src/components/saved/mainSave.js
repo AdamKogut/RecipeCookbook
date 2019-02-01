@@ -6,8 +6,8 @@ class mainSave extends Component {
 
   render() {
     return (
-      <div>
-
+      <div className='BigDivArea'>
+        Save
       </div>
     );
   }

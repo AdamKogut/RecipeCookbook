@@ -6,8 +6,8 @@ class mainHome extends Component {
 
   render() {
     return (
-      <div>
-
+      <div className='BigDivArea'>
+        
       </div>
     );
   }
