@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
 import { AppBar, Toolbar, Tabs, Tab, Button } from "@material-ui/core";
+import LoginButton from './LoginButton';
 import History from '../../history';
 
 class Header extends Component {
@@ -52,12 +53,7 @@ class Header extends Component {
             <Tab label="Meal Planning" value={3} />
             <Tab label="Saved Recipes" value={4} />
           </Tabs>
-          <Button
-            onClick={this.handleLogin}
-            style={{ position: "absolute", right: "10px" }}
-          >
-            Create Account/Login
-          </Button>
+          <LoginButton />
         </Toolbar>
       </AppBar>
     );

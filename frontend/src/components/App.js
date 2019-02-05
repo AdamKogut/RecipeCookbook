@@ -8,6 +8,8 @@ import MainPlanning from "./planning/mainPlanning";
 import MainGrocery from "./grocery/mainGrocery";
 import MainHome from "./home/mainHome";
 import MainPantry from "./pantry/mainPantry";
+import { connect } from 'react-redux';
+import * as actions from '../actions';
 import "./App.css";
 
 class App extends Component {
@@ -20,6 +22,10 @@ class App extends Component {
       danger: "orange"
     }
   });
+
+  componentDidMount(){
+    this.props.fetchUser();
+  }
 
   render() {
     return (
@@ -40,4 +46,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default connect(null, actions)(App);
