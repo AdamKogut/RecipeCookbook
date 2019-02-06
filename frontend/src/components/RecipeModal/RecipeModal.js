@@ -1,7 +1,7 @@
 import React from 'react';
 import './RecipeModal.css';
 
-import { Modal, Paper } from '@material-ui/core';
+import { Modal, Paper, Button } from '@material-ui/core';
 import Loader from "../Loader/Loader";
 
 class RecipeModal extends React.Component {
@@ -12,11 +12,12 @@ class RecipeModal extends React.Component {
       recipe: {}
     };
 
+    // Grab the recipe data from the api using props.id
     setTimeout(() => {
       this.setState({
         recipe: {
-          title: 'asdf',
-          description: 'lorum ipsum blah blah blah',
+          title: 'Delicious Burger',
+          description: 'Insert description/recipe here',
           img: 'https://assets3.thrillist.com/v1/image/2797371/size/tmg-article_default_mobile.jpg'
         }
       });
@@ -30,9 +31,33 @@ class RecipeModal extends React.Component {
   render () {
     let content;
     if (this.state.recipe.title) {
+      const recipe = this.state.recipe;
+
       content = (
         <div>
-          Hello world!
+          <h1 id={'recipe-modal-title'}>
+            {recipe.title}
+          </h1>
+
+          <img id={'recipe-modal-image'} src={recipe.img} />
+
+          <div id={'recipe-modal-toolbar'}>
+            <Button variant="contained" color="primary">
+              Save
+            </Button>
+
+            <Button variant="contained">
+              Add to Groceries
+            </Button>
+
+            <Button variant="contained">
+              Print
+            </Button>
+          </div>
+
+          <Paper id={'recipe-modal-description'}>
+            {recipe.description}
+          </Paper>
         </div>
       );
     } else {

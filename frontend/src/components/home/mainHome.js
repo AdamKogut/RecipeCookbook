@@ -4,7 +4,7 @@ import "./mainHome.css";
 import BodyContainer from '../BodyContainer/BodyContainer';
 import RecipeCard from '../RecipeCard/RecipeCard';
 import Loader from '../Loader/Loader';
-import { Grid } from '@material-ui/core';
+import { Grid, TextField } from '@material-ui/core';
 import RecipeModal from "../RecipeModal/RecipeModal";
 
 class mainHome extends Component {
@@ -13,9 +13,27 @@ class mainHome extends Component {
     super(props);
 
     this.state = {
-      displayedRecipe: null
+      displayedRecipe: null,
+      results: null,
+      searchBarValue: '',
+      isLoadingSearch: false
     };
+  }
 
+  search = () => {
+    const searchValue = this.state.searchBarValue;
+
+    // Empty search base case
+    if (searchValue === '') {
+      this.setState({
+        results: null,
+        isLoadingSearch: false
+      });
+
+      return;
+    }
+
+    // **** Test code to simulate a search
     let results = [];
 
     for (let i = 0; i < 20; i++) {
@@ -26,18 +44,23 @@ class mainHome extends Component {
       });
     }
 
-    console.log(results);
+    // Render the loader while we wait for results
+    this.setState({
+      isLoadingSearch: true
+    });
 
+    // Set the TEST results once we get them back from the server
     setTimeout(() => {
       this.setState({
-          results
+        results,
+        isLoadingSearch: false
       });
     }, 1000);
-  }
+  };
 
   onRecipeClick = (id) => {
     this.setState({
-        displayedRecipe: id
+      displayedRecipe: id
     });
   };
 
@@ -51,7 +74,13 @@ class mainHome extends Component {
 
     // Build out the Results list
     const cards = [];
-    if (this.state.results) {
+    if (this.state.isLoadingSearch) {
+      cards.push(
+        <Grid item xs={12}>
+          <Loader/>
+        </Grid>
+      );
+    } else if (this.state.results) {
       for (let i = 0; i < this.state.results.length; i++) {
         const recipe = this.state.results[i];
 
@@ -66,12 +95,6 @@ class mainHome extends Component {
           </Grid>
         );
       }
-    } else {
-      cards.push(
-        <Grid item xs={12}>
-          <Loader/>
-        </Grid>
-      );
     }
 
     return (
@@ -82,6 +105,27 @@ class mainHome extends Component {
         />
 
         <BodyContainer>
+          <TextField
+            id={'recipe-search-bar'}
+            value={this.state.searchBarValue}
+            label={'Search for a Recipe'}
+            type={'search'}
+            fullWidth
+            onChange={(event) => {
+              this.setState({
+                searchBarValue: event.target.value
+              })
+            }}
+            onKeyPress={(e) => {
+              if (e.key === 'Enter') {
+                this.search();
+              }
+            }}
+          />
+
+          <br/>
+          <br/>
+
           <Grid id={'search-results'} container spacing={24}>
             {cards}
           </Grid>
