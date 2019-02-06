@@ -8,9 +8,16 @@ class RecipeCard extends React.Component {
     super(props);
   }
 
+  handleClick  = () => {
+    this.props.onClick(this.props.id);
+  };
+
   render () {
     return (
-      <Card>
+      <Card
+        onClick={this.handleClick}
+        className={'recipe-card'}
+      >
         <CardHeader
           title={this.props.title}
         />

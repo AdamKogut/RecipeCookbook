@@ -1,0 +1,9 @@
+.modal-container {
+    position: absolute;
+    width: 70vw;
+    padding: 20px;
+    margin: 50px 0;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
