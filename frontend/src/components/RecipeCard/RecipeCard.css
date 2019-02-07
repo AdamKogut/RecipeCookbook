@@ -1,0 +1,12 @@
+.recipe-media {
+   height: 0;
+   padding-top: 56.25%;
+ }
+
+.recipe-card:hover {
+  cursor: pointer;
+}
+
+.recipe-card-header {
+  font-size: 1.3rem !important;
+}

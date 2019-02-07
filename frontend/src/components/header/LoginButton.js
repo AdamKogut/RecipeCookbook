@@ -4,7 +4,7 @@ import {Button} from '@material-ui/core';
 class LoginButton extends Component {
   handleLogin=()=>{
     window.location.href = "/auth/google";
-  }
+  };
 
   render() {
     return (
