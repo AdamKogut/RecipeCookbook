@@ -5,7 +5,7 @@ import "./mainHome.css";
 import BodyContainer from '../BodyContainer/BodyContainer';
 import RecipeCard from '../RecipeCard/RecipeCard';
 import Loader from '../Loader/Loader';
-import { Grid, TextField } from '@material-ui/core';
+import { Button, Grid, TextField, Collapse, FormControl, InputLabel, Select, MenuItem, Paper } from '@material-ui/core';
 import RecipeModal from "../RecipeModal/RecipeModal";
 
 class mainHome extends Component {
@@ -39,8 +39,8 @@ class mainHome extends Component {
       isLoadingSearch: true
     });
 
-    // Set the TEST results once we get them back from the server
-    axios.post('http://localhost:8080/search', {
+    // Set the results once we get them back from the server
+    axios.post('http://localhost:8080/', {
       query: searchValue,
       number: "16"
     }).then((response) => {
@@ -125,6 +125,52 @@ class mainHome extends Component {
 
           <br/>
           <br/>
+
+          <div id={'search-toolbar'}>
+            <Button variant="contained">
+              Random
+            </Button>
+
+            <Button variant="contained">
+              Using my Ingredients
+            </Button>
+
+            <Button variant="contained">
+              Advanced
+            </Button>
+          </div>
+
+          <Collapse in={true}>
+            <Paper>
+              <FormControl className={'advanced-search-input'}>
+                <InputLabel htmlFor="cuisine">Cuisine</InputLabel>
+                <Select
+                  inputProps={{
+                    name: 'cuisine',
+                    id: 'cuisine',
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                </Select>
+              </FormControl>
+
+              <FormControl className={'advanced-search-input'}>
+                <InputLabel htmlFor="diet">Diet</InputLabel>
+                <Select
+                  inputProps={{
+                    name: 'diet',
+                    id: 'diet',
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                </Select>
+              </FormControl>
+            </Paper>
+          </Collapse>
 
           <Grid id={'search-results'} container spacing={24}>
             {cards}

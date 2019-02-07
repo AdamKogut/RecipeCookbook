@@ -5,3 +5,8 @@
   overflow-y: auto;
   overflow-x: hidden;
 }
+
+.advanced-search-input {
+  min-width: 120px !important;
+  margin: 10px !important;
+}
