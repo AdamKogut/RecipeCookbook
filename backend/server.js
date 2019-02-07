@@ -2,6 +2,8 @@ require('babel-register')({
     presets: ['env']
 });
 
+const GoogleStragey = require('passport-google-oauth20').Strategy;
+
 var http = require('http');
 var path = require('path');
 var fs = require('fs');
@@ -15,6 +17,16 @@ var unirest = require('unirest');
 var bodyParser = require('body-parser');
 
 var app = express();
+
+passport.use(
+    new GoogleStragey({
+        clientID: "CLIENT", //change later
+        clientSecret: "SECRET", //change later
+        calbackURL: '/auth/google/callback'
+    }, (accessToken) => {
+        console.log(accessToken); 
+    })
+);
 
 var helloRouter = require('./routes/hello');
 var searchRouter = require('./routes/search');
