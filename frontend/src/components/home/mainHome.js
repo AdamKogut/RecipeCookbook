@@ -83,7 +83,7 @@ class mainHome extends Component {
           <Grid item xs={3} key={'Recipe' + i}>
             <RecipeCard
               title={recipe.title}
-              image={'https://spoonacular.com/recipeImages/' + recipe.image}
+              image={recipe.image}
               id={recipe.id}
               onClick={this.onRecipeClick}
             />
