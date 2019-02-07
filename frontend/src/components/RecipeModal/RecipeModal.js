@@ -62,7 +62,7 @@ class RecipeModal extends React.Component {
             {recipe.title}
           </h1>
 
-          <img id={'recipe-modal-image'} src={recipe.img} />
+          <img id={'recipe-modal-image'} src={recipe.img} alt={`recipe: ${recipe.title}`} />
 
           <div id={'recipe-modal-toolbar'}>
             <Button variant="contained" color="primary">

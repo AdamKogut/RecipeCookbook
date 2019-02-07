@@ -5,7 +5,9 @@
   "dependencies": {
     "@material-ui/core": "^3.9.1",
     "@material-ui/icons": "^3.0.2",
+    "@material-ui/styles": "^3.0.0-alpha.10",
     "axios": "^0.18.0",
+    "downshift": "^3.2.2",
     "history": "^4.7.2",
     "npm": "^6.7.0",
     "react": "^16.7.0",
