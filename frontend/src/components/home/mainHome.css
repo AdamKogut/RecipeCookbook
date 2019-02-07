@@ -7,6 +7,9 @@
 }
 
 .advanced-search-input {
-  min-width: 120px !important;
-  margin: 10px !important;
+  min-width: 90% !important;
+  margin: 10px auto !important;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
 }

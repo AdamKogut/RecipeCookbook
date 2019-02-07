@@ -5,8 +5,9 @@ import "./mainHome.css";
 import BodyContainer from '../BodyContainer/BodyContainer';
 import RecipeCard from '../RecipeCard/RecipeCard';
 import Loader from '../Loader/Loader';
-import { Button, Grid, TextField, Collapse, FormControl, InputLabel, Select, MenuItem, Paper } from '@material-ui/core';
+import { Button, Grid, TextField } from '@material-ui/core';
 import RecipeModal from "../RecipeModal/RecipeModal";
+import AdvancedSearch from '../AdvancedSearch/AdvancedSearch';
 
 class mainHome extends Component {
 
@@ -17,7 +18,9 @@ class mainHome extends Component {
       displayedRecipe: null,
       results: null,
       searchBarValue: '',
-      isLoadingSearch: false
+      isLoadingSearch: false,
+      searchType: 'default',
+      advancedSearch: {}
     };
   }
 
@@ -135,42 +138,26 @@ class mainHome extends Component {
               Using my Ingredients
             </Button>
 
-            <Button variant="contained">
+            <Button
+              variant="contained"
+              onClick={() => {
+                if (this.state.searchType !== 'advanced')
+                  this.setState({ searchType: 'advanced' });
+                else
+                  this.setState({ searchType: 'default' });
+              }} >
               Advanced
             </Button>
           </div>
 
-          <Collapse in={true}>
-            <Paper>
-              <FormControl className={'advanced-search-input'}>
-                <InputLabel htmlFor="cuisine">Cuisine</InputLabel>
-                <Select
-                  inputProps={{
-                    name: 'cuisine',
-                    id: 'cuisine',
-                  }}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                </Select>
-              </FormControl>
-
-              <FormControl className={'advanced-search-input'}>
-                <InputLabel htmlFor="diet">Diet</InputLabel>
-                <Select
-                  inputProps={{
-                    name: 'diet',
-                    id: 'diet',
-                  }}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                </Select>
-              </FormControl>
-            </Paper>
-          </Collapse>
+          <AdvancedSearch
+            expanded={this.state.searchType === 'advanced'}
+            onUpdate={(state) => {
+              this.setState({
+                advancedSearch: state
+              });
+            }}
+          />
 
           <Grid id={'search-results'} container spacing={24}>
             {cards}
