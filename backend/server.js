@@ -18,6 +18,7 @@ var app = express();
 
 var helloRouter = require('./routes/hello');
 var searchRouter = require('./routes/search');
+var testRouter = require('./routes/test');
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -35,6 +36,7 @@ app.use(bodyParser.urlencoded({ limit: "10gb", extended: true }))
 
 app.use('/hello', helloRouter);
 app.use('/search', searchRouter);
+app.use('/test', testRouter);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
