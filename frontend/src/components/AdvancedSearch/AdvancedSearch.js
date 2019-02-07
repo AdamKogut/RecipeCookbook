@@ -4,6 +4,68 @@ import './AdvancedSearch.css';
 import {Collapse, FormControl, Grid, InputLabel, MenuItem, Paper, Select} from "@material-ui/core";
 import IngredientsAutocomplete from "../IngredientsAutocomplete/IngredientsAutocomplete";
 
+const options = {
+  cuisine: [
+    'african',
+    'chinese',
+    'japanese',
+    'korean',
+    'vietnamese',
+    'thai',
+    'indian',
+    'british',
+    'irish',
+    'french',
+    'italian',
+    'mexican',
+    'spanish',
+    'middle eastern',
+    'jewish',
+    'american',
+    'cajun',
+    'southern',
+    'greek',
+    'german',
+    'nordic',
+    'eastern european',
+    'caribbean',
+    'latin american'
+  ],
+  diet: [
+    'pescetarian',
+    'lacto vegetarian',
+    'ovo vegetarian',
+    'vegan',
+    'vegetarian'
+  ],
+  intolerances: [
+    'dairy',
+    'egg',
+    'gluten',
+    'peanut',
+    'sesame',
+    'seafood',
+    'shellfish',
+    'soy',
+    'sulfite',
+    'tree nut',
+    'wheat'
+  ],
+  type: [
+    'main course',
+    'side dish',
+    'dessert',
+    'appetizer',
+    'salad',
+    'bread',
+    'breakfast',
+    'soup',
+    'beverage',
+    'sauce',
+    'drink'
+  ],
+};
+
 class AdvancedSearch extends React.Component {
   constructor (props) {
     super(props);
@@ -35,6 +97,25 @@ class AdvancedSearch extends React.Component {
   };
 
   render () {
+    let selectOptions = {
+      cuisine: [],
+      diet: [],
+      intolerances: [],
+      type: []
+    };
+
+    for (let key in options) {
+      // skip loop if the property is from prototype
+      if (!options.hasOwnProperty(key))
+        continue;
+
+      for (let i = 0; i < options[key].length; i++) {
+        selectOptions[key].push(
+          <MenuItem value={options[key][i]} key={options[key][i]}>{options[key][i]}</MenuItem>
+        );
+      }
+    }
+
     return (
       <div id={'advanced-search'}>
         <Collapse in={this.props.expanded}>
@@ -44,6 +125,10 @@ class AdvancedSearch extends React.Component {
                 <FormControl className={'advanced-search-input'}>
                   <InputLabel htmlFor="cuisine">Cuisine</InputLabel>
                   <Select
+                    value={this.state.cuisine}
+                    onChange={(event) => {
+                      this.update({ [event.target.name]: event.target.value });
+                    }}
                     inputProps={{
                       name: 'cuisine',
                       id: 'cuisine',
@@ -52,6 +137,7 @@ class AdvancedSearch extends React.Component {
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
+                    {selectOptions.cuisine}
                   </Select>
                 </FormControl>
               </Grid>
@@ -60,6 +146,10 @@ class AdvancedSearch extends React.Component {
                 <FormControl className={'advanced-search-input'}>
                   <InputLabel htmlFor="diet">Diet</InputLabel>
                   <Select
+                    value={this.state.diet}
+                    onChange={(event) => {
+                      this.update({ [event.target.name]: event.target.value });
+                    }}
                     inputProps={{
                       name: 'diet',
                       id: 'diet',
@@ -68,6 +158,7 @@ class AdvancedSearch extends React.Component {
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
+                    {selectOptions.diet}
                   </Select>
                 </FormControl>
               </Grid>
@@ -76,6 +167,10 @@ class AdvancedSearch extends React.Component {
                 <FormControl className={'advanced-search-input'}>
                   <InputLabel htmlFor="intolerances">Intolerances</InputLabel>
                   <Select
+                    value={this.state.intolerances}
+                    onChange={(event) => {
+                      this.update({ [event.target.name]: event.target.value });
+                    }}
                     inputProps={{
                       name: 'intolerances',
                       id: 'intolerances',
@@ -84,6 +179,7 @@ class AdvancedSearch extends React.Component {
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
+                    {selectOptions.intolerances}
                   </Select>
                 </FormControl>
               </Grid>
@@ -92,6 +188,10 @@ class AdvancedSearch extends React.Component {
                 <FormControl className={'advanced-search-input'}>
                   <InputLabel htmlFor="type">Type</InputLabel>
                   <Select
+                    value={this.state.type}
+                    onChange={(event) => {
+                      this.update({ [event.target.name]: event.target.value });
+                    }}
                     inputProps={{
                       name: 'type',
                       id: 'type',
@@ -100,6 +200,7 @@ class AdvancedSearch extends React.Component {
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
+                    {selectOptions.type}
                   </Select>
                 </FormControl>
               </Grid>

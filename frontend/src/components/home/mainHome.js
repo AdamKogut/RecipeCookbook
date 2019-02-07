@@ -42,13 +42,34 @@ class mainHome extends Component {
       isLoadingSearch: true
     });
 
-    // Set the results once we get them back from the server
-    axios.post('http://localhost:8080/', {
+    let query = {
       query: searchValue,
-      number: "16"
-    }).then((response) => {
-      console.log(response);
+      number: "16",
+      instructionsRequired: true
+    };
 
+    if (this.state.searchType === 'advanced') {
+      query = {
+        ...query,
+        ...this.state.advancedSearch,
+        includedIngredients: null,
+        excludedIngredients: null
+      };
+
+      if (this.state.advancedSearch.includedIngredients.length) {
+        query.includeIngredients = this.state.advancedSearch.includedIngredients;
+      }
+
+      if (this.state.advancedSearch.excludedIngredients.length) {
+        query.excludeIngredients = this.state.advancedSearch.excludedIngredients;
+      }
+    }
+
+    // Set the results once we get them back from the server
+    axios.post(
+      'http://localhost:8080/search',
+      query
+    ).then((response) => {
       this.setState({
         results: response.data.body.results,
         isLoadingSearch: false
@@ -69,7 +90,6 @@ class mainHome extends Component {
   };
 
   render () {
-
     // Build out the Results list
     const cards = [];
     if (this.state.isLoadingSearch) {
@@ -130,11 +150,27 @@ class mainHome extends Component {
           <br/>
 
           <div id={'search-toolbar'}>
-            <Button variant="contained">
+            <Button
+              variant="contained"
+              onClick={() => {
+                if (this.state.searchType !== 'random')
+                  this.setState({ searchType: 'random' });
+                else
+                  this.setState({ searchType: 'default' });
+              }}
+            >
               Random
             </Button>
 
-            <Button variant="contained">
+            <Button
+              variant="contained"
+              onClick={() => {
+                if (this.state.searchType !== 'myIngredients')
+                  this.setState({ searchType: 'myIngredients' });
+                else
+                  this.setState({ searchType: 'default' });
+              }}
+            >
               Using my Ingredients
             </Button>
 
@@ -145,7 +181,8 @@ class mainHome extends Component {
                   this.setState({ searchType: 'advanced' });
                 else
                   this.setState({ searchType: 'default' });
-              }} >
+              }}
+            >
               Advanced
             </Button>
           </div>
