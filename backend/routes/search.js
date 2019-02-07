@@ -21,6 +21,8 @@ router.post('/', function(req, res, next) {
   //CUSINE OPTIONS: african, chinese, japanese, korean, vietnamese, thai, indian, british, irish, french, italian, mexican, spanish, middle eastern, jewish, american, cajun, southern, greek, german, nordic, eastern european, caribbean, or latin american.
   let diet = req.body.diet;
   //POSSIBLE DIET OPTIONS: pescetarian, lacto vegetarian, ovo vegetarian, vegan, and vegetarian. maybe more?
+  let includeIngredients = req.body.includeIngredients; //MUST BE COMMA SEPERATED LIST IF MORE THAN ONE
+  //list of ingredients or ingredient types that should/must be contained in the recipes.
   let excludeIngredients = req.body.excludeIngredients; //MUST BE COMMA SEPERATED LIST IF MORE THAN ONE
   //list of ingredients or ingredient types that must not be contained in the recipes.
   let intolerances = req.body.intolerances; //MUST BE COMMA SEPERATED LIST IF MORE THAN ONE
@@ -37,8 +39,11 @@ router.post('/', function(req, res, next) {
   //BOOLEAN (true or false): Whether the recipes must have instructions.
   let query = req.body.query;
 
-  let url = 'https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/search?';
+  let url = 'https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/searchComplex?';
 
+  if(query) {
+    url += 'query=' + query + '&';
+  }
   if(cuisine) {
     cuisine.toLowerCase();
     cuisine = cuisine.replace(/\s/g, '');
@@ -51,6 +56,16 @@ router.post('/', function(req, res, next) {
   }
   if(diet) {
     url += 'diet=' + diet + '&';
+  }
+  if(includeIngredients) {
+    includeIngredients.toLowerCase();
+    includeIngredients = includeIngredients.replace(/\s/g, '');
+    let ingredientsArr = includeIngredients.split(',');
+    url += 'excludeIngredients=';
+    for(let i = 0; i < ingredientsArr.length - 1; i++) {
+      url += ingredientsArr[i] + '%2C'
+    }
+    url += ingredientsArr[ingredientsArr.legnth - 1] + '&';
   }
   if(excludeIngredients) {
     excludeIngredients.toLowerCase();
@@ -72,23 +87,20 @@ router.post('/', function(req, res, next) {
     }
     url += intolerancesArr[intolerancesArr.legnth - 1] + '&';
   }
-  if(number) {
-    url += 'number=' + number + '&';
-  }
-  if(offset) {
-    url += 'offset=' + offset + '&';
-  }
   if(type) {
     url += 'type=' + type + '&';
-  }
-  if(limitLicense) {
-    url += 'limitLicense=' + limitLicense + '&';
   }
   if(instructionsRequired) {
     url += 'instructionsRequired=' + instructionsRequired + '&';
   }
-  if(query) {
-    url += 'query=' + query;
+  if(limitLicense) {
+    url += 'limitLicense=' + limitLicense + '&';
+  }
+  if(offset) {
+    url += 'offset=' + offset + '&';
+  }
+  if(number) {
+    url += 'number=' + number;
   }
 
   unirest.get(url)
