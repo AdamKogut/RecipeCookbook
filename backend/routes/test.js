@@ -8,7 +8,7 @@ router.get('/', function(req, res, next) {
         whatever: "blah"
     };
 
-    res.json(resp);
+    res.send("TEST SUCCESSFUL");
 });
 
 module.exports = router;
