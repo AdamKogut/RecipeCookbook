@@ -1,7 +1,7 @@
 import React from 'react';
 import './RecipeModal.css';
 
-import { Modal, Paper, Button } from '@material-ui/core';
+import { Modal, Paper, Button, AppBar, Tabs, Tab } from '@material-ui/core';
 import Loader from "../Loader/Loader";
 
 class RecipeModal extends React.Component {
@@ -9,26 +9,49 @@ class RecipeModal extends React.Component {
     super(props);
 
     this.state = {
-      recipe: {}
+      recipe: {},
+      currentTab: 0,
+      closed: true
     };
+  }
 
+  getData = () => {
     // Grab the recipe data from the api using props.id
     setTimeout(() => {
       this.setState({
         recipe: {
           title: 'Delicious Burger',
-          description: 'Insert description/recipe here',
+          ingredients: 'Ingredients!',
+          instructions: 'Put it in the microwave or something',
+          nutrition: 'It might be good for you',
           img: 'https://assets3.thrillist.com/v1/image/2797371/size/tmg-article_default_mobile.jpg'
         }
       });
-    }, 3000);
-  }
+    }, 1000);
+  };
+
+  handleTab = (event, value) => {
+    this.setState({ currentTab: value });
+  };
 
   handleClose = () => {
     this.props.onClose();
+    this.setState({
+      recipe: {},
+      currentTab: 0,
+      closed: true
+    });
   };
 
   render () {
+    const currentTab = this.state.currentTab;
+
+    // If this has just been opened, grab the data from the server
+    if (this.props.id && this.state.closed) {
+      this.setState({closed: false});
+      this.getData();
+    }
+
     let content;
     if (this.state.recipe.title) {
       const recipe = this.state.recipe;
@@ -55,9 +78,18 @@ class RecipeModal extends React.Component {
             </Button>
           </div>
 
-          <Paper id={'recipe-modal-description'}>
-            {recipe.description}
-          </Paper>
+          <div id={'recipe-modal-description'}>
+            <AppBar position="static" color={'default'}>
+              <Tabs value={currentTab} onChange={this.handleTab}>
+                <Tab label="Ingredients" />
+                <Tab label="Instructions" />
+                <Tab label="Nutrition" />
+              </Tabs>
+            </AppBar>
+            {currentTab === 0 && <div className={'recipe-modal-tab-content'}>{recipe.ingredients}</div>}
+            {currentTab === 1 && <div className={'recipe-modal-tab-content'}>{recipe.instructions}</div>}
+            {currentTab === 2 && <div className={'recipe-modal-tab-content'}>{recipe.nutrition}</div>}
+          </div>
         </div>
       );
     } else {
