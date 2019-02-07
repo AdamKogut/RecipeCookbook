@@ -18,6 +18,7 @@ var app = express();
 
 var helloRouter = require('./routes/hello');
 var searchRouter = require('./routes/search');
+var recipeInfoRouter = require('./routes/recipeInfo');
 var randomsearch = require('./routes/randomsearch')
 
 app.use(function(req, res, next) {
@@ -36,6 +37,7 @@ app.use(bodyParser.urlencoded({ limit: "10gb", extended: true }))
 
 app.use('/hello', helloRouter);
 app.use('/search', searchRouter);
+app.use('/recipeInfo', recipeInfoRouter);
 app.use('/randomsearch', randomsearch);
 
 // view engine setup
