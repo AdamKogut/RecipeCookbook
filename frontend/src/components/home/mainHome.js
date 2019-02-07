@@ -87,10 +87,10 @@ class mainHome extends Component {
         cards.push(
           <Grid item xs={3} key={'Recipe' + i}>
             <RecipeCard
-                title={recipe.title}
-                image={recipe.image}
-                id={recipe.id}
-                onClick={this.onRecipeClick}
+              title={recipe.title}
+              image={recipe.image}
+              id={recipe.id}
+              onClick={this.onRecipeClick}
             />
           </Grid>
         );
