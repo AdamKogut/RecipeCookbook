@@ -1,0 +1,12 @@
+.BigDivArea {
+  /* background-color: blue; */
+  height:calc(100vh - 48px);
+  width:100vw;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#search-results {
+  width: 1200px;
+  margin: auto;
+}

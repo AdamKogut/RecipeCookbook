@@ -1,17 +1,40 @@
 import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
 import { AppBar, Toolbar, Tabs, Tab, Button } from "@material-ui/core";
+import LoginButton from './LoginButton';
+import History from '../../history';
 
 class Header extends Component {
   constructor(props) {
     super(props);
+    let temp=0;
+    if(!History.location.pathname.indexOf('/grocery')){
+      temp=1;
+    } else if(!History.location.pathname.indexOf('/pantry')){
+      temp=2;
+    } else if(!History.location.pathname.indexOf('/planning')){
+      temp=3;
+    } else if(!History.location.pathname.indexOf('/saved')){
+      temp=4;
+    } 
     this.state = {
-      tabValue: 0
+      tabValue: temp,
     };
   }
 
   handleTabChange = (event, newValue) => {
     this.setState({ tabValue: newValue });
+    if(newValue===0){
+      History.push('/');
+    } else if(newValue===1){
+      History.push('/grocery');
+    } else if(newValue===2){
+      History.push('/pantry');
+    } else if(newValue===3){
+      History.push('/planning');
+    } else if (newValue===4){
+      History.push('/saved');
+    }
   };
 
   render() {
@@ -30,12 +53,7 @@ class Header extends Component {
             <Tab label="Meal Planning" value={3} />
             <Tab label="Saved Recipes" value={4} />
           </Tabs>
-          <Button
-            onClick={this.handleLogin}
-            style={{ position: "absolute", right: "10px" }}
-          >
-            Create Account/Login
-          </Button>
+          <LoginButton />
         </Toolbar>
       </AppBar>
     );
