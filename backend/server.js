@@ -1,3 +1,7 @@
+require('babel-register')({
+    presets: ['env']
+});
+
 var http = require('http');
 var path = require('path');
 var fs = require('fs');
@@ -6,12 +10,14 @@ var createError = require('http-errors');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var config = require('config');
+var unirest = require('unirest');
 
 var bodyParser = require('body-parser');
 
 var app = express();
 
 var helloRouter = require('./routes/hello');
+var searchRouter = require('./routes/search');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -20,7 +26,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json({ limit: '10gb' }));
 app.use(bodyParser.urlencoded({ limit: "10gb", extended: true }))
 
+
 app.use('/hello', helloRouter);
+app.use('/search', searchRouter);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
