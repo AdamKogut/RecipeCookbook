@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from 'axios';
 import "./mainHome.css";
 
 import BodyContainer from '../BodyContainer/BodyContainer';
@@ -33,29 +34,23 @@ class mainHome extends Component {
       return;
     }
 
-    // **** Test code to simulate a search
-    let results = [];
-
-    for (let i = 0; i < 20; i++) {
-      results.push({
-        title: 'Hello World',
-        image: 'https://assets3.thrillist.com/v1/image/2797371/size/tmg-article_default_mobile.jpg',
-        id: 'asdfqwert' + i
-      });
-    }
-
     // Render the loader while we wait for results
     this.setState({
       isLoadingSearch: true
     });
 
     // Set the TEST results once we get them back from the server
-    setTimeout(() => {
+    axios.post('http://localhost:8080/search', {
+      query: searchValue,
+      number: "16"
+    }).then((response) => {
+      console.log(response);
+
       this.setState({
-        results,
+        results: response.data.body.results,
         isLoadingSearch: false
       });
-    }, 1000);
+    });
   };
 
   onRecipeClick = (id) => {
@@ -76,7 +71,7 @@ class mainHome extends Component {
     const cards = [];
     if (this.state.isLoadingSearch) {
       cards.push(
-        <Grid item xs={12}>
+        <Grid item xs={12} key={0}>
           <Loader/>
         </Grid>
       );
@@ -88,7 +83,7 @@ class mainHome extends Component {
           <Grid item xs={3} key={'Recipe' + i}>
             <RecipeCard
               title={recipe.title}
-              image={recipe.image}
+              image={'https://spoonacular.com/recipeImages/' + recipe.image}
               id={recipe.id}
               onClick={this.onRecipeClick}
             />

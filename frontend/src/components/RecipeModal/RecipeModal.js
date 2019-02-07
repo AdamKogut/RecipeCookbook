@@ -98,7 +98,7 @@ class RecipeModal extends React.Component {
 
     return (
       <Modal
-        open={this.props.id}
+        open={this.props.id !== null}
         onClose={this.handleClose}
       >
         <Paper className={'modal-container'}>
