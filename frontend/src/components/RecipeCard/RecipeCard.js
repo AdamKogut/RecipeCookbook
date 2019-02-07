@@ -20,6 +20,9 @@ class RecipeCard extends React.Component {
       >
         <CardHeader
           title={this.props.title}
+          classes={{
+            title: 'recipe-card-header'
+          }}
         />
 
         <CardMedia

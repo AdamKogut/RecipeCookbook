@@ -121,6 +121,11 @@ class mainHome extends Component {
                 this.search();
               }
             }}
+            inputProps={{
+              style: {
+                fontSize: 25
+              }
+            }}
           />
 
           <br/>

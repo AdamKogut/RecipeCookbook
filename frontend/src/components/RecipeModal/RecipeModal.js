@@ -80,7 +80,7 @@ class RecipeModal extends React.Component {
 
           <div id={'recipe-modal-description'}>
             <AppBar position="static" color={'default'}>
-              <Tabs value={currentTab} onChange={this.handleTab}>
+              <Tabs value={currentTab} onChange={this.handleTab} variant={'fullWidth'}>
                 <Tab label="Ingredients" />
                 <Tab label="Instructions" />
                 <Tab label="Nutrition" />
