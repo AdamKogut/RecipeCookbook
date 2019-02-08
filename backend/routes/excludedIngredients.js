@@ -15,7 +15,7 @@ MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
 
 router.get('/', function(req, res, next){
   const user = req.header("name");
-  let result = myDBO.collection("users").find({name: user}, { projection: { notes: 1 }});
+  let result = myDBO.collection("users").find({name: user}, { projection: { excludedIngredients: 1}});
   result.toArray(function(err, result){
     if (err) throw err;
 
@@ -27,14 +27,17 @@ router.get('/', function(req, res, next){
 
 router.post('/', function(req, res, next){
   let user = req.body.user;
-  let recipe = req.body.recipeID;
-  let note = req.body.note;
+  let ingredients = req.body.ingredients;
 
-  myDBO.collection("users").updateOne({name: user}, {$push: {"notes": [{"recipeID": recipe, "note": note}]}});
+  ingredients = ingredients.replace(/\s/g, '');
+  let ingredientsArr = ingredients.split(',');
+
+  myDBO.collection("users").updateOne({name: user}, {$push: {"excludedIngredients": ingredientsArr}});
 
   const resp = {
     success: true
-  };
+  }
   res.json(resp);
 });
+
 module.exports = router;
