@@ -56,14 +56,34 @@ class mainHome extends Component {
         excludedIngredients: null
       };
 
-      if (this.state.advancedSearch.includedIngredients.length) {
-        query.includeIngredients = this.state.advancedSearch.includedIngredients;
+      if (this.state.advancedSearch.includedIngredients.selectedItem.length) {
+        let array = this.state.advancedSearch.includedIngredients.selectedItem;
+        let string = '';
+
+        for (let i = 0; i < array.length; i++) {
+          string += array[i];
+          if (i + 1 < array.length)
+            string += ',';
+        }
+
+        query.includeIngredients = string;
       }
 
-      if (this.state.advancedSearch.excludedIngredients.length) {
-        query.excludeIngredients = this.state.advancedSearch.excludedIngredients;
+      if (this.state.advancedSearch.excludedIngredients.selectedItem.length) {
+        let array = this.state.advancedSearch.excludedIngredients.selectedItem;
+        let string = '';
+
+        for (let i = 0; i < array.length; i++) {
+          string += array[i];
+          if (i + 1 < array.length)
+            string += ',';
+        }
+
+        query.excludeIngredients = string;
       }
     }
+
+    console.log(query);
 
     // Set the results once we get them back from the server
     axios.post(

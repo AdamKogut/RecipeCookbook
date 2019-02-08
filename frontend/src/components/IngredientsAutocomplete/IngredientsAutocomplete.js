@@ -5,7 +5,7 @@ import { MenuItem, TextField, Paper, Chip } from '@material-ui/core';
 import Downshift from 'downshift';
 import deburr from 'lodash/deburr';
 
-import ingredientsList from './ingredientsList';
+import { ingredients } from './ingredients';
 
 class IngredientsAutocomplete extends React.Component {
   state = {
@@ -117,13 +117,7 @@ function getSuggestions(value) {
   const inputLength = inputValue.length;
   let count = 0;
 
-  const suggestions = [];
-
-  for (let i = 0; i < ingredientsList.length; i++) {
-    suggestions.push({
-      label: ingredientsList[i]
-    });
-  }
+  const suggestions = ingredients;
 
   return inputLength === 0
     ? []
