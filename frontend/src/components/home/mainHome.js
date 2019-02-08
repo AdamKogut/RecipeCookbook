@@ -26,13 +26,15 @@ class mainHome extends Component {
 
   search = () => {
     const searchValue = this.state.searchBarValue;
+    if (this.state.searchType === 'random') {
+      this.setState({
+        searchType: 'default'
+      });
+    }
 
     // Empty search base case
     if (searchValue === '') {
-      this.setState({
-        results: null,
-        isLoadingSearch: false
-      });
+      this.clearResults();
 
       return;
     }
@@ -94,6 +96,39 @@ class mainHome extends Component {
         results: response.data.body.results,
         isLoadingSearch: false
       });
+    });
+  };
+
+  randomSearch = () => {
+    this.setState({
+      searchType: 'random'
+    });
+
+    // Render the loader while we wait for results
+    this.setState({
+      isLoadingSearch: true
+    });
+
+    // Set the results once we get them back from the server
+    axios.post(
+      'http://localhost:8080/randomsearch',
+      {
+        number: 16
+      }
+    ).then((response) => {
+      console.log(response);
+
+      this.setState({
+        results: response.data.body.recipes,
+        isLoadingSearch: false
+      });
+    });
+  };
+
+  clearResults = () => {
+    this.setState({
+      results: null,
+      isLoadingSearch: false
     });
   };
 
@@ -172,9 +207,10 @@ class mainHome extends Component {
           <div id={'search-toolbar'}>
             <Button
               variant="contained"
+              color={this.state.searchType === "random" ? "secondary" : "default"}
               onClick={() => {
                 if (this.state.searchType !== 'random')
-                  this.setState({ searchType: 'random' });
+                  this.randomSearch();
                 else
                   this.setState({ searchType: 'default' });
               }}
@@ -184,11 +220,14 @@ class mainHome extends Component {
 
             <Button
               variant="contained"
+              color={this.state.searchType === "myIngredients" ? "secondary" : "default"}
               onClick={() => {
-                if (this.state.searchType !== 'myIngredients')
-                  this.setState({ searchType: 'myIngredients' });
-                else
+                if (this.state.searchType !== 'myIngredients') {
+                  this.setState({searchType: 'myIngredients'});
+                  this.clearResults();
+                } else {
                   this.setState({ searchType: 'default' });
+                }
               }}
             >
               Using my Ingredients
@@ -196,11 +235,14 @@ class mainHome extends Component {
 
             <Button
               variant="contained"
+              color={this.state.searchType === "advanced" ? "secondary" : "default"}
               onClick={() => {
-                if (this.state.searchType !== 'advanced')
-                  this.setState({ searchType: 'advanced' });
-                else
+                if (this.state.searchType !== 'advanced') {
+                  this.setState({searchType: 'advanced'});
+                  this.clearResults();
+                } else {
                   this.setState({ searchType: 'default' });
+                }
               }}
             >
               Advanced

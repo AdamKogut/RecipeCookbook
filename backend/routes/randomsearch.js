@@ -20,7 +20,7 @@ router.post('/', function(req, res, next){
   //Tags that the random recipe(s) must adhere to (i.e. vegetarian,dessert)
   let tags = req.body.tags;
 
-  let url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/random?number=20";
+  let url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/random?number=" + req.body.number;
 
   if(limitLicense){
     url += '&limitLicense=' + limitLicense
