@@ -15,9 +15,9 @@ MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
 
 router.post('/', function(req, res, next) {
   const deleteID = req.body.deleteID; //id of recipe to be deleted
-  const name = req.body.name; //username
+  const name = req.body.googleId; //username
 
-  myDBO.collection("users").updateOne({ name: name }, { $pull: { recipes: { id: deleteID } } });
+  myDBO.collection("users").updateOne({ googleId: name }, { $pull: { recipes: { id: deleteID } } });
 
   const resp = {
     success: true
