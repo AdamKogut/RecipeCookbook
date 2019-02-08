@@ -69,7 +69,7 @@ router.post('/', function(req, res, next) {
     includeIngredients = includeIngredients.replace(/\s/g, '');
     let ingredientsArr = includeIngredients.split(",");
     if(ingredientsArr.length > 1) {
-      url += 'excludeIngredients=';
+      url += 'includeIngredients=';
       for(var i = 0; i < ingredientsArr.length - 1; i++) {
         url += ingredientsArr[i] + '%2C'
       }

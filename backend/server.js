@@ -19,6 +19,7 @@ var app = express();
 var helloRouter = require('./routes/hello');
 var searchRouter = require('./routes/search');
 var recipeInfoRouter = require('./routes/recipeInfo');
+var savedRecipesRouter = require('./routes/savedRecipes');
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -37,6 +38,7 @@ app.use(bodyParser.urlencoded({ limit: "10gb", extended: true }))
 app.use('/hello', helloRouter);
 app.use('/search', searchRouter);
 app.use('/recipeInfo', recipeInfoRouter);
+app.use('/savedRecipes', savedRecipesRouter);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
