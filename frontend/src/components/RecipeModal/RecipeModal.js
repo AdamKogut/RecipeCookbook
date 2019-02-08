@@ -4,6 +4,7 @@ import './RecipeModal.css';
 import { Modal, Paper, Button, AppBar, Tabs, Tab } from '@material-ui/core';
 import Loader from "../Loader/Loader";
 import axios from "axios/index";
+import RecipePrinter from "../RecipePrinter/RecipePrinter";
 
 class RecipeModal extends React.Component {
   constructor (props) {
@@ -94,9 +95,7 @@ class RecipeModal extends React.Component {
               Add to Groceries
             </Button>
 
-            <Button variant="contained">
-              Print
-            </Button>
+            <RecipePrinter recipe={recipe}/>
           </div>
 
           <div id={'recipe-modal-description'}>
