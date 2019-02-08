@@ -9,7 +9,6 @@
     "axios": "^0.18.0",
     "downshift": "^3.2.2",
     "fuzzaldrin": "^2.1.0",
-
     "history": "^4.7.2",
     "lodash": "^4.17.11",
     "npm": "^6.7.0",

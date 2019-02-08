@@ -11,6 +11,7 @@ import MainPantry from "./pantry/mainPantry";
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 import "./App.css";
+import history from "../history.js";
 
 class App extends Component {
   theme = createMuiTheme({
@@ -38,6 +39,12 @@ class App extends Component {
             <Route path="/grocery" render={() => <MainGrocery />} />
             <Route path="/pantry" render={() => <MainPantry />} />
             <Route path="/planning" render={() => <MainPlanning />} />
+            <Route path='/cookie' render={()=>{
+              document.cookie=`user=${window.location.search.substring(1).split('=')[1]}; expires=${(new Date).getTime()+(7*24*60*60*1000)}`;
+              // console.log(document.cookie);
+              return <Redirect to="/" />;
+              // return null;
+            }} />
             <Route path="/" render={() => <Redirect to="/" />} />
           </Switch>
         </div>

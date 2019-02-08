@@ -41,19 +41,19 @@ class Header extends Component {
   renderTab=()=>{
     switch(this.props.auth){
       case null:
-        return;
+        return <div></div>;
       case false:
-        return <div />;
+        return <div></div>;
       default:
         return <Tab label="Saved Recipes" value={4} />;
     }
   }
 
   renderButton=()=>{
-    console.log(this.props.auth)
+    // console.log(this.props.auth)
     switch(this.props.auth){
       case null:
-        return;
+        return <LoginButton />;
       case false:
         return <LoginButton />;
       default:

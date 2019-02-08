@@ -120,7 +120,7 @@ class AdvancedSearch extends React.Component {
       <div id={'advanced-search'}>
         <Collapse in={this.props.expanded}>
           <Paper>
-            <Grid container spacing={12}>
+            <Grid container spacing={16}>
               <Grid item xs={3}>
                 <FormControl className={'advanced-search-input'}>
                   <InputLabel htmlFor="cuisine">Cuisine</InputLabel>
