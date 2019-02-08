@@ -3,6 +3,8 @@ import './RecipeModal.css';
 
 import { Modal, Paper, Button, AppBar, Tabs, Tab } from '@material-ui/core';
 import Loader from "../Loader/Loader";
+import axios from "axios/index";
+import RecipePrinter from "../RecipePrinter/RecipePrinter";
 
 class RecipeModal extends React.Component {
   constructor (props) {
@@ -17,17 +19,19 @@ class RecipeModal extends React.Component {
 
   getData = () => {
     // Grab the recipe data from the api using props.id
-    setTimeout(() => {
-      this.setState({
-        recipe: {
-          title: 'Delicious Burger',
-          ingredients: 'Ingredients!',
-          instructions: 'Put it in the microwave or something',
-          nutrition: 'It might be good for you',
-          img: 'https://assets3.thrillist.com/v1/image/2797371/size/tmg-article_default_mobile.jpg'
+    axios.get(
+      'http://localhost:8080/recipeInfo',
+      {
+        headers: {
+          id: this.props.id,
+          includeNutrition: 'true'
         }
+      }
+    ).then((response) => {
+      this.setState({
+        recipe: response.data.body
       });
-    }, 1000);
+    });
   };
 
   handleTab = (event, value) => {
@@ -55,14 +59,32 @@ class RecipeModal extends React.Component {
     let content;
     if (this.state.recipe.title) {
       const recipe = this.state.recipe;
+      const ingredients = [];
+      const instructions = [];
+
+      for (let i = 0; i < recipe.extendedIngredients.length; i++) {
+        ingredients.push(
+          <li key={'ingredient' + i}>
+            { recipe.extendedIngredients[i].original }
+          </li>
+        );
+      }
+
+      for (let i = 0; i < recipe.analyzedInstructions[0].steps.length; i++) {
+        instructions.push(
+          <li key={'ingredient' + i}>
+            { recipe.analyzedInstructions[0].steps[i].step }
+          </li>
+        );
+      }
 
       content = (
         <div>
           <h1 id={'recipe-modal-title'}>
             {recipe.title}
           </h1>
-
-          <img id={'recipe-modal-image'} src={recipe.img} alt={`recipe: ${recipe.title}`} />
+        
+          <img id={'recipe-modal-image'} src={recipe.image} alt={`recipe: ${recipe.title}`} />
 
           <div id={'recipe-modal-toolbar'}>
             <Button variant="contained" color="primary">
@@ -73,9 +95,7 @@ class RecipeModal extends React.Component {
               Add to Groceries
             </Button>
 
-            <Button variant="contained">
-              Print
-            </Button>
+            <RecipePrinter recipe={recipe}/>
           </div>
 
           <div id={'recipe-modal-description'}>
@@ -86,9 +106,9 @@ class RecipeModal extends React.Component {
                 <Tab label="Nutrition" />
               </Tabs>
             </AppBar>
-            {currentTab === 0 && <div className={'recipe-modal-tab-content'}>{recipe.ingredients}</div>}
-            {currentTab === 1 && <div className={'recipe-modal-tab-content'}>{recipe.instructions}</div>}
-            {currentTab === 2 && <div className={'recipe-modal-tab-content'}>{recipe.nutrition}</div>}
+            {currentTab === 0 && <div className={'recipe-modal-tab-content'}><ul>{ingredients}</ul></div>}
+            {currentTab === 1 && <div className={'recipe-modal-tab-content'}><ul>{instructions}</ul></div>}
+            {currentTab === 2 && <div className={'recipe-modal-tab-content'}></div>}
           </div>
         </div>
       );

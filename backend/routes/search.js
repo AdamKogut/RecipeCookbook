@@ -69,7 +69,7 @@ router.post('/', function(req, res, next) {
     includeIngredients = includeIngredients.replace(/\s/g, '');
     let ingredientsArr = includeIngredients.split(",");
     if(ingredientsArr.length > 1) {
-      url += 'excludeIngredients=';
+      url += 'includeIngredients=';
       for(var i = 0; i < ingredientsArr.length - 1; i++) {
         url += ingredientsArr[i] + '%2C'
       }
@@ -135,7 +135,7 @@ router.post('/', function(req, res, next) {
   console.log(url);
 
   unirest.get(url)
-  .header("X-RapidAPI-Key", "API KEY GOES IN THESE QUOTES") //MAJOR KEY ALERT
+  .header("X-RapidAPI-Key", "a9a52ceac7msh44e67e374810be9p169e33jsnb46bcb8a9b05") //MAJOR KEY ALERT
   .end(function (result) {
   console.log(result.status, result.headers, result.body);
   const resp = {

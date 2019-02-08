@@ -5,3 +5,11 @@
   overflow-y: auto;
   overflow-x: hidden;
 }
+
+.advanced-search-input {
+  min-width: 90% !important;
+  margin: 10px auto !important;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+}

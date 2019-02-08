@@ -1,0 +1,41 @@
+.recipe-printer {
+  display: inline-flex;
+}
+
+#print-box {
+  display: none;
+}
+
+.print-container {
+  position: relative;
+  width: 70vw;
+  padding: 25px;
+  margin: 100px 0;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+}
+
+.recipe-print-content {
+  padding: 10px;
+}
+
+#recipe-print-title {
+  margin-top: 0;
+  font-size: 40px;
+  border-bottom: 2px solid lightgray;
+}
+
+.recipe-print-subtitle {
+  margin-top: 0;
+  font-size: 35px;
+  border-bottom: 2px solid lightgray;
+}
+
+#recipe-print-image {
+  position: relative;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+  box-shadow: 5px 5px 10px grey;
+}
