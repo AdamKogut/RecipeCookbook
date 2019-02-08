@@ -42,6 +42,7 @@ var randomsearch = require('./routes/randomsearch');
 var recipeNote = require('./routes/recipeNote');
 var excludedIngredients = require('./routes/excludedIngredients');
 var authRouter = require('./routes/auth');
+var testRouter = require('./routes/test');
 
 var allowCrossDomain = function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
@@ -75,6 +76,7 @@ app.use('/randomsearch', randomsearch);
 app.use('/recipeNote', recipeNote);
 app.use('/excludedIngredients', excludedIngredients);
 app.use('/auth', authRouter);
+app.use('/test', testRouter);
 
 
 
