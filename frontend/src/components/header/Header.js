@@ -47,10 +47,10 @@ class Header extends Component {
       default:
         return <Tab label="Saved Recipes" value={4} />;
     }
-  }
+  };
 
   renderButton=()=>{
-    console.log(this.props.auth)
+    console.log(this.props.auth);
     switch(this.props.auth){
       case null:
         return;
@@ -59,7 +59,7 @@ class Header extends Component {
       default:
         return <LogoutButton />;
     }
-  }
+  };
 
   render() {
     return (
