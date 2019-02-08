@@ -14,7 +14,7 @@ MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
 });
 
 router.post('/', function(req, res, next){
-  console.log(req.body);
+  //console.log(req.body);
   //BOOLEAN (true or false): Whether the recipes should have an open license that allows for displaying with proper attribution.
   let limitLicense = req.body.limitLicense;
   //Tags that the random recipe(s) must adhere to (i.e. vegetarian,dessert)
@@ -36,7 +36,7 @@ router.post('/', function(req, res, next){
     }
     url += tagsArray[tagsArray.length - 1];
   }
-  console.log(url);
+  //console.log(url);
 
   unirest.get(url)
   .header("X-RapidAPI-Key", "65cccbe42amshc14dcee9ef31452p173356jsn8b5b8d2c1789") //MAJOR KEY ALERT

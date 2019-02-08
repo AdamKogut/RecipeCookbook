@@ -28,7 +28,6 @@ class RecipeCard extends React.Component {
         <CardMedia
           className={'recipe-media'}
           image={this.props.image}
-          title="Yeet"
         />
       </Card>
     );
