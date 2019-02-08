@@ -13,17 +13,31 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var config = require('config');
 var unirest = require('unirest');
+mongoose.connect(keys.mongodbURL);
+
+require('./models/User');
+require('./routes/auth');
 
 var bodyParser = require('body-parser');
-
-var app = express();
+const cookieSession = require('cookie-session');
 const passport = require('passport');
+var app = express();
+
+app.use(   
+    cookieSession({
+        maxAge: 100,//30 * 24 * 60 * 60 * 1000,
+        keys: [keys.cookieKey]
+    })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 var helloRouter = require('./routes/hello');
 var searchRouter = require('./routes/search');
 var authRouter = require('./routes/auth');
 
-mongoose.connect(keys.mongodbURL);
+
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
