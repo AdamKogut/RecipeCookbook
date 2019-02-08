@@ -1,7 +1,9 @@
 require('babel-register')({
     presets: ['env']
 });
-
+const mongoose = require('mongoose');
+const GoogleStragey = require('passport-google-oauth20').Strategy;
+const keys = require('./config/keys');
 var http = require('http');
 var path = require('path');
 var fs = require('fs');
@@ -11,10 +13,25 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var config = require('config');
 var unirest = require('unirest');
+mongoose.connect(keys.mongodbURL);
+
+require('./models/User');
+require('./routes/auth');
 
 var bodyParser = require('body-parser');
-
+const cookieSession = require('cookie-session');
+const passport = require('passport');
 var app = express();
+
+app.use(   
+    cookieSession({
+        maxAge: 100,//30 * 24 * 60 * 60 * 1000,
+        keys: [keys.cookieKey]
+    })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 var helloRouter = require('./routes/hello');
 var searchRouter = require('./routes/search');
@@ -24,6 +41,7 @@ var deleteSavedRecipeRouter = require('./routes/deleteSavedRecipe');
 var randomsearch = require('./routes/randomsearch');
 var recipeNote = require('./routes/recipeNote');
 var excludedIngredients = require('./routes/excludedIngredients');
+var authRouter = require('./routes/auth');
 
 var allowCrossDomain = function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
@@ -56,6 +74,9 @@ app.use('/deleteSavedRecipe', deleteSavedRecipeRouter);
 app.use('/randomsearch', randomsearch);
 app.use('/recipeNote', recipeNote);
 app.use('/excludedIngredients', excludedIngredients);
+app.use('/auth', authRouter);
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
