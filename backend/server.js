@@ -11,9 +11,8 @@ var fs = require('fs');
 
 var express = require('express');
 const mongoose = require('mongoose');
-require('./models/User');
+require('./models/user');
 require('./services/passport');
-
 
 mongoose.connect(keys.mongodbURL);
 
@@ -27,14 +26,15 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var config = require('config');
 var unirest = require('unirest');
-
-
+const passport = require('passport');
+app.use(passport.initialize());
+app.use(passport.session());
 
 require('./routes/auth');
 
 var bodyParser = require('body-parser');
 const cookieSession = require('cookie-session');
-const passport = require('passport');
+
 
 app.use(   
     cookieSession({
@@ -43,8 +43,7 @@ app.use(
     })
 );
 
-app.use(passport.initialize());
-app.use(passport.session());
+
 
 var helloRouter = require('./routes/hello');
 var searchRouter = require('./routes/search');

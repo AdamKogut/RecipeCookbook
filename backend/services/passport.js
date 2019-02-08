@@ -11,10 +11,9 @@ passport.use(
         callbackURL: '/auth/google/callback'
     }, 
     (accessToken, refreshToken, profile, done) => {
-        console.log(profile.id);
-        new User({ googleID: profile.id }).save();
-        /*console.log(accessToken);
-        console.log(profile);
+        console.log(typeof(profile.id));
+        //console.log(accessToken);
+        //console.log(profile);
         User.findOne({googleId: profile.id})
         .then( (user) => {
             if(user){
@@ -28,6 +27,6 @@ passport.use(
             }
 
         })
-        .catch(err => console.log(err));*/
+        .catch(err => console.log(err));
     })
 );
