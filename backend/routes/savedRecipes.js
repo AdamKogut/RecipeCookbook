@@ -18,7 +18,7 @@ router.get('/', function(req, res, next) {
 
   console.log(name);
 
-  let result = myDBO.collection("users").find({name: name});
+  let result = myDBO.collection("users").find({name: name}, "recipes");
 
   result.toArray(function(err, result) {
   if (err) throw err;
@@ -35,7 +35,18 @@ router.post('/', function(req, res, next) {
 
   console.log(recipe);
 
-  myDBO.collection("users").updateOne({name: user}, {$push:{"recipes": recipe}});
+  let recipesArr = myDBO.collection("users").find({name: user}, "recipes");
+  let flag = true;
+
+  for(let i = 0; i < recipesArr.length; i++) {
+    if(recipesArr[i].id == recipe.id) {
+      flag = false;
+    }
+  }
+
+  if(flag) {
+    myDBO.collection("users").updateOne({name: user}, {$push:{"recipes": recipe}});
+  }
 
   const resp = {
     success: true
