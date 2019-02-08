@@ -2,21 +2,6 @@ var express = require('express');
 var router = express.Router();
 const passport = require('passport');
 
-passport.serializeUser((user,done) => {
-    done(null, user.id); 
-});
-
-passport.deserializeUser((id ,done) => {
-    User.findById(id)
-    .then(user => {
-        done(null, user);
-    }).catch(err => {
-        console.log(err);
-    });
-});
-
-
-
 router.get('/google/callback', passport.authenticate('google'),(req, res) => {
     console.log(req.user);
     res.redirect('https://night-in-12.firebaseapp.com/');

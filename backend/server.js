@@ -11,6 +11,9 @@ var fs = require('fs');
 
 var express = require('express');
 const mongoose = require('mongoose');
+const cookieSession = require('cookie-session');
+const passport = require('passport');
+
 require('./models/user');
 require('./services/passport');
 
@@ -18,30 +21,35 @@ mongoose.connect(keys.mongodbURL);
 
 var app = express();
 
+app.use(
+    cookieSession({
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+        keys: [keys.cookieKey],
+    })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 var authRouter = require('./routes/auth');
-app.use('/auth', authRouter);
+
 
 var createError = require('http-errors');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var config = require('config');
 var unirest = require('unirest');
-const passport = require('passport');
-app.use(passport.initialize());
-app.use(passport.session());
 
-require('./routes/auth');
+
+
+
+app.use('/auth', authRouter);
+//require('./routes/auth');
 
 var bodyParser = require('body-parser');
-const cookieSession = require('cookie-session');
 
 
-app.use(   
-    cookieSession({
-        maxAge: 100,//30 * 24 * 60 * 60 * 1000,
-        keys: [keys.cookieKey]
-    })
-);
+
 
 
 
