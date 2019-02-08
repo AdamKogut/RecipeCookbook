@@ -50,6 +50,7 @@ class Header extends Component {
   }
 
   renderButton=()=>{
+    console.log(this.props.auth)
     switch(this.props.auth){
       case null:
         return;
@@ -74,8 +75,8 @@ class Header extends Component {
             <Tab label="Grocery List" value={1} />
             <Tab label="Pantry" value={2} />
             <Tab label="Meal Planning" value={3} />
-            <Tab label="Saved Recipes" value={4} />
-            {/* {this.renderTab()} */}
+            {/* <Tab label="Saved Recipes" value={4} /> */}
+            {this.renderTab()}
           </Tabs>
           {this.renderButton()}
         </Toolbar>
