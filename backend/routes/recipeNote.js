@@ -14,8 +14,8 @@ MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
 });
 
 router.get('/', function(req, res, next){
-  const user = req.header("name");
-  let result = myDBO.collection("users").find({name: user}, { projection: { notes: 1 }});
+  const user = req.header("googleId");
+  let result = myDBO.collection("users").find({googleId: user}, { projection: { notes: 1 }});
   result.toArray(function(err, result){
     if (err) throw err;
 
@@ -26,11 +26,11 @@ router.get('/', function(req, res, next){
 });
 
 router.post('/', function(req, res, next){
-  let user = req.body.user;
+  let user = req.body.googleId;
   let recipe = req.body.recipeID;
   let note = req.body.note;
 
-  myDBO.collection("users").updateOne({name: user}, {$push: {"notes": {"recipeID": recipe, "note": note}}});
+  myDBO.collection("users").updateOne({googleId: user}, {$push: {"notes": {"recipeID": recipe, "note": note}}});
 
   const resp = {
     success: true
