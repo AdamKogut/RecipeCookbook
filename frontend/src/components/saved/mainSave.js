@@ -38,8 +38,8 @@ class mainSave extends Component {
       console.log(response.data);
       let tempCard = [];
       let tempName = [];
-      if (response.data.length == 0) {
-        tempCard.push(<h3 style={{margin:'auto',paddingTop:'5vh'}}>Save some recipes to see them here!</h3>);
+      if (response.data.length===0) {
+        tempCard.push(<h3 style={{margin:'auto',paddingTop:'5vh'}} key={1}>Save some recipes to see them here!</h3>);
         that.setState({
           allCards: tempCard,
           shownCards: tempCard,
