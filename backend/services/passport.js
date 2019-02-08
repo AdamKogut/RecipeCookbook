@@ -9,7 +9,7 @@ passport.serializeUser((user,done) => {
 });
 
 passport.deserializeUser((id ,done) => {
-    //console.log("ID: "+id);
+    console.log("ID: "+id);
     User.findById(id)
     .then(user => {
         done(null, user);
@@ -25,12 +25,12 @@ passport.use(
         callbackURL: '/auth/google/callback'
     }, 
     (accessToken, refreshToken, profile, done) => {
-        //console.log(typeof(profile.id));
+        console.log(typeof(profile.id));
         //console.log(accessToken);
         //console.log(profile);
         User.findOne({googleId: profile.id})
         .then( existingUser => {
-            //console.log("user retrieved\n" + existingUser)
+            console.log("user retrieved\n" + existingUser)
             if(existingUser){
                 done(null, existingUser);
             }
