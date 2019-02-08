@@ -13,29 +13,11 @@ MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
   //console.log("Databse obj is " + myDBO);
 });
 
-router.get('/', function(req, res, next) {
-  const name = req.header("name");
-
-  console.log(name);
-
-  let result = myDBO.collection("users").find({name: name});
-
-  result.toArray(function(err, result) {
-  if (err) throw err;
-
-  console.log(result);
-
-  res.json(result);
-  });
-});
-
 router.post('/', function(req, res, next) {
-  const recipe = req.body.recipe; //send only the recipe to be added
-  const user = req.body.user;
+  const deleteID = req.body.deleteID; //id of recipe to be deleted
+  const name = req.body.name; //username
 
-  console.log(recipe);
-
-  myDBO.collection("users").updateOne({name: user}, {$push:{"recipes": recipe}});
+  myDBO.collection("users").updateOne({ name: name }, { $pull: { recipes: { id: deleteID } } });
 
   const resp = {
     success: true
