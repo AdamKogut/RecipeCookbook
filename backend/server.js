@@ -1,9 +1,9 @@
 require('babel-register')({
     presets: ['env']
 });
-
+const mongoose = require('mongoose');
 const GoogleStragey = require('passport-google-oauth20').Strategy;
-
+const keys = require('./config/keys');
 var http = require('http');
 var path = require('path');
 var fs = require('fs');
@@ -17,19 +17,13 @@ var unirest = require('unirest');
 var bodyParser = require('body-parser');
 
 var app = express();
-
-passport.use(
-    new GoogleStragey({
-        clientID: "CLIENT", //change later
-        clientSecret: "SECRET", //change later
-        calbackURL: '/auth/google/callback'
-    }, (accessToken) => {
-        console.log(accessToken); 
-    })
-);
+const passport = require('passport');
 
 var helloRouter = require('./routes/hello');
 var searchRouter = require('./routes/search');
+var authRouter = require('./routes/auth');
+
+mongoose.connect(keys.mongodbURL);
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -47,6 +41,9 @@ app.use(bodyParser.urlencoded({ limit: "10gb", extended: true }))
 
 app.use('/hello', helloRouter);
 app.use('/search', searchRouter);
+app.use('/auth', authRouter);
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
