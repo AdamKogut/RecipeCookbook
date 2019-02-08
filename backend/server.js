@@ -21,6 +21,7 @@ var searchRouter = require('./routes/search');
 var recipeInfoRouter = require('./routes/recipeInfo');
 var savedRecipesRouter = require('./routes/savedRecipes');
 var randomsearch = require('./routes/randomsearch');
+var recipeNote = require('./routes/recipeNote');
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -41,6 +42,7 @@ app.use('/search', searchRouter);
 app.use('/recipeInfo', recipeInfoRouter);
 app.use('/savedRecipes', savedRecipesRouter);
 app.use('/randomsearch', randomsearch);
+app.use('/recipeNote', recipeNote);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
