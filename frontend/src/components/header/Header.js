@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { Route, Switch } from "react-router-dom";
-import { AppBar, Toolbar, Tabs, Tab, Button } from "@material-ui/core";
+import { AppBar, Toolbar, Tabs, Tab } from "@material-ui/core";
 import { connect } from "react-redux";
 import LoginButton from "./LoginButton";
 import LogoutButton from "./LogoutButton";
@@ -48,9 +47,10 @@ class Header extends Component {
       default:
         return <Tab label="Saved Recipes" value={4} />;
     }
-  }
+  };
 
   renderButton=()=>{
+    console.log(this.props.auth);
     switch(this.props.auth){
       case null:
         return;
@@ -59,7 +59,7 @@ class Header extends Component {
       default:
         return <LogoutButton />;
     }
-  }
+  };
 
   render() {
     return (
@@ -75,6 +75,7 @@ class Header extends Component {
             <Tab label="Grocery List" value={1} />
             <Tab label="Pantry" value={2} />
             <Tab label="Meal Planning" value={3} />
+            {/* <Tab label="Saved Recipes" value={4} /> */}
             {this.renderTab()}
           </Tabs>
           {this.renderButton()}
