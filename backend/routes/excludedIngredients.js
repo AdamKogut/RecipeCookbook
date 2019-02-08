@@ -32,7 +32,9 @@ router.post('/', function(req, res, next){
   ingredients = ingredients.replace(/\s/g, '');
   let ingredientsArr = ingredients.split(',');
 
-  myDBO.collection("users").updateOne({name: user}, {$push: {"excludedIngredients": ingredientsArr}});
+  for(var i = 0; i < ingredientsArr.length; i++){
+    myDBO.collection("users").updateOne({name: user}, {$push: {"excludedIngredients": ingredientsArr[i]}});
+  }
 
   const resp = {
     success: true

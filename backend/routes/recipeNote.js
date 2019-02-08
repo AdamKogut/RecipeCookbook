@@ -30,7 +30,7 @@ router.post('/', function(req, res, next){
   let recipe = req.body.recipeID;
   let note = req.body.note;
 
-  myDBO.collection("users").updateOne({name: user}, {$push: {"notes": [{"recipeID": recipe, "note": note}]}});
+  myDBO.collection("users").updateOne({name: user}, {$push: {"notes": {"recipeID": recipe, "note": note}}});
 
   const resp = {
     success: true
