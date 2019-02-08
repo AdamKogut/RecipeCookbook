@@ -8,6 +8,7 @@ import Axios from "axios";
 import RecipeModal from "../RecipeModal/RecipeModal";
 import BodyContainer from "../BodyContainer/BodyContainer";
 import filter from 'fuzzaldrin';
+import {connect} from 'react-redux';
 
 class mainSave extends Component {
   constructor(props) {
@@ -32,7 +33,7 @@ class mainSave extends Component {
   componentDidMount = () => {
     let that = this;
     Axios.get("http://localhost:8080/savedRecipes", {
-      headers: { name: "Ryan" }
+      headers: { name: that.props.auth }
     }).then(function(response) {
       //console.log(response.data[0].recipes);
       let tempCard = [];
@@ -80,4 +81,9 @@ class mainSave extends Component {
   }
 }
 
-export default mainSave;
+
+function mapStatesToProps({ auth }) {
+  return { auth: auth };
+}
+
+export default connect(mapStatesToProps)(mainSave);
