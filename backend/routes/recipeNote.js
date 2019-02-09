@@ -28,14 +28,36 @@ router.get('/', function(req, res, next){
 
 router.post('/', function(req, res, next){
   let user = req.body.googleId;
-  let recipe = req.body.recipeID;
+  let recipe = req.body.recipeId;
   let note = req.body.note;
 
-  myDBO.collection("users").updateOne({googleId: user}, {$push: {"notes": {"recipeID": recipe, "note": note}}});
+  console.log(user, recipe, note);
 
-  const resp = {
-    success: true
-  };
-  res.json(resp);
+  let result = myDBO.collection("users").find({googleId: user}, { projection: { notes: 1 }});
+  result.toArray(function(err, result){
+    let notes = result[0].notes;
+
+    let found = false;
+    for (let i = 0; i < notes.length; i++) {
+      if (notes[i].recipeId === recipe) {
+        notes[i].note = note;
+        found = true;
+        break;
+      }
+    }
+
+    if (!found) {
+      notes.push({"recipeId": recipe, "note": note});
+    }
+
+    console.log(notes);
+
+    myDBO.collection("users").updateOne({googleId: user}, {$set: {"notes": notes}}, () => {
+      const resp = {
+        success: true
+      };
+      res.json(resp);
+    });
+  });
 });
 module.exports = router;

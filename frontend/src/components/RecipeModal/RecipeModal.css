@@ -51,6 +51,6 @@
   transform: translateX(-50%);
 }
 
-body > div.MuiModal-root-69 {
+[role="presentation"] {
     overflow-y: scroll;
 }
