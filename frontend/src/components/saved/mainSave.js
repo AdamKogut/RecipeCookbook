@@ -32,8 +32,11 @@ class mainSave extends Component {
 
   componentDidMount = () => {
     let that = this;
+
+    console.log(that.props.auth);
+
     Axios.get("http://localhost:8080/savedRecipes", {
-      headers: { name: that.props.auth }
+      headers: { googleId: that.props.auth }
     }).then(function(response) {
       console.log(response.data);
       let tempCard = [];

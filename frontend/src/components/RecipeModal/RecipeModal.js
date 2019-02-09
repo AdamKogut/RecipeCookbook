@@ -1,11 +1,12 @@
 import React from 'react';
 import './RecipeModal.css';
 
-import { Modal, Paper, Button, AppBar, Tabs, Tab } from '@material-ui/core';
+import { Modal, Paper, Button, AppBar, Tabs, Tab, TextField } from '@material-ui/core';
 import Loader from "../Loader/Loader";
 import axios from "axios/index";
 import RecipePrinter from "../RecipePrinter/RecipePrinter";
 import RecipeToolbar from './RecipeToolbar';
+import { connect } from "react-redux";
 
 class RecipeModal extends React.Component {
   constructor (props) {
@@ -14,7 +15,8 @@ class RecipeModal extends React.Component {
     this.state = {
       recipe: {},
       currentTab: 0,
-      closed: true
+      closed: true,
+      notes: ''
     };
   }
 
@@ -33,6 +35,33 @@ class RecipeModal extends React.Component {
         recipe: response.data.body
       });
     });
+
+    // Grab the recipe notes if on the saved page
+    if (this.props.type === 'saved') {
+      axios.get(
+        'http://localhost:8080/recipeNote',
+        {
+          headers: {
+            googleId: this.props.auth
+          }
+        }
+      ).then((response) => {
+        console.log(response);
+
+        let note = '';
+        const notes = response.data[0].notes;
+        for (let i = 0; i < notes.length; i++) {
+          if (notes[i].recipeId === this.props.id) {
+            note = notes[i].note;
+            break;
+          }
+        }
+
+        this.setState({
+          notes: note
+        });
+      });
+    }
   };
 
   handleTab = (event, value) => {
@@ -46,6 +75,18 @@ class RecipeModal extends React.Component {
       currentTab: 0,
       closed: true
     });
+  };
+
+  saveNotes = () => {
+    console.log('save');
+    axios.post(
+      'http://localhost:8080/recipeNote',
+      {
+        googleId: this.props.auth,
+        recipeId: this.props.id,
+        note: this.state.notes
+      }
+    );
   };
 
   render () {
@@ -79,6 +120,24 @@ class RecipeModal extends React.Component {
         );
       }
 
+      const notesTab = this.props.type === 'saved' ? <Tab label="Notes" /> : null;
+      const notesBox = (
+        <TextField
+          label="Notes"
+          value={this.state.notes}
+          multiline
+          rows="10"
+          margin="normal"
+          variant="outlined"
+          fullWidth
+          onChange={(event) => {
+            this.setState({
+              notes: event.target.value
+            })
+          }}
+        />
+      );
+
       content = (
         <div>
           <h1 id={'recipe-modal-title'}>
@@ -87,7 +146,7 @@ class RecipeModal extends React.Component {
         
           <img id={'recipe-modal-image'} src={recipe.image} alt={`recipe: ${recipe.title}`} />
 
-          <RecipeToolbar recipe={recipe} type={this.props.type}/>
+          <RecipeToolbar recipe={recipe} type={this.props.type} save={this.saveNotes}/>
 
           <div id={'recipe-modal-description'}>
             <AppBar position="static" color={'default'}>
@@ -95,11 +154,13 @@ class RecipeModal extends React.Component {
                 <Tab label="Ingredients" />
                 <Tab label="Instructions" />
                 <Tab label="Nutrition" />
+                {notesTab}
               </Tabs>
             </AppBar>
             {currentTab === 0 && <div className={'recipe-modal-tab-content'}><ul>{ingredients}</ul></div>}
             {currentTab === 1 && <div className={'recipe-modal-tab-content'}><ul>{instructions}</ul></div>}
             {currentTab === 2 && <div className={'recipe-modal-tab-content'}></div>}
+            {currentTab === 3 && <div className={'recipe-modal-tab-content'}>{notesBox}</div>}
           </div>
         </div>
       );
@@ -120,4 +181,8 @@ class RecipeModal extends React.Component {
   }
 }
 
-export default RecipeModal;
+function mapStatesToProps({ auth }) {
+  return { auth: auth };
+}
+
+export default connect(mapStatesToProps)(RecipeModal);

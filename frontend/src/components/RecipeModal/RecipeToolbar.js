@@ -17,7 +17,7 @@ class RecipeToolbar extends Component {
   saveRecipe = () => {
     let that = this;
     Axios.post("http://localhost:8080/savedRecipes", {
-      user: that.props.auth,
+      googleId: that.props.auth,
       recipe: that.props.recipe
     }).then(()=>{console.log('hi');that.setState({a:!that.state.a})});
   };
@@ -25,7 +25,7 @@ class RecipeToolbar extends Component {
   removeRecipe = () => {
     let that=this
     Axios.post("http://localhost:8080/deleteSavedRecipe", {
-      name: that.props.auth,
+      googleId: that.props.auth,
       deleteID: that.props.recipe.id
     }).then(()=>{console.log('hi');that.setState({a:!that.state.a})});
   };
@@ -33,7 +33,7 @@ class RecipeToolbar extends Component {
   componentDidMount = () => {
     let that = this;
     Axios.get("http://localhost:8080/savedRecipes", {
-      headers: { name: that.props.auth }
+      headers: { googleId: that.props.auth }
     }).then(function(response) {
       that.setState({
         p:
@@ -86,6 +86,8 @@ class RecipeToolbar extends Component {
         <Button variant="contained">Add to Groceries</Button>
 
         <RecipePrinter recipe={this.props.recipe} />
+
+        {this.props.type === 'saved' ? <Button variant="contained" onClick={this.props.save} >Save Notes</Button> : null}
       </div>
     );
   }

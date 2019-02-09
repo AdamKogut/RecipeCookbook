@@ -5,7 +5,7 @@ const passport = require('passport');
 router.get('/google/callback', passport.authenticate('google'),(req, res) => {
     console.log(req.user);
     // res.redirect('https://night-in-12.firebaseapp.com/');
-    res.redirect(`http://localhost:3000/cookie?cookie=${req.user._id}`)
+    res.redirect(`http://localhost:3000/cookie?cookie=${req.user.googleId}`)
     // res.cookie('')
 
 });
