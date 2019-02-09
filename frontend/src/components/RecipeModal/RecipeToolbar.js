@@ -37,7 +37,7 @@ class RecipeToolbar extends Component {
     }).then(function(response) {
       that.setState({
         p:
-          response.data.length === 0
+        response.data[0].recipes==undefined||response.data[0].recipes.length === 0 
             ? false
             : response.data[0].recipes.find(obj => {
                 return obj.id === that.props.recipe.id;
