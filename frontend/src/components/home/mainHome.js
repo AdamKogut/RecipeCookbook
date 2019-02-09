@@ -85,7 +85,7 @@ class mainHome extends Component {
       }
     }
 
-    console.log(query);
+    // console.log(query);
 
     // Set the results once we get them back from the server
     axios.post(
@@ -175,6 +175,7 @@ class mainHome extends Component {
         <RecipeModal
           id={this.state.displayedRecipe}
           onClose={this.onModalClose}
+          type='search'
         />
 
         <BodyContainer>

@@ -5,14 +5,15 @@ import history from "../../history";
 
 class LogoutButton extends Component {
   handleLogout = () => {
-    // axios.post("http://localhost:8080/logout", {}).then(() => history.push("/"));
-    window.location.href='http://localhost:8080/auth/logout';
+    document.cookie=`user=; expires=Thu, 01 Jan 1970 00:00:00 UTC`;
+    window.location.href='http://localhost:3000';
   };
 
   render() {
+    // console.log(document.cookie)
     return (
       <Button
-        onClick={this.handleLogin}
+        onClick={this.handleLogout}
         style={{ position: "absolute", right: "10px", color: "white" }}
       >
         Logout

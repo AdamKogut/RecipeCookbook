@@ -5,6 +5,7 @@ import { Modal, Paper, Button, AppBar, Tabs, Tab } from '@material-ui/core';
 import Loader from "../Loader/Loader";
 import axios from "axios/index";
 import RecipePrinter from "../RecipePrinter/RecipePrinter";
+import RecipeToolbar from './RecipeToolbar';
 
 class RecipeModal extends React.Component {
   constructor (props) {
@@ -86,17 +87,7 @@ class RecipeModal extends React.Component {
         
           <img id={'recipe-modal-image'} src={recipe.image} alt={`recipe: ${recipe.title}`} />
 
-          <div id={'recipe-modal-toolbar'}>
-            <Button variant="contained" color="primary">
-              Save
-            </Button>
-
-            <Button variant="contained">
-              Add to Groceries
-            </Button>
-
-            <RecipePrinter recipe={recipe}/>
-          </div>
+          <RecipeToolbar recipe={recipe} type={this.props.type}/>
 
           <div id={'recipe-modal-description'}>
             <AppBar position="static" color={'default'}>
