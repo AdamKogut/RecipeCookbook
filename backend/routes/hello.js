@@ -1,9 +1,10 @@
 var express = require('express');
 var router = express.Router();
+var keys = require('../config/keys');
 
 /* GET test. */
 router.get('/', function(req, res, next) {
-  const url = "mongodb+srv://NightInUser:NightIn@mycluster-ir6tr.mongodb.net/test?retryWrites=true"
+  const url = keys.mongodbURL;
   var MongoClient = require('mongodb').MongoClient;
   var myDBO;
 
@@ -24,7 +25,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
-  const url = "mongodb+srv://NightInUser:NightIn@mycluster-ir6tr.mongodb.net/test?retryWrites=true"
+  const url = keys.mongodbURL;
   var MongoClient = require('mongodb').MongoClient;
   var myDBO;
 

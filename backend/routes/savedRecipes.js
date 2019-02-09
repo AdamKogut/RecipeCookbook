@@ -1,8 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var unirest = require('unirest');
+var keys = require('../config/keys');
 
-const url = "mongodb+srv://NightInUser:NightIn@mycluster-ir6tr.mongodb.net/test?retryWrites=true"
+const url = keys.mongodbURL;
 var MongoClient = require('mongodb').MongoClient;
 var myDBO;
 

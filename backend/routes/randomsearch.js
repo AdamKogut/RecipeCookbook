@@ -1,8 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var unirest = require('unirest');
+var keys = require('../config/keys');
 
-const url = "mongodb+srv://NightInUser:NightIn@mycluster-ir6tr.mongodb.net/test?retryWrites=true"
+const url = keys.mongodbURL;
 var MongoClient = require('mongodb').MongoClient;
 var myDBO;
 
@@ -40,7 +41,7 @@ router.post('/', function(req, res, next){
   }
 
   unirest.get(url)
-  .header("X-RapidAPI-Key", "65cccbe42amshc14dcee9ef31452p173356jsn8b5b8d2c1789") //MAJOR KEY ALERT
+  .header("X-RapidAPI-Key", keys.spoonacularKey) //MAJOR KEY ALERT
   .end(function (result) {
     const resp = {
       status: result.status,
