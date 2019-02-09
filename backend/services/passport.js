@@ -35,7 +35,13 @@ passport.use(
                 done(null, existingUser);
             }
             else{
-                new User({googleId: profile.id})
+                new User({
+                    googleId: profile.id,
+                    name: profile.name.givenName,
+                    recipes: [],
+                    notes: [],
+                    excludedIngredients: [],
+                })
                 .save()
                 .then( user => done(null, user))
                 .catch(err => console.log(err));     
