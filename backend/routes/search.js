@@ -2,8 +2,6 @@ var express = require('express');
 var router = express.Router();
 var unirest = require('unirest');
 
-//import axios from "axios";
-
 const url = "mongodb+srv://NightInUser:NightIn@mycluster-ir6tr.mongodb.net/test?retryWrites=true"
 var MongoClient = require('mongodb').MongoClient;
 var myDBO;
@@ -12,7 +10,6 @@ MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
   if(err) throw err
   console.log("Database opened!");
   myDBO = db.db("CookbookBase");
-  //console.log("Databse obj is " + myDBO);
 });
 
 router.post('/', function(req, res, next) {
@@ -46,14 +43,18 @@ router.post('/', function(req, res, next) {
   if(query) {
     url += 'query=' + query + '&';
   }
+
   if(cuisine) {
     cuisine = cuisine.replace(/\s/g, '');
     let cuisineArr = cuisine.split(',');
     if(cuisineArr.length > 1) {
       url += 'cuisine=';
-      for(var i = 0; i < cuisineArr.length - 1; i++) {
+
+      let i;
+      for(i = 0; i < cuisineArr.length - 1; i++) {
         url += cuisineArr[i] + '%2C'
       }
+
       url += cuisineArr[i] + '&';
     }
     else {
@@ -70,9 +71,12 @@ router.post('/', function(req, res, next) {
     let ingredientsArr = includeIngredients.split(",");
     if(ingredientsArr.length > 1) {
       url += 'includeIngredients=';
-      for(var i = 0; i < ingredientsArr.length - 1; i++) {
+
+      let i;
+      for(i = 0; i < ingredientsArr.length - 1; i++) {
         url += ingredientsArr[i] + '%2C'
       }
+
       url += ingredientsArr[i] + '&';
     }
     else {
@@ -83,13 +87,15 @@ router.post('/', function(req, res, next) {
   if(excludeIngredients) {
     excludeIngredients = excludeIngredients.replace(/\s/g, '');
     let ingredientsArr = excludeIngredients.split(",");
-    console.log(ingredientsArr.length);
-    console.log(ingredientsArr);
+
     if(ingredientsArr.length > 1) {
       url += 'excludeIngredients=';
-      for(var i = 0; i < ingredientsArr.length - 1; i++) {
+
+      let i;
+      for(i = 0; i < ingredientsArr.length - 1; i++) {
         url += ingredientsArr[i] + '%2C'
       }
+
       url += ingredientsArr[i] + '&';
     }
     else {
@@ -102,9 +108,12 @@ router.post('/', function(req, res, next) {
     let intolerancesArr = intolerances.split(",");
     if(intolerancesArr.length > 1) {
       url += 'intolerances=';
-      for(var i = 0; i < intolerancesArr.length - 1; i++) {
+
+      let i;
+      for(i = 0; i < intolerancesArr.length - 1; i++) {
         url += intolerancesArr[i] + '%2C'
       }
+
       url += intolerancesArr[i] + '&';
     }
     else {
@@ -137,13 +146,15 @@ router.post('/', function(req, res, next) {
   unirest.get(url)
   .header("X-RapidAPI-Key", "a9a52ceac7msh44e67e374810be9p169e33jsnb46bcb8a9b05") //MAJOR KEY ALERT
   .end(function (result) {
-  console.log(result.status, result.headers, result.body);
-  const resp = {
-    status: result.status,
-    header: result.headers,
-    body: result.body
-  };
-  res.json(resp);
+    console.log(result.status, result.headers, result.body);
+
+    const resp = {
+      status: result.status,
+      header: result.headers,
+      body: result.body
+    };
+
+    res.json(resp);
   });
 });
 

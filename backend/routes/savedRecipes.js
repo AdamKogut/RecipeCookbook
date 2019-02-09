@@ -14,11 +14,11 @@ MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
 });
 
 router.get('/', function(req, res, next) {
-  const name = req.header("name");
+  const name = req.header("googleId");
 
   console.log(name);
 
-  let result = myDBO.collection("users").find({name: name});
+  let result = myDBO.collection("users").find({googleId: name});
 
   result.toArray(function(err, result) {
   if (err) throw err;
@@ -31,11 +31,30 @@ router.get('/', function(req, res, next) {
 
 router.post('/', function(req, res, next) {
   const recipe = req.body.recipe; //send only the recipe to be added
-  const user = req.body.user;
+  const user = req.body.googleId;
 
-  console.log(recipe);
+  console.log(user);
 
-  myDBO.collection("users").updateOne({name: user}, {$push:{"recipes": recipe}});
+  let result = myDBO.collection("users").find({googleId: user});
+  let flag = true;
+
+  result.toArray(function(err, result) {
+  if (err) throw err;
+
+  console.log(result);
+
+  for(let i = 0; i < result[0].recipes.length; i++) {
+    console.log(result[0].recipes[i].id);
+    if(result[0].recipes[i].id === recipe.id) {
+      console.log("in if")
+      flag = false;
+      console.log(flag);
+    }
+  }
+  if(flag) {
+    myDBO.collection("users").updateOne({googleId: user}, {$push:{"recipes": recipe}});
+  }
+  });
 
   const resp = {
     success: true
