@@ -6,6 +6,7 @@ require('babel-register')({
 const GoogleStragey = require('passport-google-oauth20').Strategy;
 const keys = require('./config/keys');
 var http = require('http');
+var https = require('https');
 var path = require('path');
 var fs = require('fs');
 
@@ -61,7 +62,7 @@ var deleteSavedRecipeRouter = require('./routes/deleteSavedRecipe');
 var randomsearch = require('./routes/randomsearch');
 var recipeNote = require('./routes/recipeNote');
 var excludedIngredients = require('./routes/excludedIngredients');
-
+var testRouter = require('./routes/test');
 var allowCrossDomain = function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
@@ -84,7 +85,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json({ limit: '10gb' }));
 app.use(bodyParser.urlencoded({ limit: "10gb", extended: true }))
 
-
+app.use('/test', testRouter);
 app.use('/hello', helloRouter);
 app.use('/search', searchRouter);
 app.use('/recipeInfo', recipeInfoRouter);
@@ -108,6 +109,19 @@ app.use(function(req, res, next) {
 
 var httpServer = http.createServer(app);
 
+//const fs = require('fs');
+/*
+const options = {
+	key: fs.readFileSync('../../certificates/privkey.pem','utf8'),
+	cert: fs.readFileSync('../../certificates/fullchain.pem','utf8')
+};
+
+var httpsServer = https.createServer(options, app);
+
+httpsServer.listen(8000, function() {
+    console.log('HTTPS server listening on port ' + app.get('port'));
+});
+*/
 httpServer.listen(app.get('port'), function() {
     console.log('Server listing on port ' + app.get('port'));
 });
