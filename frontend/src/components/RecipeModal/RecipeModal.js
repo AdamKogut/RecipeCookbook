@@ -143,10 +143,22 @@ class RecipeModal extends React.Component {
           <h1 id={'recipe-modal-title'}>
             {recipe.title}
           </h1>
-        
+
           <img id={'recipe-modal-image'} src={recipe.image} alt={`recipe: ${recipe.title}`} />
 
-          <RecipeToolbar recipe={recipe} type={this.props.type} save={this.saveNotes}/>
+          <RecipeToolbar
+            recipe={recipe}
+            type={this.props.type}
+            saveNote={this.saveNotes}
+            onSave={() => {
+              if (this.props.type === "saved")
+                this.props.updateSavedList();
+            }}
+            onDelete={() => {
+              if (this.props.type === "saved")
+                this.props.updateSavedList();
+            }}
+          />
 
           <div id={'recipe-modal-description'}>
             <AppBar position="static" color={'default'}>

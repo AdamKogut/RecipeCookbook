@@ -19,15 +19,25 @@ class RecipeToolbar extends Component {
     Axios.post("http://localhost:8080/savedRecipes", {
       googleId: that.props.auth,
       recipe: that.props.recipe
-    }).then(()=>{console.log('hi');that.setState({a:!that.state.a})});
+    }).then(()=>{
+      that.setState({p:!that.state.p});
+
+      if (this.props.onSave)
+        this.props.onSave();
+    });
   };
 
   removeRecipe = () => {
-    let that=this
+    let that=this;
     Axios.post("http://localhost:8080/deleteSavedRecipe", {
       googleId: that.props.auth,
       deleteID: that.props.recipe.id
-    }).then(()=>{console.log('hi');that.setState({a:!that.state.a})});
+    }).then(()=>{
+      that.setState({p:!that.state.p});
+
+      if (this.props.onDelete)
+        this.props.onDelete();
+    });
   };
 
   componentDidMount = () => {
@@ -37,13 +47,13 @@ class RecipeToolbar extends Component {
     }).then(function(response) {
       that.setState({
         p:
-        response.data[0].recipes==undefined||response.data[0].recipes.length === 0 
+          response.data[0].recipes==undefined||response.data[0].recipes.length === 0
             ? false
             : response.data[0].recipes.find(obj => {
-                return obj.id === that.props.recipe.id;
-              }) != undefined
-              ? true
-              : false
+              return obj.id === that.props.recipe.id;
+            }) != undefined
+            ? true
+            : false
       });
     });
   };
@@ -87,7 +97,7 @@ class RecipeToolbar extends Component {
 
         <RecipePrinter recipe={this.props.recipe} />
 
-        {this.props.type === 'saved' ? <Button variant="contained" onClick={this.props.save} >Save Notes</Button> : null}
+        {this.props.type === 'saved' ? <Button variant="contained" onClick={this.props.saveNote} >Save Notes</Button> : null}
       </div>
     );
   }

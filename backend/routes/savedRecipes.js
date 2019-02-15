@@ -34,35 +34,34 @@ router.post('/', function(req, res, next) {
   const recipe = req.body.recipe; //send only the recipe to be added
   const user = req.body.googleId;
 
-  console.log('USER', user);
-
   let result = myDBO.collection("users").find({googleId: user});
   let flag = true;
 
   result.toArray(function(err, result) {
     if (err) throw err;
 
-    console.log('------------------',result);
-
     for(let i = 0; i < result[0].recipes.length; i++) {
-      console.log(result[0].recipes[i].id);
       if(result[0].recipes[i].id === recipe.id) {
-        console.log("in if")
         flag = false;
-        console.log(flag);
       }
     }
 
-    console.log(flag);
     if(flag) {
-      myDBO.collection("users").updateOne({googleId: user}, {$push:{"recipes": recipe}});
+      myDBO.collection("users").updateOne({googleId: user}, {$push:{"recipes": recipe}}, () => {
+        const resp = {
+          success: true
+        };
+
+        res.json(resp);
+      });
+    } else {
+      const resp = {
+        success: false
+      };
+
+      res.json(resp);
     }
   });
-
-  const resp = {
-    success: true
-  };
-  res.json(resp);
 });
 
 module.exports = router;

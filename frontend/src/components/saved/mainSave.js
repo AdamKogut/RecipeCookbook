@@ -31,14 +31,20 @@ class mainSave extends Component {
   };
 
   componentDidMount = () => {
-    let that = this;
+    if (this.state.auth)
+      this.updateList();
+    else
+      setTimeout(() => {
+        this.updateList();
+      }, 10);
+  };
 
-    console.log(that.props.auth);
+  updateList = () => {
+    let that = this;
 
     Axios.get("http://localhost:8080/savedRecipes", {
       headers: { googleId: that.props.auth }
     }).then(function(response) {
-      console.log(response.data);
       let tempCard = [];
       let tempName = [];
       if (response.data.length===0) {
@@ -91,7 +97,12 @@ class mainSave extends Component {
           <Grid id={"search-results"} container spacing={24}>
             {this.state.shownCards}
           </Grid>
-          <RecipeModal {...this.state} onClose={this.onClose} type="saved" />
+          <RecipeModal
+            {...this.state}
+            onClose={this.onClose}
+            type="saved"
+            updateSavedList={this.updateList}
+          />
         </BodyContainer>
       </div>
     );
