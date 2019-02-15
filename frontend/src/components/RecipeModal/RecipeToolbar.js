@@ -16,7 +16,7 @@ class RecipeToolbar extends Component {
 
   saveRecipe = () => {
     let that = this;
-    Axios.post("http://localhost:8080/savedRecipes", {
+    Axios.post("/savedRecipes", {
       googleId: that.props.auth,
       recipe: that.props.recipe
     }).then(()=>{
@@ -29,7 +29,7 @@ class RecipeToolbar extends Component {
 
   removeRecipe = () => {
     let that=this;
-    Axios.post("http://localhost:8080/deleteSavedRecipe", {
+    Axios.post("/deleteSavedRecipe", {
       googleId: that.props.auth,
       deleteID: that.props.recipe.id
     }).then(()=>{
@@ -42,9 +42,10 @@ class RecipeToolbar extends Component {
 
   componentDidMount = () => {
     let that = this;
-    Axios.get("http://localhost:8080/savedRecipes", {
+    Axios.get("/savedRecipes", {
       headers: { googleId: that.props.auth }
     }).then(function(response) {
+      console.log(response.data)
       that.setState({
         p:
           response.data[0].recipes==undefined||response.data[0].recipes.length === 0

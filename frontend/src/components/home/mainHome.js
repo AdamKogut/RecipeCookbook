@@ -89,7 +89,7 @@ class mainHome extends Component {
 
     // Set the results once we get them back from the server
     axios.post(
-      'http://localhost:8080/search',
+      '/search',
       query
     ).then((response) => {
       this.setState({
@@ -111,7 +111,7 @@ class mainHome extends Component {
 
     // Set the results once we get them back from the server
     axios.post(
-      'http://localhost:8080/randomsearch',
+      '/randomsearch',
       {
         number: 16
       }

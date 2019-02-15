@@ -42,7 +42,7 @@ class mainSave extends Component {
   updateList = () => {
     let that = this;
 
-    Axios.get("http://localhost:8080/savedRecipes", {
+    Axios.get("/savedRecipes", {
       headers: { googleId: that.props.auth }
     }).then(function(response) {
       let tempCard = [];

@@ -29,7 +29,7 @@ class RecipeModal extends React.Component {
   getData = () => {
     // Grab the recipe data from the api using props.id
     axios.get(
-      'http://localhost:8080/recipeInfo',
+      '/recipeInfo',
       {
         headers: {
           id: this.props.id,
@@ -45,7 +45,7 @@ class RecipeModal extends React.Component {
     // Grab the recipe notes if on the saved page
     if (this.props.type === 'saved') {
       axios.get(
-        'http://localhost:8080/recipeNote',
+        '/recipeNote',
         {
           headers: {
             googleId: this.props.auth
@@ -106,7 +106,7 @@ class RecipeModal extends React.Component {
     });
 
     axios.post(
-      'http://localhost:8080/recipeNote',
+      '/recipeNote',
       {
         googleId: this.props.auth,
         recipeId: this.props.id,
