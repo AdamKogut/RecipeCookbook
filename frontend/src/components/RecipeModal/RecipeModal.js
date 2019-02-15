@@ -52,8 +52,6 @@ class RecipeModal extends React.Component {
           }
         }
       ).then((response) => {
-        console.log(response);
-
         let note = '';
         const notes = response.data[0].notes;
         for (let i = 0; i < notes.length; i++) {
@@ -138,12 +136,20 @@ class RecipeModal extends React.Component {
         );
       }
 
-      for (let i = 0; i < recipe.analyzedInstructions[0].steps.length; i++) {
+      if (recipe.instructions === null) {
         instructions.push(
-          <li key={'ingredient' + i}>
-            { recipe.analyzedInstructions[0].steps[i].step }
+          <li key={'ingredient'}>
+            <em>None provided ):</em>
           </li>
         );
+      } else {
+        for (let i = 0; i < recipe.analyzedInstructions[0].steps.length; i++) {
+          instructions.push(
+            <li key={'ingredient' + i}>
+              { recipe.analyzedInstructions[0].steps[i].step }
+            </li>
+          );
+        }
       }
 
       const notesTab = this.props.type === 'saved' ? <Tab label="Notes" /> : null;

@@ -62,12 +62,20 @@ class PrintableRecipe extends React.Component {
         );
       }
 
-      for (let i = 0; i < recipe.analyzedInstructions[0].steps.length; i++) {
+      if (recipe.instructions === null) {
         instructions.push(
-          <li key={'ingredient' + i}>
-            { recipe.analyzedInstructions[0].steps[i].step }
+          <li key={'ingredient'}>
+            <em>None provided ):</em>
           </li>
         );
+      } else {
+        for (let i = 0; i < recipe.analyzedInstructions[0].steps.length; i++) {
+          instructions.push(
+            <li key={'ingredient' + i}>
+              { recipe.analyzedInstructions[0].steps[i].step }
+            </li>
+          );
+        }
       }
 
       content = (
