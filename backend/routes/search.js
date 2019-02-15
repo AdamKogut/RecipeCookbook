@@ -43,6 +43,7 @@ router.post('/', function(req, res, next) {
   let url = 'https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/searchComplex?';
 
   if(query) {
+    query = cleanQuery(query);
     url += 'query=' + query + '&';
   }
 
@@ -160,4 +161,8 @@ router.post('/', function(req, res, next) {
   });
 });
 
+ function cleanQuery(query){
+  var cleanedQuery = query.replace(/[!@#$%^&*()_+\-=|\\\[\]"':;`~<>?,./☼¶§æÆ¢☺£¥₧ƒªº¿¬½¼¡«»ßµ±°∙·²€◙☻♥♦♣♠•◘○◙]/gi, '')
+  return cleanedQuery;
+}
 module.exports = router;
