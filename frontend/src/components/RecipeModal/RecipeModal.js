@@ -7,6 +7,8 @@ import axios from "axios/index";
 import RecipePrinter from "../RecipePrinter/RecipePrinter";
 import RecipeToolbar from './RecipeToolbar';
 import { connect } from "react-redux";
+import ConfirmationDialog from '../ConfirmationDialog/ConfirmationDialog';
+import AlertDialog from "../AlertDialog/AlertDialog";
 
 class RecipeModal extends React.Component {
   constructor (props) {
@@ -16,8 +18,12 @@ class RecipeModal extends React.Component {
       recipe: {},
       currentTab: 0,
       closed: true,
-      notes: ''
+      notes: '',
+      notesOriginal: '',
+      notesWarningIsOpen: false
     };
+
+    this.noChangesAlert = React.createRef();
   }
 
   getData = () => {
@@ -58,7 +64,8 @@ class RecipeModal extends React.Component {
         }
 
         this.setState({
-          notes: note
+          notes: note,
+          notesOriginal: note
         });
       });
     }
@@ -69,16 +76,35 @@ class RecipeModal extends React.Component {
   };
 
   handleClose = () => {
+    // Check for unsaved notes
+    if (this.props.type === "saved" && this.state.notes !== this.state.notesOriginal) {
+      this.setState({
+        notesWarningIsOpen: true
+      });
+
+      return;
+    }
+
+    // close the modal
     this.props.onClose();
     this.setState({
       recipe: {},
       currentTab: 0,
-      closed: true
+      closed: true,
+      notes: '',
+      notesOriginal: '',
+      notesWarningIsOpen: false
     });
   };
 
   saveNotes = () => {
-    console.log('save');
+    if (this.state.notes === this.state.notesOriginal)
+      this.noChangesAlert.current.open();
+
+    this.setState({
+      notesOriginal: this.state.notes
+    });
+
     axios.post(
       'http://localhost:8080/recipeNote',
       {
@@ -181,14 +207,47 @@ class RecipeModal extends React.Component {
     }
 
     return (
-      <Modal
-        open={this.props.id !== null}
-        onClose={this.handleClose}
-      >
-        <Paper className={'modal-container'}>
-          {content}
-        </Paper>
-      </Modal>
+      <div>
+        <Modal
+          open={this.props.id !== null}
+          onClose={this.handleClose}
+        >
+          <Paper className={'modal-container'}>
+            {content}
+          </Paper>
+        </Modal>
+
+        <ConfirmationDialog
+          isOpen={this.state.notesWarningIsOpen}
+          title={"Exit?"}
+          text={"You have an unsaved note for this recipe. Exit anyways?"}
+          agreeText={"Yes"}
+          disagreeText={"No"}
+          onClose={() => {
+            this.setState({
+              notesWarningIsOpen: false
+            });
+          }}
+          onAgree={() => {
+            // close the modal
+            this.props.onClose();
+            this.setState({
+              recipe: {},
+              currentTab: 0,
+              closed: true,
+              notes: '',
+              notesOriginal: '',
+              notesWarningIsOpen: false
+            });
+          }}
+        />
+
+        <AlertDialog
+          title={"Alert"}
+          text={"There are no changes to be saved for the current note"}
+          ref={this.noChangesAlert}
+        />
+      </div>
     );
   }
 }
