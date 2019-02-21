@@ -21,9 +21,11 @@ class RecipeToolbar extends Component {
       recipe: that.props.recipe
     }).then(()=>{
       that.setState({p:!that.state.p});
+      alert('Successfully saved!');
 
       if (this.props.onSave)
         this.props.onSave();
+      that.props.handleClose();
     });
   };
 
