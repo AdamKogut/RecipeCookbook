@@ -1,39 +1,47 @@
 import React, { Component } from "react";
-import axios from 'axios';
+import axios from "axios";
 import "./mainHome.css";
+import { connect } from "react-redux";
 
-import BodyContainer from '../BodyContainer/BodyContainer';
-import RecipeCard from '../RecipeCard/RecipeCard';
-import Loader from '../Loader/Loader';
-import { Button, Grid, TextField } from '@material-ui/core';
+import BodyContainer from "../BodyContainer/BodyContainer";
+import RecipeCard from "../RecipeCard/RecipeCard";
+import Loader from "../Loader/Loader";
+import {
+  Button,
+  Grid,
+  TextField,
+  Checkbox,
+  FormControlLabel,
+  Switch
+} from "@material-ui/core";
 import RecipeModal from "../RecipeModal/RecipeModal";
-import AdvancedSearch from '../AdvancedSearch/AdvancedSearch';
+import AdvancedSearch from "../AdvancedSearch/AdvancedSearch";
 
 class mainHome extends Component {
-
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.state = {
       displayedRecipe: null,
       results: null,
-      searchBarValue: '',
+      searchBarValue: "",
       isLoadingSearch: false,
-      searchType: 'default',
-      advancedSearch: {}
+      searchType: "default",
+      advancedSearch: {},
+      eingre: false
     };
   }
 
   search = () => {
     const searchValue = this.state.searchBarValue;
-    if (this.state.searchType === 'random') {
+    if (this.state.searchType === "random") {
       this.setState({
-        searchType: 'default'
+        searchType: "default"
       });
     }
 
     // Empty search base case
-    if (searchValue === '') {
+    if (searchValue === "") {
       this.clearResults();
 
       return;
@@ -50,7 +58,25 @@ class mainHome extends Component {
       instructionsRequired: true
     };
 
-    if (this.state.searchType === 'advanced') {
+    if (this.props.auth) {
+      let that = this;
+      axios
+        .get("http://localhost:8080/excludedIngredients", {
+          headers: { googleId: that.props.auth }
+        })
+        .then(function(response) {
+          // console.log(response.data)
+          if (that.state.advancedSearch.excludedIngredients != undefined) {
+            let e = that.state.advancedSearch.excludedIngredients;
+            for (let i in response.data) {
+              e.push(response.data[i]);
+            }
+            that.setState({advancedSearch:{...that.state.advancedSearch,excludedIngredients:e}});
+          } else that.setState({ searchType: "advanced", advancedSearch: { ...that.state.advancedSearch, excludedIngredients: response.data } });
+        });
+    }
+
+    if (this.state.searchType === "advanced") {
       query = {
         ...query,
         ...this.state.advancedSearch,
@@ -60,12 +86,11 @@ class mainHome extends Component {
 
       if (this.state.advancedSearch.includedIngredients.selectedItem.length) {
         let array = this.state.advancedSearch.includedIngredients.selectedItem;
-        let string = '';
+        let string = "";
 
         for (let i = 0; i < array.length; i++) {
           string += array[i];
-          if (i + 1 < array.length)
-            string += ',';
+          if (i + 1 < array.length) string += ",";
         }
 
         query.includeIngredients = string;
@@ -73,12 +98,11 @@ class mainHome extends Component {
 
       if (this.state.advancedSearch.excludedIngredients.selectedItem.length) {
         let array = this.state.advancedSearch.excludedIngredients.selectedItem;
-        let string = '';
+        let string = "";
 
         for (let i = 0; i < array.length; i++) {
           string += array[i];
-          if (i + 1 < array.length)
-            string += ',';
+          if (i + 1 < array.length) string += ",";
         }
 
         query.excludeIngredients = string;
@@ -88,10 +112,7 @@ class mainHome extends Component {
     // console.log(query);
 
     // Set the results once we get them back from the server
-    axios.post(
-      'http://localhost:8080/search',
-      query
-    ).then((response) => {
+    axios.post("http://localhost:8080/search", query).then(response => {
       this.setState({
         results: response.data.body.results,
         isLoadingSearch: false
@@ -99,9 +120,13 @@ class mainHome extends Component {
     });
   };
 
+  componentDidMount = () => {
+    this.randomSearch();
+  };
+
   randomSearch = () => {
     this.setState({
-      searchType: 'random'
+      searchType: "random"
     });
 
     // Render the loader while we wait for results
@@ -110,19 +135,18 @@ class mainHome extends Component {
     });
 
     // Set the results once we get them back from the server
-    axios.post(
-      'http://localhost:8080/randomsearch',
-      {
+    axios
+      .post("http://localhost:8080/randomsearch", {
         number: 16
-      }
-    ).then((response) => {
-      console.log(response);
+      })
+      .then(response => {
+        console.log(response);
 
-      this.setState({
-        results: response.data.body.recipes,
-        isLoadingSearch: false
+        this.setState({
+          results: response.data.body.recipes,
+          isLoadingSearch: false
+        });
       });
-    });
   };
 
   clearResults = () => {
@@ -132,7 +156,7 @@ class mainHome extends Component {
     });
   };
 
-  onRecipeClick = (id) => {
+  onRecipeClick = id => {
     this.setState({
       displayedRecipe: id
     });
@@ -144,13 +168,13 @@ class mainHome extends Component {
     });
   };
 
-  render () {
+  render() {
     // Build out the Results list
     const cards = [];
     if (this.state.isLoadingSearch) {
       cards.push(
         <Grid item xs={12} key={0}>
-          <Loader/>
+          <Loader />
         </Grid>
       );
     } else if (this.state.results) {
@@ -158,7 +182,7 @@ class mainHome extends Component {
         const recipe = this.state.results[i];
 
         cards.push(
-          <Grid item xs={3} key={'Recipe' + i}>
+          <Grid item xs={3} key={"Recipe" + i}>
             <RecipeCard
               title={recipe.title}
               image={recipe.image}
@@ -171,27 +195,27 @@ class mainHome extends Component {
     }
 
     return (
-      <div className='BigDivArea'>
+      <div className="BigDivArea">
         <RecipeModal
           id={this.state.displayedRecipe}
           onClose={this.onModalClose}
-          type='search'
+          type="search"
         />
 
         <BodyContainer>
           <TextField
-            id={'recipe-search-bar'}
+            id={"recipe-search-bar"}
             value={this.state.searchBarValue}
-            label={'Search for a Recipe'}
-            type={'search'}
+            label={"Search for a Recipe"}
+            type={"search"}
             fullWidth
-            onChange={(event) => {
+            onChange={event => {
               this.setState({
                 searchBarValue: event.target.value
-              })
+              });
             }}
-            onKeyPress={(e) => {
-              if (e.key === 'Enter') {
+            onKeyPress={e => {
+              if (e.key === "Enter") {
                 this.search();
               }
             }}
@@ -202,18 +226,18 @@ class mainHome extends Component {
             }}
           />
 
-          <br/>
-          <br/>
+          <br />
+          <br />
 
-          <div id={'search-toolbar'}>
+          <div id={"search-toolbar"}>
             <Button
               variant="contained"
-              color={this.state.searchType === "random" ? "secondary" : "default"}
+              color={
+                this.state.searchType === "random" ? "secondary" : "default"
+              }
               onClick={() => {
-                if (this.state.searchType !== 'random')
-                  this.randomSearch();
-                else
-                  this.setState({ searchType: 'default' });
+                if (this.state.searchType !== "random") this.randomSearch();
+                else this.setState({ searchType: "default" });
               }}
             >
               Random
@@ -221,13 +245,17 @@ class mainHome extends Component {
 
             <Button
               variant="contained"
-              color={this.state.searchType === "myIngredients" ? "secondary" : "default"}
+              color={
+                this.state.searchType === "myIngredients"
+                  ? "secondary"
+                  : "default"
+              }
               onClick={() => {
-                if (this.state.searchType !== 'myIngredients') {
-                  this.setState({searchType: 'myIngredients'});
+                if (this.state.searchType !== "myIngredients") {
+                  this.setState({ searchType: "myIngredients" });
                   this.clearResults();
                 } else {
-                  this.setState({ searchType: 'default' });
+                  this.setState({ searchType: "default" });
                 }
               }}
             >
@@ -236,30 +264,46 @@ class mainHome extends Component {
 
             <Button
               variant="contained"
-              color={this.state.searchType === "advanced" ? "secondary" : "default"}
+              color={
+                this.state.searchType === "advanced" ? "secondary" : "default"
+              }
               onClick={() => {
-                if (this.state.searchType !== 'advanced') {
-                  this.setState({searchType: 'advanced'});
+                if (this.state.searchType !== "advanced") {
+                  this.setState({ searchType: "advanced" });
                   this.clearResults();
                 } else {
-                  this.setState({ searchType: 'default' });
+                  this.setState({ searchType: "default" });
                 }
               }}
             >
               Advanced
             </Button>
+            {this.props.auth
+              ? <FormControlLabel
+                  style={{ paddingLeft: "10px" }}
+                  control={
+                    <Switch
+                      checked={this.state.eingre}
+                      color="primary"
+                      onChange={() =>
+                        this.setState({ eingre: !this.state.eingre })}
+                    />
+                  }
+                  label="Exclude Saved Ingredients"
+                />
+              : <div />}
           </div>
 
           <AdvancedSearch
-            expanded={this.state.searchType === 'advanced'}
-            onUpdate={(state) => {
+            expanded={this.state.searchType === "advanced"}
+            onUpdate={state => {
               this.setState({
                 advancedSearch: state
               });
             }}
           />
 
-          <Grid id={'search-results'} container spacing={24}>
+          <Grid id={"search-results"} container spacing={24}>
             {cards}
           </Grid>
         </BodyContainer>
@@ -268,4 +312,8 @@ class mainHome extends Component {
   }
 }
 
-export default mainHome;
+function mapStatesToProps({ auth }) {
+  return { auth: auth };
+}
+
+export default connect(mapStatesToProps)(mainHome);
