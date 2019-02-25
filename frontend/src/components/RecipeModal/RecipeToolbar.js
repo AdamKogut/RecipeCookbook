@@ -4,6 +4,7 @@ import RecipePrinter from "../RecipePrinter/RecipePrinter";
 import { connect } from "react-redux";
 import "./RecipeModal.css";
 import Axios from "axios";
+import EditRecipeModal from "../EditRecipeModal/EditRecipeModal";
 
 class RecipeToolbar extends Component {
   constructor(props) {
@@ -74,13 +75,23 @@ class RecipeToolbar extends Component {
         );
       } else if (that.props.type === "saved" || that.state.p) {
         test = (
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={that.removeRecipe}
-          >
-            Delete
-          </Button>
+          <span>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={that.removeRecipe}
+            >
+              Delete
+            </Button>
+
+            <Button
+              variant={"contained"}
+              color={"secondary"}
+              onClick={that.openEdit}
+            >
+              Edit
+            </Button>
+          </span>
         );
       } else {
         test = <div />;
@@ -99,6 +110,10 @@ class RecipeToolbar extends Component {
         <RecipePrinter recipe={this.props.recipe} />
 
         {this.props.type === 'saved' ? <Button variant="contained" onClick={this.props.saveNote} >Save Notes</Button> : null}
+
+        <EditRecipeModal
+          recipe={this.props.recipe}
+        />
       </div>
     );
   }
