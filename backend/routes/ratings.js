@@ -54,10 +54,8 @@ router.post('/', function(req,res,next){
       var ratings = document.ratings;
       var recipeId = req.body.recipeId;
       var rating = req.body.rating;
-      var obj = new Object;
-      obj[recipeId] = rating;
       console.log(obj);
-      ratings.push(obj);
+      ratings[recipeId]=rating;
       console.log(ratings);
       myDBO.collection("users").updateOne({googleId: user},{$set: {ratings: ratings}}, function(err, result){
         if(err){
@@ -85,10 +83,9 @@ router.post('/', function(req,res,next){
         console.log(recipeId);
         console.log(rating);
         console.log("VALUES PRINTED");
-        var obj = new Object;
-        obj[recipeId] = rating;
-        var ratings = [obj];
-        myDBO.collection("users").updateOne({googleId: user},{$set: {ratings: ratings}}, function(err, res){
+        var ratings = new Object;
+        ratings[recipeId] = rating;
+        myDBO.collection("users").updateOne({googleId: user},{$set: {ratings: ratings}}, function(err, result){
           if(err){
             const resp = {
               success: false

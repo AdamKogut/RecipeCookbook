@@ -7,7 +7,7 @@ const userSchema = new Schema({
     recipes: [Schema.Types.Mixed],
     notes: [String],
     excludedIngredients: [String],
-    ratings: [Schema.Types.Mixed],
+    ratings: Schema.Types.Mixed,
 });
 
 mongoose.model('users', userSchema)
