@@ -16,24 +16,30 @@ MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
 
 router.get('/', function(req, res, next){
   const user = req.header("googleId");
-  let result = myDBO.collection("users").find({googleId: user}, { projection: { excludedIngredients: 1}});
+  let result = myDBO.collection("users").find({googleId: user});
   result.toArray(function(err, result){
     if (err) throw err;
 
     console.log(result);
+    const resp = {
+      excludedIngredients: result[0].excludedIngredients,
+      diet: result[0].diet
+    }
 
-    res.json(result);
+    res.json(resp);
   });
 });
 
 router.post('/', function(req, res, next){
   let user = req.body.googleId;
   let ingredients = req.body.ingredients;
+  let diet = req.body.diet;
 
   ingredients = ingredients.replace(/\s/g, '');
   let ingredientsArr = ingredients.split(',');
 
   myDBO.collection("users").updateOne({googleId: user}, {$set: {"excludedIngredients": ingredientsArr}});
+  myDBO.collection("users").updateOne({googleId: user}, {$set: {"diet": diet}});
 
   const resp = {
     success: true
