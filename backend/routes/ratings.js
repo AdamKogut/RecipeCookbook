@@ -15,70 +15,94 @@ MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
 });
 
 router.get('/', function(req,res,next){
-  const resp = {
-    success: true
-  };
-
-  res.json(resp);
-})
+  console.log("GETTING");
+  const user = req.body.googleId;
+  myDBO.collection("users").findOne({googleId: user}, function(err, document){
+    if(err){
+      console.log(err);
+    }
+    else if(document){
+      console.log(document);
+      const resp = {
+        success: true
+      };
+    
+      res.json(resp);
+    }
+    else{
+      const resp = {
+        success: false,
+      };
+    
+      res.json(resp);
+    }
+  })
+  
+}) 
 
 router.post('/', function(req,res,next){
-  const user = req.header("googleId");
-  let result = myDBO.collection("users").findOne({googleId: user}, function(err, document){
+  //console.log(req.query.googleId);
+  const user = req.body.googleId;;
+  console.log(user);
+  myDBO.collection("users").findOne({googleId: user}, function(err, document){
+    console.log(document);
     if(err){
-      Console.log(err);
+      Console.log("Error Finding User");
     }
     else if(document && document.ratings){ //document found with ratings field
+      console.log(document);
       var ratings = document.ratings;
-      var recipeId = req.header("recipeId");
-      var rating = req.header("rating");
-      obj = {
-        recipeId: rating,
-      }
+      var recipeId = req.body.recipeId;
+      var rating = req.body.rating;
+      var obj = new Object;
+      obj[recipeId] = rating;
+      console.log(obj);
       ratings.push(obj);
-      myDBO.collection("users").updateOne({googleId: user}, {ratings: ratings}, function(err, res){
+      console.log(ratings);
+      myDBO.collection("users").updateOne({googleId: user},{$set: {ratings: ratings}}, function(err, result){
         if(err){
           const resp = {
             success: false
           };
-      
-          res.json(resp);
           console.log("Error updating ratings\n");
+          res.json(resp);
+          
         }
         else{
           const resp = {
             success: true
           };
-      
-          res.json(resp);
           console.log("Ratings updated\n");
+          res.json(resp);
+          
         }
       })
   }
   else{
       if(document){ //document found without ratings field
-        var recipeId = req.header("recipeId");
-        var rating = req.header("rating");
-        obj = {
-          recipeId: rating,
-        }
+        var recipeId = req.body.recipeId;
+        var rating = req.body.rating;
+        console.log(recipeId);
+        console.log(rating);
+        console.log("VALUES PRINTED");
+        var obj = new Object;
+        obj[recipeId] = rating;
         var ratings = [obj];
-        myDBO.collection("users").updateOne({googleId: user}, {ratings: ratings}, function(err, res){
+        myDBO.collection("users").updateOne({googleId: user},{$set: {ratings: ratings}}, function(err, res){
           if(err){
             const resp = {
               success: false
             };
-            
-            res.json(resp);
             console.log("Error updating ratings\n");
+            res.json(resp);
+            
           }
           else{
             const resp = {
               success: true
             };
-      
+            console.log("Ratings updated\n");   
             res.json(resp);
-            console.log("Ratings updated\n");
           }
         })
       }
@@ -86,9 +110,9 @@ router.post('/', function(req,res,next){
         const resp = {
           success: false
         };
-    
+        console.log("User does not exist\n");    
         res.json(resp);
-        console.log("User does not exist\n");
+
       }
     }
   })
