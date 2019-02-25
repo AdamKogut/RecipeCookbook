@@ -14,7 +14,7 @@ MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
   console.log("Databse obj is " + myDBO);
 });
 
-router.post('/', function(req,res,next){
+router.get('/', function(req,res,next){
   const resp = {
     success: true
   };
