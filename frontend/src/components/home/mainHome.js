@@ -58,24 +58,6 @@ class mainHome extends Component {
       instructionsRequired: true
     };
 
-    if (this.props.auth) {
-      let that = this;
-      axios
-        .get("http://localhost:8080/excludedIngredients", {
-          headers: { googleId: that.props.auth }
-        })
-        .then(function(response) {
-          // console.log(response.data)
-          if (that.state.advancedSearch.excludedIngredients != undefined) {
-            let e = that.state.advancedSearch.excludedIngredients;
-            for (let i in response.data) {
-              e.push(response.data[i]);
-            }
-            that.setState({advancedSearch:{...that.state.advancedSearch,excludedIngredients:e}});
-          } else that.setState({ searchType: "advanced", advancedSearch: { ...that.state.advancedSearch, excludedIngredients: response.data } });
-        });
-    }
-
     if (this.state.searchType === "advanced") {
       query = {
         ...query,
@@ -84,7 +66,10 @@ class mainHome extends Component {
         excludedIngredients: null
       };
 
-      if (this.state.advancedSearch.includedIngredients.selectedItem.length) {
+      if (
+        this.state.advancedSearch.includedIngredients != undefined &&
+        this.state.advancedSearch.includedIngredients.selectedItem.length
+      ) {
         let array = this.state.advancedSearch.includedIngredients.selectedItem;
         let string = "";
 
@@ -96,7 +81,11 @@ class mainHome extends Component {
         query.includeIngredients = string;
       }
 
-      if (this.state.advancedSearch.excludedIngredients.selectedItem.length) {
+      // console.log(this.state.advancedSearch.excludedIngredients);
+      if (
+        this.state.advancedSearch.excludedIngredients != undefined &&
+        this.state.advancedSearch.excludedIngredients.selectedItem.length
+      ) {
         let array = this.state.advancedSearch.excludedIngredients.selectedItem;
         let string = "";
 
@@ -107,6 +96,40 @@ class mainHome extends Component {
 
         query.excludeIngredients = string;
       }
+    }
+
+    //TODO: fix diet stuff when added
+    if (this.props.auth && this.state.eingre) {
+      let that = this;
+      axios
+        .get("http://localhost:8080/excludedIngredients", {
+          headers: { googleId: that.props.auth }
+        })
+        .then(function(response) {
+          // console.log(response.data);
+          if (that.state.advancedSearch.excludedIngredients != undefined) {
+            let e = that.state.advancedSearch.excludedIngredients.selectedItem;
+            for (let i in response.data[0].excludedIngredients) {
+              e.push(response.data[0].excludedIngredients[i]);
+            }
+            that.setState({
+              advancedSearch: {
+                ...that.state.advancedSearch,
+                excludedIngredients: { selectedItem: e }
+              }
+            });
+          } else if (response.data[0].excludedIngredients[0] != "") {
+            that.setState({
+              searchType: "advanced",
+              advancedSearch: {
+                ...that.state.advancedSearch,
+                excludedIngredients: {
+                  selectedItem: response.data[0].excludedIngredients
+                }
+              }
+            });
+          }
+        });
     }
 
     // console.log(query);
@@ -140,7 +163,7 @@ class mainHome extends Component {
         number: 16
       })
       .then(response => {
-        console.log(response);
+        // console.log(response);
 
         this.setState({
           results: response.data.body.recipes,

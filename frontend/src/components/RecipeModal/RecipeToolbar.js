@@ -47,7 +47,7 @@ class RecipeToolbar extends Component {
     Axios.get("http://localhost:8080/savedRecipes", {
       headers: { googleId: that.props.auth }
     }).then(function(response) {
-      console.log(response.data)
+      // console.log(response.data)
       that.setState({
         p:
           response.data[0].recipes==undefined||response.data[0].recipes.length === 0
