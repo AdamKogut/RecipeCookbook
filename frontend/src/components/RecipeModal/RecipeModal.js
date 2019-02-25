@@ -1,10 +1,9 @@
 import React from 'react';
 import './RecipeModal.css';
 
-import { Modal, Paper, Button, AppBar, Tabs, Tab, TextField } from '@material-ui/core';
+import { Modal, Paper, Button, AppBar, Tabs, Tab, TextField, Table, TableBody, TableHead, TableCell, TableRow } from '@material-ui/core';
 import Loader from "../Loader/Loader";
 import axios from "axios/index";
-import RecipePrinter from "../RecipePrinter/RecipePrinter";
 import RecipeToolbar from './RecipeToolbar';
 import { connect } from "react-redux";
 import ConfirmationDialog from '../ConfirmationDialog/ConfirmationDialog';
@@ -127,6 +126,7 @@ class RecipeModal extends React.Component {
       const recipe = this.state.recipe;
       const ingredients = [];
       const instructions = [];
+      const nutrition = [];
 
       for (let i = 0; i < recipe.extendedIngredients.length; i++) {
         ingredients.push(
@@ -151,6 +151,39 @@ class RecipeModal extends React.Component {
           );
         }
       }
+
+      const nutrients = recipe.nutrition.nutrients;
+      for (let i = 0; i < nutrients.length; i++) {
+        nutrition.push(
+            {
+              ...nutrients[i],
+              key: "nutrient" + i
+            }
+        );
+      }
+
+      const nutrientsTable = (
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell align="left">Name</TableCell>
+              <TableCell align="left">Amount</TableCell>
+              <TableCell align="left">Daily Percent</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {nutrition.map(row => (
+              <TableRow key={row.key}>
+                <TableCell component="th" scope="row">
+                  {row.title}
+                </TableCell>
+                <TableCell align="left">{row.amount + row.unit}</TableCell>
+                <TableCell align="left">{row.percentOfDailyNeeds}%</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      );
 
       const notesTab = this.props.type === 'saved' ? <Tab label="Notes" /> : null;
       const notesBox = (
@@ -202,8 +235,8 @@ class RecipeModal extends React.Component {
               </Tabs>
             </AppBar>
             {currentTab === 0 && <div className={'recipe-modal-tab-content'}><ul>{ingredients}</ul></div>}
-            {currentTab === 1 && <div className={'recipe-modal-tab-content'}><ul>{instructions}</ul></div>}
-            {currentTab === 2 && <div className={'recipe-modal-tab-content'}></div>}
+            {currentTab === 1 && <div className={'recipe-modal-tab-content'}><ol>{instructions}</ol></div>}
+            {currentTab === 2 && <div className={'recipe-modal-tab-content'}>{nutrientsTable}</div>}
             {currentTab === 3 && <div className={'recipe-modal-tab-content'}>{notesBox}</div>}
           </div>
         </div>
