@@ -34,11 +34,7 @@ class AddItemModal extends Component {
         date: new Date(
           this.props.current.date.split("/")[2],
           this.props.current.date.split("/")[0],
-          this.props.current.date.split("/")[1],
-          1,
-          1,
-          1,
-          1
+          this.props.current.date.split("/")[1]
         ),
         amt: this.props.current.amt,
         amtUnit: this.props.current.amtUnit
@@ -65,7 +61,7 @@ class AddItemModal extends Component {
   handleSubmit = () => {
     //todo: fix this when routes are in place
     let that = this;
-    Axios.post("http://localhost:8080/freshness", {
+    Axios.post("http://localhost:8080/editFreshness", {
       user: that.props.auth,
       item: that.state.item,
       date: that.state.date2
