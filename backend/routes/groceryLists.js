@@ -22,8 +22,7 @@ router.get('/', function(req, res, next){
 
     console.log(result);
     const resp = {
-      excludedIngredients: result[0].excludedIngredients,
-      diet: result[0].diet
+      list: result[0].groceryLists
     };
 
     res.json(resp);
@@ -32,19 +31,15 @@ router.get('/', function(req, res, next){
 
 router.post('/', function(req, res, next){
   let user = req.body.googleId;
-  let ingredients = req.body.ingredients;
-  let diet = req.body.diet;
+  let list = req.body.list;
 
-  ingredients = ingredients.replace(/\s/g, '');
-  let ingredientsArr = ingredients.split(',');
+  myDBO.collection("users").updateOne({googleId: user}, {$push:{"groceryLists": list}}, () => {
+    const resp = {
+      success: true
+    };
 
-  myDBO.collection("users").updateOne({googleId: user}, {$set: {"excludedIngredients": ingredientsArr}});
-  myDBO.collection("users").updateOne({googleId: user}, {$set: {"diet": diet}});
-
-  const resp = {
-    success: true
-  }
-  res.json(resp);
+    res.json(resp);
+  });
 });
 
 module.exports = router;
