@@ -33,16 +33,26 @@ class mainPlanning extends Component {
   click = event => {
     // console.log(event);
     this.setState({ id: event.id, date: event.date, meal: event.meal });
+    console.log(this.state)
   };
 
   componentDidMount = () => {
     let that = this;
     Axios.get("http://localhost:8080/getMonthPlan", {
-      headers: { googleId: that.props.auth }
+      headers: { googleId: that.props.auth, month:((new Date()).getMonth()+1) }
     }).then(response => {
       that.setState({ events: response.data });
     });
   };
+
+  changeMonth=(event1)=>{
+    let that = this;
+    Axios.get("http://localhost:8080/getMonthPlan", {
+      headers: { googleId: that.props.auth, month:(event1.getMonth()+1) }
+    }).then(response => {
+      that.setState({ events: response.data });
+    });
+  }
 
   render() {
     return (
@@ -55,6 +65,9 @@ class mainPlanning extends Component {
           style={{ height: "calc(100vh - 48px)" }}
           onSelectEvent={this.click}
           resizable
+          views={{month:true}}
+          // onRangeChange={this.changeMonth}
+          onNavigate={this.changeMonth}
         />
         <RecipeModal
           {...this.state}
