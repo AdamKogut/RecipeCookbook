@@ -8,10 +8,11 @@ import Axios from "axios";
 class RecipeToolbar extends Component {
   constructor(props) {
     super(props);
-    this.state={
-      a:false,
-      q:false,
-    }
+    this.state = {
+      a: false,
+      q: false,
+      p: false
+    };
   }
 
   saveRecipe = () => {
@@ -19,26 +20,24 @@ class RecipeToolbar extends Component {
     Axios.post("http://localhost:8080/savedRecipes", {
       googleId: that.props.auth,
       recipe: that.props.recipe
-    }).then(()=>{
-      that.setState({p:!that.state.p});
-      alert('Successfully saved!');
+    }).then(() => {
+      that.setState({ p: !that.state.p });
+      alert("Successfully saved!");
 
-      if (this.props.onSave)
-        this.props.onSave();
+      if (this.props.onSave) this.props.onSave();
       that.props.handleClose();
     });
   };
 
   removeRecipe = () => {
-    let that=this;
+    let that = this;
     Axios.post("http://localhost:8080/deleteSavedRecipe", {
       googleId: that.props.auth,
       deleteID: that.props.recipe.id
-    }).then(()=>{
-      that.setState({p:!that.state.p});
+    }).then(() => {
+      that.setState({ p: !that.state.p });
 
-      if (this.props.onDelete)
-        this.props.onDelete();
+      if (this.props.onDelete) this.props.onDelete();
     });
   };
 
@@ -50,16 +49,30 @@ class RecipeToolbar extends Component {
       // console.log(response.data)
       that.setState({
         p:
-          response.data[0].recipes==undefined||response.data[0].recipes.length === 0
+          response.data[0].recipes == undefined ||
+          response.data[0].recipes.length === 0
             ? false
             : response.data[0].recipes.find(obj => {
-              return obj.id === that.props.recipe.id;
-            }) != undefined
-            ? true
-            : false
+                return obj.id === that.props.recipe.id;
+              }) != undefined
+              ? true
+              : false
       });
     });
   };
+
+  //Fix this when route is implemented
+  removePlanning=()=>{
+    let that=this;
+    Axios.post('http://localhost:8080/removeMealPlan',{
+      id:that.props.id,
+      meal:that.props.meal,
+      date:that.props.date
+    }).then(response=>{
+      console.log(response.data)
+      that.props.handleClose();
+    })
+  }
 
   renderSave = () => {
     let that = this;
@@ -68,7 +81,17 @@ class RecipeToolbar extends Component {
     if (that.props.auth == null || that.props.auth == false) {
       return <div />;
     } else {
-      if (that.props.type === "search" || !that.state.p) {
+      if ((that.props.type == "Planning")) {
+        test = (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={that.removePlanning}
+          >
+            Remove from meal plan
+          </Button>
+        );
+      } else if (that.props.type === "search" || !that.state.p) {
         test = (
           <Button variant="contained" color="primary" onClick={that.saveRecipe}>
             Save
@@ -100,7 +123,11 @@ class RecipeToolbar extends Component {
 
         <RecipePrinter recipe={this.props.recipe} />
 
-        {this.props.type === 'saved' ? <Button variant="contained" onClick={this.props.saveNote} >Save Notes</Button> : null}
+        {this.props.type === "saved"
+          ? <Button variant="contained" onClick={this.props.saveNote}>
+              Save Notes
+            </Button>
+          : null}
       </div>
     );
   }
