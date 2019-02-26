@@ -63,7 +63,7 @@ var randomsearch = require('./routes/randomsearch');
 var recipeNote = require('./routes/recipeNote');
 var excludedIngredients = require('./routes/excludedIngredients');
 var testRouter = require('./routes/test');
-var addmealRouter = require('./routes/addmeal');
+var mealRouter = require('./routes/meal');
 var allowCrossDomain = function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
@@ -79,6 +79,7 @@ var allowCrossDomain = function(req, res, next) {
 };
 app.use(allowCrossDomain);
 
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -87,7 +88,7 @@ app.use(bodyParser.json({ limit: '10gb' }));
 app.use(bodyParser.urlencoded({ limit: "10gb", extended: true }))
 
 app.use('/test', testRouter);
-app.use('/addmeal', addmealRouter);
+app.use('/meal', mealRouter);
 app.use('/hello', helloRouter);
 app.use('/search', searchRouter);
 app.use('/recipeInfo', recipeInfoRouter);
