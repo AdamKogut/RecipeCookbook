@@ -29,25 +29,27 @@ class SettingsButton extends Component {
     Axios.get("http://localhost:8080/excludedIngredients", {
       headers: { googleId: that.props.auth }
     }).then(function(response) {
-      // console.log(response.data)
+      // console.log(response.data);
       let temparr = [];
       let tempstr = "";
-      for (let i in response.data[0].excludedIngredients) {
-        if (response.data[0].excludedIngredients[i] == "") continue;
-        tempstr += response.data[0].excludedIngredients[i] + ",";
+      for (let i in response.data.excludedIngredients) {
+        if (response.data.excludedIngredients[i] == "") continue;
+        tempstr += response.data.excludedIngredients[i] + ",";
         temparr.push(
           <Button
             onClick={() =>
-              that.handleClear(response.data[0].excludedIngredients[i])}
+              that.handleClear(response.data.excludedIngredients[i])}
+            key={i}
           >
-            {response.data[0].excludedIngredients[i]}--Clear item
+            {response.data.excludedIngredients[i]}--Clear item
           </Button>
         );
       }
       that.setState({
         excludedIngredients: tempstr,
         currExcl: temparr,
-        clear: true
+        clear: true,
+        diet: response.data.diet
       });
     });
   };
@@ -76,37 +78,27 @@ class SettingsButton extends Component {
     this.setState({
       settingsModal: false,
       excludedIngredients: null,
-      clear: false
+      clear: false,
+      diet: "none"
     });
   };
 
   handleSubmit = () => {
     let that = this;
-    // console.log(this.state.diet)
-    // console.log(
-    //   this.state.excludedIngredients.substring(
-    //     0,
-    //     this.state.excludedIngredients.length - 1
-    //   )
-    // );
-    //TODO: fix diet stuff when added
-    let query = {
+    Axios.post("http://localhost:8080/excludedIngredients", {
       googleId: that.props.auth,
       ingredients: that.state.excludedIngredients.substring(
         0,
         that.state.excludedIngredients.length - 1
-      )
-    };
-    if (this.state.diet != "none") query.diet = this.state.diet;
-    Axios.post(
-      "http://localhost:8080/excludedIngredients",
-      query
-    ).then(response => {
+      ),
+      diet: that.state.diet
+    }).then(response => {
       if (response.data.success) {
         that.setState({
           excludedIngredients: null,
           settingsModal: false,
-          clear: false
+          clear: false,
+          diet: "none"
         });
       } else {
         alert("Error, the data wasn't submitted, try again");
@@ -149,17 +141,20 @@ class SettingsButton extends Component {
           >
             <Typography variant="h4">Settings</Typography>
             <Typography variant="h5">Please choose your diet</Typography>
-            <Select
-              value={this.state.diet}
-              onChange={event => this.setState({ diet: event.target.value })}
-            >
-              <MenuItem value="none">None</MenuItem>
-              <MenuItem value="pescetarian">Pescetarian</MenuItem>
-              <MenuItem value="lacto vegetarian">Lacto Vegetarian</MenuItem>
-              <MenuItem value="ovo vegetarian">Ovo Vegetarian</MenuItem>
-              <MenuItem value="vegan">Vegan</MenuItem>
-              <MenuItem value="vegetarian">Vegetarian</MenuItem>
-            </Select>
+            <div style={{ paddingLeft: "10px" }}>
+              <Select
+                value={this.state.diet}
+                onChange={event => this.setState({ diet: event.target.value })}
+              >
+                <MenuItem value="none">None</MenuItem>
+                <MenuItem value="pescetarian">Pescetarian</MenuItem>
+                <MenuItem value="lacto vegetarian">Lacto Vegetarian</MenuItem>
+                <MenuItem value="ovo vegetarian">Ovo Vegetarian</MenuItem>
+                <MenuItem value="vegan">Vegan</MenuItem>
+                <MenuItem value="vegetarian">Vegetarian</MenuItem>
+              </Select>
+            </div>
+            <br />
             <Typography variant="h5">
               Please add all of the ingredients that you want to always exclude
               when 'Exclude Ingredients' is checked

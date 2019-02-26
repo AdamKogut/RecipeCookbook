@@ -81,7 +81,7 @@ class mainHome extends Component {
         query.includeIngredients = string;
       }
 
-      // console.log(this.state.advancedSearch.excludedIngredients);
+      console.log(this.state.advancedSearch.excludedIngredients);
       if (
         this.state.advancedSearch.excludedIngredients != undefined &&
         this.state.advancedSearch.excludedIngredients.selectedItem.length
@@ -98,41 +98,7 @@ class mainHome extends Component {
       }
     }
 
-    //TODO: fix diet stuff when added
-    if (this.props.auth && this.state.eingre) {
-      let that = this;
-      axios
-        .get("http://localhost:8080/excludedIngredients", {
-          headers: { googleId: that.props.auth }
-        })
-        .then(function(response) {
-          // console.log(response.data);
-          if (that.state.advancedSearch.excludedIngredients != undefined) {
-            let e = that.state.advancedSearch.excludedIngredients.selectedItem;
-            for (let i in response.data[0].excludedIngredients) {
-              e.push(response.data[0].excludedIngredients[i]);
-            }
-            that.setState({
-              advancedSearch: {
-                ...that.state.advancedSearch,
-                excludedIngredients: { selectedItem: e }
-              }
-            });
-          } else if (response.data[0].excludedIngredients[0] != "") {
-            that.setState({
-              searchType: "advanced",
-              advancedSearch: {
-                ...that.state.advancedSearch,
-                excludedIngredients: {
-                  selectedItem: response.data[0].excludedIngredients
-                }
-              }
-            });
-          }
-        });
-    }
-
-    // console.log(query);
+    console.log(query);
 
     // Set the results once we get them back from the server
     axios.post("http://localhost:8080/search", query).then(response => {
@@ -141,6 +107,58 @@ class mainHome extends Component {
         isLoadingSearch: false
       });
     });
+  };
+
+  excludeIngredients = () => {
+    this.setState(
+      {
+        eingre: !this.state.eingre,
+        searchType: !this.state.eingre ? "advanced" : "default"
+      },
+      () => {
+        //TODO: fix diet stuff when added
+        if (this.props.auth&&this.state.eingre) {
+          let that = this;
+          axios
+            .get("http://localhost:8080/excludedIngredients", {
+              headers: { googleId: that.props.auth }
+            })
+            .then(function(response) {
+              console.log(response.data);
+              if (that.state.advancedSearch.excludedIngredients != undefined) {
+                let e =
+                  that.state.advancedSearch.excludedIngredients.selectedItem;
+                for (let i in response.data.excludedIngredients) {
+                  e.push(response.data.excludedIngredients[i]);
+                }
+                that.setState({
+                  advancedSearch: {
+                    ...that.state.advancedSearch,
+                    excludedIngredients: { selectedItem: e },
+                  }
+                });
+              } else if (response.data.excludedIngredients[0] != "") {
+                that.setState({
+                  advancedSearch: {
+                    ...that.state.advancedSearch,
+                    excludedIngredients: {
+                      selectedItem: response.data.excludedIngredients
+                    }
+                  }
+                });
+              }
+              if(that.state.advancedSearch.diet==undefined||that.state.advancedSearch.diet==""){
+                that.setState({
+                  advancedSearch:{
+                    ...that.state.advancedSearch,
+                    diet:response.data.diet,
+                  }
+                })
+              }
+            });
+        }
+      }
+    );
   };
 
   componentDidMount = () => {
@@ -308,8 +326,7 @@ class mainHome extends Component {
                     <Switch
                       checked={this.state.eingre}
                       color="primary"
-                      onChange={() =>
-                        this.setState({ eingre: !this.state.eingre })}
+                      onChange={this.excludeIngredients}
                     />
                   }
                   label="Exclude Saved Ingredients"
