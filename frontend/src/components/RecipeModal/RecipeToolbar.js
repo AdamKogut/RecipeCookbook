@@ -21,9 +21,11 @@ class RecipeToolbar extends Component {
       recipe: that.props.recipe
     }).then(()=>{
       that.setState({p:!that.state.p});
+      alert('Successfully saved!');
 
       if (this.props.onSave)
         this.props.onSave();
+      that.props.handleClose();
     });
   };
 
@@ -45,7 +47,7 @@ class RecipeToolbar extends Component {
     Axios.get("http://localhost:8080/savedRecipes", {
       headers: { googleId: that.props.auth }
     }).then(function(response) {
-      console.log(response.data)
+      // console.log(response.data)
       that.setState({
         p:
           response.data[0].recipes==undefined||response.data[0].recipes.length === 0

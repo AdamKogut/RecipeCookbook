@@ -52,7 +52,8 @@ class mainSave extends Component {
         that.setState({
           allCards: tempCard,
           shownCards: tempCard,
-          names: tempName
+          names: tempName,
+          id:null
         });
       } else {
         for (let i in response.data[0].recipes) {
@@ -72,7 +73,8 @@ class mainSave extends Component {
           allCards: tempCard,
           shownCards: tempCard,
           names: tempName,
-          info: response.data[0].recipes
+          info: response.data[0].recipes,
+          id:null,
         });
       }
     });

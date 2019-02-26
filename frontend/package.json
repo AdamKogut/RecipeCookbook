@@ -11,6 +11,7 @@
     "fuzzaldrin": "^2.1.0",
     "history": "^4.7.2",
     "lodash": "^4.17.11",
+    "material-ui-next-pickers": "0.0.19",
     "npm": "^6.7.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
