@@ -63,6 +63,7 @@ var randomsearch = require('./routes/randomsearch');
 var recipeNote = require('./routes/recipeNote');
 var excludedIngredients = require('./routes/excludedIngredients');
 var onhandIngredients = require('./routes/onhandIngredients');
+var groceryLists = require('./routes/groceryLists');
 var testRouter = require('./routes/test');
 var allowCrossDomain = function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
@@ -96,6 +97,8 @@ app.use('/randomsearch', randomsearch);
 app.use('/recipeNote', recipeNote);
 app.use('/excludedIngredients', excludedIngredients);
 app.use('/onhandIngredients', onhandIngredients);
+app.use('/groceryLists', groceryLists);
+
 
 
 // view engine setup

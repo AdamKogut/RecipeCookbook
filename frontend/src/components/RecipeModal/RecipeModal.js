@@ -190,6 +190,7 @@ class RecipeModal extends React.Component {
               if (this.props.type === "saved")
                 this.props.updateSavedList();
             }}
+            handleClose={this.handleClose}
           />
 
           <div id={'recipe-modal-description'}>

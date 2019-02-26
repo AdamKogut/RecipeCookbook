@@ -11,7 +11,7 @@ var myDBO;
 
 MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
   if(err) throw err
-  console.log("Database opened!");
+  //console.log("Database opened!");
   myDBO = db.db("CookbookBase");
   //console.log("Databse obj is " + myDBO);
 });
