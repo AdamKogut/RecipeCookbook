@@ -140,6 +140,7 @@ class SettingsButton extends Component {
             }}
           >
             <Typography variant="h4">Settings</Typography>
+            <br/>
             <Typography variant="h5">Please choose your diet</Typography>
             <div style={{ paddingLeft: "10px" }}>
               <Select
@@ -156,8 +157,7 @@ class SettingsButton extends Component {
             </div>
             <br />
             <Typography variant="h5">
-              Please add all of the ingredients that you want to always exclude
-              when 'Exclude Ingredients' is checked
+              Excluded Ingredients
             </Typography>
             {this.state.currExcl.length !== 0
               ? <div>

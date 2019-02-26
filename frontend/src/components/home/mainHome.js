@@ -98,7 +98,7 @@ class mainHome extends Component {
       }
     }
 
-    console.log(query);
+    // console.log(query);
 
     // Set the results once we get them back from the server
     axios.post("http://localhost:8080/search", query).then(response => {
@@ -124,7 +124,7 @@ class mainHome extends Component {
               headers: { googleId: that.props.auth }
             })
             .then(function(response) {
-              console.log(response.data);
+              // console.log(response.data);
               if (that.state.advancedSearch.excludedIngredients != undefined) {
                 let e =
                   that.state.advancedSearch.excludedIngredients.selectedItem;
@@ -329,7 +329,7 @@ class mainHome extends Component {
                       onChange={this.excludeIngredients}
                     />
                   }
-                  label="Exclude Saved Ingredients"
+                  label="Apply Saved Settings"
                 />
               : <div />}
           </div>
