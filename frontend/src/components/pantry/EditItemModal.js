@@ -22,13 +22,39 @@ class AddItemModal extends Component {
       date: new Date(),
       amt: "",
       amtUnit: "choose",
-      date2:'none',
+      date2: "none"
     };
   }
 
+  fillData = () => {
+    if (this.props.current != null && this.state.item == "") {
+      this.setState({
+        item: this.props.current.ingredient,
+        date2: this.props.current.date,
+        date: new Date(
+          this.props.current.date.split("/")[2],
+          this.props.current.date.split("/")[0],
+          this.props.current.date.split("/")[1],
+          1,
+          1,
+          1,
+          1
+        ),
+        amt: this.props.current.amt,
+        amtUnit: this.props.current.amtUnit
+      });
+    }
+  };
+
   changeDate = date => {
-    let date2=''+(date.getMonth()+1)+'/'+date.getDate()+'/'+date.getFullYear();
-    this.setState({ date:date, date2:date2 });
+    let date2 =
+      "" +
+      (date.getMonth() + 1) +
+      "/" +
+      date.getDate() +
+      "/" +
+      date.getFullYear();
+    this.setState({ date: date, date2: date2 });
     // console.log(date2)
   };
 
@@ -44,13 +70,27 @@ class AddItemModal extends Component {
       item: that.state.item,
       date: that.state.date2
     }).then(response => {
-      that.props.closeModal();
+      that.props.closeEdit();
     });
   };
 
+  closeModal = () => {
+    this.setState(
+      {
+        item: "",
+        date: new Date(),
+        amt: "",
+        amtUnit: "choose",
+        date2: "none"
+      },
+      this.props.closeEdit
+    );
+  };
+
   render() {
+    this.fillData();
     return (
-      <Modal open={this.props.modal} onClose={this.props.closeModal}>
+      <Modal open={this.props.editModal} onClose={this.closeModal}>
         <Paper
           style={{
             position: "absolute",
@@ -103,8 +143,8 @@ class AddItemModal extends Component {
           </div>
           <br />
           <div>
-            <Button onClick={this.handleSubmit}>Submit</Button>
-            <Button onClick={this.props.closeModal}>Close</Button>
+            <Button onClick={this.handleSubmit}>Save Changes</Button>
+            <Button onClick={this.closeModal}>Cancel</Button>
           </div>
         </Paper>
       </Modal>
