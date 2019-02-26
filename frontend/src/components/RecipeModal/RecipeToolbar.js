@@ -12,6 +12,7 @@ class RecipeToolbar extends Component {
     this.state={
       a:false,
       q:false,
+      displayingEditModal: false
     }
   }
 
@@ -87,7 +88,11 @@ class RecipeToolbar extends Component {
             <Button
               variant={"contained"}
               color={"secondary"}
-              onClick={that.openEdit}
+              onClick={() => {
+                that.setState({
+                  displayingEditModal: true
+                });
+              }}
             >
               Edit
             </Button>
@@ -98,6 +103,20 @@ class RecipeToolbar extends Component {
       }
     }
     return test;
+  };
+
+  onModalClose = () => {
+    this.setState({
+      displayingEditModal: false
+    });
+  };
+
+  onSaveEdit = () => {
+    this.setState({
+      displayingEditModal: false,
+    });
+
+    this.props.onSaveEdit();
   };
 
   render() {
@@ -112,7 +131,9 @@ class RecipeToolbar extends Component {
         {this.props.type === 'saved' ? <Button variant="contained" onClick={this.props.saveNote} >Save Notes</Button> : null}
 
         <EditRecipeModal
-          recipe={this.props.recipe}
+          recipe={this.state.displayingEditModal ? this.props.recipe : null}
+          onClose={this.onModalClose}
+          onSave={this.onSaveEdit}
         />
       </div>
     );

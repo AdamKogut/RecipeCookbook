@@ -6,6 +6,7 @@ import Loader from "../Loader/Loader";
 import { connect } from "react-redux";
 import ConfirmationDialog from '../ConfirmationDialog/ConfirmationDialog';
 import AlertDialog from "../AlertDialog/AlertDialog";
+import Axios from "axios/index";
 
 class RecipeModal extends React.Component {
   constructor (props) {
@@ -46,10 +47,38 @@ class RecipeModal extends React.Component {
   };
 
   parseInput = (inputName, text) => {
-    const recipe = this.state.recipe;
-    recipe.extendedIngredients = [];
+    const recipe = this.state.recipeEdit;
 
-    const newValue = {};
+    if (inputName === "ingredients") {
+      let ingredientsList = text.split("\n").filter(function (el) {
+        return el !== "";
+      });
+
+      for (let i = 0; i < ingredientsList.length; i++) {
+        ingredientsList[i] = {
+          original: ingredientsList[i]
+        };
+      }
+
+      recipe.extendedIngredients = ingredientsList;
+    } else {
+      //recipe.analyzedInstructions[0].steps[i].step = [];
+      let instructionsList = text.split("\n").filter(function (el) {
+        return el !== "";
+      });
+
+      for (let i = 0; i < instructionsList.length; i++) {
+        instructionsList[i] = {
+          step: instructionsList[i]
+        };
+      }
+
+      recipe.analyzedInstructions[0].steps = instructionsList;
+    }
+
+    const newValue = {
+      recipeEdit: recipe
+    };
     newValue[inputName + "String"] = text;
 
     this.setState({
@@ -58,22 +87,46 @@ class RecipeModal extends React.Component {
     });
   };
 
+  saveRecipe = () => {
+    // Delete the recipe from the db if it exists
+    Axios.post("http://localhost:8080/deleteSavedRecipe", {
+      googleId: this.props.auth,
+      deleteID: this.state.recipeEdit.id
+    }).then(()=>{
+
+      // Now, actually save the recipe
+      Axios.post("http://localhost:8080/savedRecipes", {
+        googleId: this.props.auth,
+        recipe: this.state.recipeEdit
+      }).then(()=>{
+        if (this.props.onSave)
+          this.props.onSave();
+      });
+    });
+  };
+
   render () {
     const currentTab = this.state.currentTab;
 
-    // If this has just been opened, grab the data from the server
+    // If this has just been opened, initialize stuff
     if (this.props.recipe && this.state.closed) {
-      const recipe = this.state.recipeEdit;
+      const recipe = this.props.recipe;
       let ingredientsString = "";
       let instructionsString = "";
 
       for (let i = 0; i < recipe.extendedIngredients.length; i++) {
-        ingredientsString += recipe.extendedIngredients[i].original + '\n';
+        ingredientsString += recipe.extendedIngredients[i].original;
+
+        if (i !== recipe.extendedIngredients.length - 1)
+          ingredientsString += '\n';
       }
 
       if (recipe.instructions !== null) {
         for (let i = 0; i < recipe.analyzedInstructions[0].steps.length; i++) {
-          instructionsString += recipe.analyzedInstructions[0].steps[i].step + '\n';
+          instructionsString += recipe.analyzedInstructions[0].steps[i].step;
+
+          if (i !== recipe.analyzedInstructions[0].steps.length - 1)
+            instructionsString += '\n';
         }
       }
 
@@ -83,10 +136,12 @@ class RecipeModal extends React.Component {
         ingredientsString,
         instructionsString
       });
+
+      return null;
     }
 
     let content;
-    if (this.state.recipeEdit.title) {
+    if (this.props.recipe) {
       const recipe = this.state.recipeEdit;
 
       const ingredients = (
@@ -113,18 +168,51 @@ class RecipeModal extends React.Component {
 
       content = (
         <div>
-          <h1 id={'edit-recipe-modal-title'}>
-            {recipe.title}
-          </h1>
+          <TextField
+            id={'edit-recipe-modal-title'}
+            onChange={(event) => {
+              this.setState({
+                recipeEdit: {
+                  ...this.state.recipeEdit,
+                  title: event.target.value
+                }
+              });
+            }}
+            value={recipe.title}
+            fullWidth
+            label={'Recipe Title'}
+          />
 
-          <img id={'edit-recipe-modal-image'} src={recipe.image} alt={`recipe: ${recipe.title}`} />
+          <br />
+          <br />
+
+          <TextField
+            onChange={(event) => {
+              this.setState({
+                recipeEdit: {
+                  ...this.state.recipeEdit,
+                  image: event.target.value
+                }
+              });
+            }}
+            value={recipe.image}
+            fullWidth
+            label={'Image Link'}
+          />
 
           <div id={"edit-recipe-modal-toolbar"}>
-            <Button variant="contained" color="primary" onClick={this.saveRecipe}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={this.saveRecipe}
+            >
               Save
             </Button>
 
-            <Button variant="contained">
+            <Button
+              variant="contained"
+              onClick={this.handleClose}
+            >
               Cancel
             </Button>
           </div>

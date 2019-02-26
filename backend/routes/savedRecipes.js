@@ -17,14 +17,10 @@ MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
 router.get('/', function(req, res, next) {
   const name = req.header("googleId");
 
-  console.log(name);
-
   let result = myDBO.collection("users").find({googleId: name});
 
   result.toArray(function(err, result) {
     if (err) throw err;
-
-    console.log(result);
 
     res.json(result);
   });

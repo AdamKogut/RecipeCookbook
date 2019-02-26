@@ -26,23 +26,29 @@ class RecipeModal extends React.Component {
   }
 
   getData = () => {
-    // Grab the recipe data from the api using props.id
-    axios.get(
-      'http://localhost:8080/recipeInfo',
-      {
-        headers: {
-          id: this.props.id,
-          includeNutrition: 'true'
-        }
-      }
-    ).then((response) => {
-      this.setState({
-        recipe: response.data.body
-      });
-    });
-
-    // Grab the recipe notes if on the saved page
     if (this.props.type === 'saved') {
+      // Grab the saved list and extract out the necessary data
+      axios.get(
+        'http://localhost:8080/savedRecipes',
+        {
+          headers: {
+            googleId: this.props.auth
+          }
+        }
+      ).then((response) => {
+        for (let i = 0; i < response.data[0].recipes.length; i++) {
+          const recipe = response.data[0].recipes[i];
+          if (recipe.id === this.props.id) {
+            this.setState({
+              recipe
+            });
+
+            break;
+          }
+        }
+      });
+
+      // Grab the recipe notes if on the saved page
       axios.get(
         'http://localhost:8080/recipeNote',
         {
@@ -63,6 +69,23 @@ class RecipeModal extends React.Component {
         this.setState({
           notes: note,
           notesOriginal: note
+        });
+      });
+
+    } else {
+
+      // Grab the recipe data from the api using props.id
+      axios.get(
+        'http://localhost:8080/recipeInfo',
+        {
+          headers: {
+            id: this.props.id,
+            includeNutrition: 'true'
+          }
+        }
+      ).then((response) => {
+        this.setState({
+          recipe: response.data.body
         });
       });
     }
@@ -223,6 +246,7 @@ class RecipeModal extends React.Component {
               if (this.props.type === "saved")
                 this.props.updateSavedList();
             }}
+            onSaveEdit={this.getData}
           />
 
           <div id={'recipe-modal-description'}>

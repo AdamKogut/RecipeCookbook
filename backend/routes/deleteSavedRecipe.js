@@ -17,12 +17,13 @@ router.post('/', function(req, res, next) {
   const deleteID = req.body.deleteID; //id of recipe to be deleted
   const name = req.body.googleId; //username
 
-  myDBO.collection("users").updateOne({ googleId: name }, { $pull: { recipes: { id: deleteID } } });
+  myDBO.collection("users").updateOne({ googleId: name }, { $pull: { recipes: { id: deleteID } } }, () => {
+    const resp = {
+      success: true
+    };
 
-  const resp = {
-    success: true
-  };
-  res.json(resp);
+    res.json(resp);
+  });
 });
 
 module.exports = router;
