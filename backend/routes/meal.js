@@ -13,12 +13,40 @@ MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
   console.log("Databse obj is " + myDBO);
 });
 
-router.get('/', function(req, res, next) {
-  const resp = {
-    message: "TEST SUCCESSFUL"
-  };
-
-  res.json(resp);
+router.get('/month', function(req, res, next) {
+  const user = req.body.googleId;
+  const date = req.body.date;
+  myDBO.collection("users").findOne({googleId: user},{ projection: { mealPlans: 1 }}, function(err, document){
+    if(err){
+      const resp = {
+        success: false,
+      };
+      console.log("Error finding user");
+      res.json(resp);
+    }
+    var splitDate = date.split('/');
+    var month = parseInt(splitDate[0]);
+    var day = 1;
+    var year = parseInt(splitDate[2]);
+    var plans = [];
+    if(document.mealPlans){
+      while(day<=31){
+        var checkDate = month+"/"+day+"/"+year;
+        if(!(document.mealPlans[checkDate] == null )){
+          var obj = {};
+          obj[checkDate] = document.mealPlans[checkDate];
+          plans.push(obj);
+        }
+        day++;
+      }
+    }
+    const resp = {
+      mealPlans : plans,
+      success : true,
+    };
+    console.log("Returning found meal plans");
+    res.json(resp);
+  });
 });
 
 router.post('/', function(req, res, next) {
