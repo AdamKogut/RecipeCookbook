@@ -8,6 +8,7 @@ import RecipeToolbar from './RecipeToolbar';
 import { connect } from "react-redux";
 import ConfirmationDialog from '../ConfirmationDialog/ConfirmationDialog';
 import AlertDialog from "../AlertDialog/AlertDialog";
+import RecipeSubstituter from "../RecipeSubstituter/RecipeSubstituter";
 
 class RecipeModal extends React.Component {
   constructor (props) {
@@ -19,10 +20,12 @@ class RecipeModal extends React.Component {
       closed: true,
       notes: '',
       notesOriginal: '',
-      notesWarningIsOpen: false
+      notesWarningIsOpen: false,
+      substituteName: ""
     };
 
     this.noChangesAlert = React.createRef();
+    this.recipeSubstituter = React.createRef();
   }
 
   getData = () => {
@@ -135,6 +138,14 @@ class RecipeModal extends React.Component {
     );
   };
 
+  getSubstitute = (substituteName) => {
+    this.setState({
+      substituteName
+    });
+
+    this.recipeSubstituter.current.open();
+  };
+
   render () {
     const currentTab = this.state.currentTab;
 
@@ -150,11 +161,22 @@ class RecipeModal extends React.Component {
       const ingredients = [];
       const instructions = [];
       const nutrition = [];
+      let image = null;
+
+      if (recipe.image && recipe.image !== "")
+        image = <img id={'recipe-modal-image'} src={recipe.image} alt={"Incorrect Link Format"} />;
 
       for (let i = 0; i < recipe.extendedIngredients.length; i++) {
         ingredients.push(
-          <li key={'ingredient' + i}>
-            { recipe.extendedIngredients[i].original }
+          <li key={'ingredient' + i} >
+            <span
+              className={"recipe-modal-ingredient"}
+              onClick={() => {
+                this.getSubstitute(recipe.extendedIngredients[i].original);
+              }}
+            >
+              { recipe.extendedIngredients[i].original }
+            </span>
           </li>
         );
       }
@@ -232,7 +254,7 @@ class RecipeModal extends React.Component {
             {recipe.title}
           </h1>
 
-          <img id={'recipe-modal-image'} src={recipe.image} alt={`recipe: ${recipe.title}`} />
+          {image}
 
           <RecipeToolbar
             recipe={recipe}
@@ -246,7 +268,10 @@ class RecipeModal extends React.Component {
               if (this.props.type === "saved")
                 this.props.updateSavedList();
             }}
-            onSaveEdit={this.getData}
+            onSaveEdit={() => {
+              this.getData();
+              this.props.updateSavedList();
+            }}
           />
 
           <div id={'recipe-modal-description'}>
@@ -309,6 +334,16 @@ class RecipeModal extends React.Component {
           title={"Alert"}
           text={"There are no changes to be saved for the current note"}
           ref={this.noChangesAlert}
+        />
+
+        <RecipeSubstituter
+          ingredientName={this.state.substituteName}
+          onClose={() => {
+            this.setState({
+              substituteName: ""
+            });
+          }}
+          ref={this.recipeSubstituter}
         />
       </div>
     );

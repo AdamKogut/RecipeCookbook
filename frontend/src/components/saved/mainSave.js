@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Grid } from "@material-ui/core";
+import {Button, Grid} from "@material-ui/core";
 import SavedSearch from "./SavedSearch";
 import RecipeTiles from "./RecipeTiles";
 import RecipeCard from "../RecipeCard/RecipeCard";
@@ -9,6 +9,7 @@ import RecipeModal from "../RecipeModal/RecipeModal";
 import BodyContainer from "../BodyContainer/BodyContainer";
 import filter from "fuzzaldrin";
 import { connect } from "react-redux";
+import EditRecipeModal from "../EditRecipeModal/EditRecipeModal";
 
 class mainSave extends Component {
   constructor(props) {
@@ -18,7 +19,8 @@ class mainSave extends Component {
       allCards: [],
       id: null,
       names: [],
-      info: []
+      info: [],
+      displayingEditModal: false
     };
   }
 
@@ -87,6 +89,20 @@ class mainSave extends Component {
     this.setState({ shownCards: tempCard });
   };
 
+  onEditClose = () => {
+    this.setState({
+      displayingEditModal: false
+    });
+  };
+
+  onSaveNew = () => {
+    this.setState({
+      displayingEditModal: false,
+    });
+
+    this.updateList();
+  };
+
   render() {
     return (
       <div className="BigDivArea">
@@ -94,14 +110,43 @@ class mainSave extends Component {
           <div className="save-search-bar">
             <SavedSearch {...this.state} searchSaved={this.searchSaved} />
           </div>
+
+          <div id={'save-toolbar'}>
+            <Button
+              variant="contained"
+              color={"primary"}
+              onClick={() => {
+                this.setState({
+                  displayingEditModal: true
+                });
+              }}
+            >
+              Add Custom
+            </Button>
+          </div>
+
           <Grid id={"search-results"} container spacing={24}>
             {this.state.shownCards}
           </Grid>
+
           <RecipeModal
             {...this.state}
             onClose={this.onClose}
             type="saved"
             updateSavedList={this.updateList}
+          />
+
+          <EditRecipeModal
+            recipe={this.state.displayingEditModal ? {
+              extendedIngredients: [],
+              analyzedInstructions: [{
+                steps: []
+              }],
+              image: null,
+              title: ""
+            } : null}
+            onClose={this.onEditClose}
+            onSave={this.onSaveNew}
           />
         </BodyContainer>
       </div>

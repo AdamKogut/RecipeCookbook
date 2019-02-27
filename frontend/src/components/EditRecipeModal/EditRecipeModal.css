@@ -12,8 +12,8 @@
   border: 1px solid lightgray;
   border-top: none;
   padding: 10px;
-    margin: 0;
-    width: calc(100% - 20px);
+	margin: 0;
+	width: 100%;
 }
 
 #edit-recipe-modal-title {
@@ -28,6 +28,15 @@
   -webkit-transform: translateX(-50%);
   transform: translateX(-50%);
   box-shadow: 5px 5px 10px grey;
+	max-width: 1000px;
+}
+
+#edit-recipe-modal-link {
+	position: relative;
+	width: calc(90% - 20px);
+	left: 50%;
+	-webkit-transform: translateX(-50%);
+	transform: translateX(-50%);
 }
 
 #edit-recipe-modal-toolbar {

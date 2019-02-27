@@ -88,19 +88,52 @@ class RecipeModal extends React.Component {
   };
 
   saveRecipe = () => {
+    if (this.state.recipeEdit === this.props.recipe) {
+      this.noChangesAlert.current.open();
+      return;
+    }
+
+    const fillerValues = {
+      id: this.state.recipeEdit.id
+    };
+
+    if (!fillerValues.id) {
+      fillerValues.id = Math.floor(Math.random() * 10000000000);
+      fillerValues.nutrition = {
+        nutrients: [
+          {
+            title: "No Nutrients Provided for Custom Recipes ):",
+            percentOfDailyNeeds: "",
+            amount: "",
+            unit: ""
+          }
+        ]
+      }
+    }
+
     // Delete the recipe from the db if it exists
     Axios.post("http://localhost:8080/deleteSavedRecipe", {
       googleId: this.props.auth,
-      deleteID: this.state.recipeEdit.id
+      deleteID: fillerValues.id
     }).then(()=>{
 
       // Now, actually save the recipe
       Axios.post("http://localhost:8080/savedRecipes", {
         googleId: this.props.auth,
-        recipe: this.state.recipeEdit
+        recipe: {
+          ...this.state.recipeEdit,
+          ...fillerValues
+        }
       }).then(()=>{
         if (this.props.onSave)
           this.props.onSave();
+
+        this.setState({
+          recipeEdit: {},
+          currentTab: 0,
+          closed: true,
+          warningIsOpen: false
+        });
       });
     });
   };
@@ -143,6 +176,10 @@ class RecipeModal extends React.Component {
     let content;
     if (this.props.recipe) {
       const recipe = this.state.recipeEdit;
+      let image = null;
+
+      if (recipe.image && recipe.image !== "")
+        image = <img id={'edit-recipe-modal-image'} src={recipe.image} alt={"Incorrect Link Format"} />;
 
       const ingredients = (
         <TextField
@@ -183,23 +220,6 @@ class RecipeModal extends React.Component {
             label={'Recipe Title'}
           />
 
-          <br />
-          <br />
-
-          <TextField
-            onChange={(event) => {
-              this.setState({
-                recipeEdit: {
-                  ...this.state.recipeEdit,
-                  image: event.target.value
-                }
-              });
-            }}
-            value={recipe.image}
-            fullWidth
-            label={'Image Link'}
-          />
-
           <div id={"edit-recipe-modal-toolbar"}>
             <Button
               variant="contained"
@@ -218,8 +238,29 @@ class RecipeModal extends React.Component {
           </div>
           <br />
 
-          One Per Line
+          {image}
+
+          <div id={"edit-recipe-modal-link"}>
+            <TextField
+              onChange={(event) => {
+                this.setState({
+                  recipeEdit: {
+                    ...this.state.recipeEdit,
+                    image: event.target.value
+                  }
+                });
+              }}
+              value={recipe.image}
+              fullWidth
+              label={'Image Link'}
+            />
+          </div>
+
           <div id={'edit-recipe-modal-description'}>
+            <em>Enter Ingredients and Instructions as one per line</em>
+            <br />
+            <br />
+
             <AppBar position="static" color={'default'}>
               <Tabs value={currentTab} onChange={this.handleTab} variant={'fullWidth'}>
                 <Tab label="Ingredients" />

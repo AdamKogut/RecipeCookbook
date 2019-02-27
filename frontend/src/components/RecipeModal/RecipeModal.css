@@ -8,6 +8,11 @@
   transform: translateX(-50%);
 }
 
+.recipe-modal-ingredient:hover {
+	cursor: pointer;
+	text-decoration: underline;
+}
+
 .recipe-modal-tab-content {
   border: 1px solid lightgray;
   border-top: none;
@@ -26,6 +31,7 @@
   -webkit-transform: translateX(-50%);
   transform: translateX(-50%);
   box-shadow: 5px 5px 10px grey;
+	max-width: 1000px;
 }
 
 #recipe-modal-toolbar {
