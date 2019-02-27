@@ -49,11 +49,45 @@ router.get('/month', function(req, res, next) {
   });
 });
 
+router.get('/day', function(req, res, next) {
+  const user = req.body.googleId;
+  const date = req.body.date;
+  myDBO.collection("users").findOne({googleId: user},{ projection: { mealPlans: 1 }}, function(err, document){
+    if(err){
+      const resp = {
+        success: false,
+      };
+      console.log("Error finding user");
+      res.json(resp);
+    }
+    var plans = [];
+    if(document.mealPlans){
+        if(!(document.mealPlans[date] == null )){
+          var obj = {};
+          obj[date] = document.mealPlans[date];
+          plans.push(obj);
+        }
+    }
+    else {
+      const resp = {
+        success : false,
+      }
+    }
+    const resp = {
+      mealPlans : plans,
+      success : true,
+    };
+    console.log("Returning found meal plans");
+    res.json(resp);
+  });
+});
+
 router.post('/', function(req, res, next) {
   const user = req.body.googleId;
   const date = req.body.date;
   const meal = req.body.meal;
   const recipeId = req.body.recipeId;
+  const recipeName = req.body.recipeName;
   myDBO.collection("users").findOne({googleId: user},{ projection: { mealPlans: 1 }}, function(err, document){
     if(err){
       const resp = {
@@ -65,7 +99,11 @@ router.post('/', function(req, res, next) {
     if(document.mealPlans && document.mealPlans[date]){ //if document has a plan for that particular date
       var meals = document.mealPlans[date]; //get meals object for that date
       var recipes = meals[meal]; //get recipes for particular meal from meal object
-      recipes.push(recipeId); //update recipes for that meal
+      var recipeobj = {
+        recipeId : recipeId,
+        recipeName: recipeName,
+      }
+      recipes.push(recipeobj); //update recipes for that meal
       meals[meal]=recipes; //update meal with updated recipes
       var obj = {};
       obj[date] = meals;
@@ -90,7 +128,11 @@ router.post('/', function(req, res, next) {
       meals["Lunch"]=[];
       meals["Dinner"]=[];
       var recipes = meals[meal]; //get empty array from above initialization
-      recipes.push(recipeId); //push new recipe ID onto the desired meal
+      var recipeobj = {
+        recipeId : recipeId,
+        recipeName: recipeName,
+      }
+      recipes.push(recipeobj); //push new recipe ID onto the desired meal
       var obj = {};
       obj[date] = meals; //create new object with date as field and meals object as value
       
