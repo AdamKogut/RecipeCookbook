@@ -141,8 +141,6 @@ class RecipeToolbar extends Component {
           onClose={() => {
             if (this.props.onSave)
               this.props.onSave();
-
-            this.props.handleClose();
           }}
         />
       </div>

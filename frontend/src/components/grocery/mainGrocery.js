@@ -8,6 +8,7 @@ import GroceryListEditor from "../GroceryListEditor/GroceryListEditor";
 import Axios from "axios";
 import connect from "react-redux/es/connect/connect";
 import { Button } from "@material-ui/core";
+import Loader from "../Loader/Loader";
 
 class mainGrocery extends Component {
   constructor (props) {
@@ -19,7 +20,8 @@ class mainGrocery extends Component {
       listToEdit: null,
       deleteDialogIsOpen: false,
       displayingEditModal: false,
-      displayingAddModal: false
+      displayingAddModal: false,
+      isLoading: false
     };
   }
 
@@ -28,16 +30,19 @@ class mainGrocery extends Component {
   };
 
   getGroceryLists = () => {
+    this.setState({
+      isLoading: true
+    });
+
     setTimeout(() => {
       Axios.get("http://localhost:8080/groceryLists", {
         headers: {
           googleId: this.props.auth
         }
       }).then((response) => {
-        console.log(response.data);
-
         this.setState({
-          groceryLists: response.data.list
+          groceryLists: response.data.list,
+          isLoading: false
         });
       });
     }, 10);
@@ -79,7 +84,11 @@ class mainGrocery extends Component {
   render() {
     const groceryLists = [];
 
-    if (this.state.groceryLists.length === 0) {
+    if (this.state.isLoading) {
+      groceryLists.push(
+        <Loader />
+      );
+    } else if (this.state.groceryLists.length === 0) {
       groceryLists.push(
         <div>
           Create some Grocery Lists to see them here!

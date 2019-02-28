@@ -24,6 +24,7 @@ class RecipeModal extends React.Component {
     };
 
     this.noChangesAlert = React.createRef();
+    this.notesAlert = React.createRef();
   }
 
   getData = () => {
@@ -96,8 +97,10 @@ class RecipeModal extends React.Component {
   };
 
   saveNotes = () => {
-    if (this.state.notes === this.state.notesOriginal)
+    if (this.state.notes === this.state.notesOriginal){
       this.noChangesAlert.current.open();
+      return;
+    }
 
     this.setState({
       notesOriginal: this.state.notes
@@ -110,7 +113,9 @@ class RecipeModal extends React.Component {
         recipeId: this.props.id,
         note: this.state.notes
       }
-    );
+    ).then((response) => {
+      this.notesAlert.current.open();
+    });
   };
 
   render () {
@@ -253,6 +258,12 @@ class RecipeModal extends React.Component {
           title={"Alert"}
           text={"There are no changes to be saved for the current note"}
           ref={this.noChangesAlert}
+        />
+
+        <AlertDialog
+          title={"Success"}
+          text={"Notes saved for " + this.state.recipe.title}
+          ref={this.notesAlert}
         />
       </div>
     );

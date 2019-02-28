@@ -81,7 +81,6 @@ class mainHome extends Component {
         query.includeIngredients = string;
       }
 
-      console.log(this.state.advancedSearch.excludedIngredients);
       if (
         this.state.advancedSearch.excludedIngredients != undefined &&
         this.state.advancedSearch.excludedIngredients.selectedItem.length
@@ -98,14 +97,13 @@ class mainHome extends Component {
       }
     }
 
-    // console.log(query);
-
     // Set the results once we get them back from the server
     axios.post("http://localhost:8080/search", query).then(response => {
-      this.setState({
-        results: response.data.body.results,
-        isLoadingSearch: false
-      });
+      if (this.state.searchType !== "random")
+        this.setState({
+          results: response.data.body.results,
+          isLoadingSearch: false
+        });
     });
   };
 
@@ -181,12 +179,13 @@ class mainHome extends Component {
         number: 16
       })
       .then(response => {
-        // console.log(response);
 
-        this.setState({
-          results: response.data.body.recipes,
-          isLoadingSearch: false
-        });
+        if (this.state.searchType === "random") {
+          this.setState({
+            results: response.data.body.recipes,
+            isLoadingSearch: false
+          });
+        }
       });
   };
 

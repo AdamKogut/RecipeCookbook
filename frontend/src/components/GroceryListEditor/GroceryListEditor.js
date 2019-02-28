@@ -50,6 +50,11 @@ class GroceryListEditor extends React.Component {
   };
 
   saveList = () => {
+    if (this.props.list === this.state.listEdit) {
+      this.noChangesAlert.current.open();
+      return;
+    }
+
     let ingredientsList = this.state.listEdit.list.split("\n").filter(function (el) {
       return el !== "";
     });
@@ -87,7 +92,7 @@ class GroceryListEditor extends React.Component {
     if (this.props.list && this.state.closed) {
       this.setState({
         closed: false,
-        listEdit: this.props.list,
+        listEdit: this.props.list
       });
 
       return null;
