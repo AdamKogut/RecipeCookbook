@@ -5,6 +5,8 @@ import GroceryList from "../GroceryList/GroceryList";
 import BodyContainer from "../BodyContainer/BodyContainer";
 import ConfirmationDialog from "../ConfirmationDialog/ConfirmationDialog";
 import GroceryListEditor from "../GroceryListEditor/GroceryListEditor";
+import Axios from "axios";
+import connect from "react-redux/es/connect/connect";
 
 class mainGrocery extends Component {
   constructor (props) {
@@ -24,23 +26,19 @@ class mainGrocery extends Component {
   };
 
   getGroceryLists = () => {
-    this.setState({
-      groceryLists: [{
-        title: "Test List",
-        ingredients: [
-          "a banana",
-          "some bread",
-          "asdfasdf?"
-        ]
-      }, {
-        title: "Second Test List",
-        ingredients: [
-          "a banana",
-          "some bread",
-          "asdfasdf?"
-        ]
-      }]
-    });
+    setTimeout(() => {
+      Axios.get("http://localhost:8080/groceryLists", {
+        headers: {
+          googleId: this.props.auth
+        }
+      }).then((response) => {
+        console.log(response.data);
+
+        this.setState({
+          groceryLists: response.data.list
+        });
+      });
+    }, 10);
   };
 
   onEditList = (list) => {
@@ -124,4 +122,8 @@ class mainGrocery extends Component {
   }
 }
 
-export default mainGrocery;
+function mapStatesToProps({ auth }) {
+  return { auth: auth };
+}
+
+export default connect(mapStatesToProps)(mainGrocery);

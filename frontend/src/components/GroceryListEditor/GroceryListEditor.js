@@ -41,22 +41,35 @@ class GroceryListEditor extends React.Component {
   };
 
   parseInput = (text) => {
-    let ingredientsList = text.split("\n").filter(function (el) {
-      return el !== "";
-    });
-
-    ingredientsList = ingredientsList.join("\n");
-
     this.setState({
       listEdit: {
         ...this.state.listEdit,
-        ingredients: ingredientsList
+        list: text
       }
     });
   };
 
   saveList = () => {
+    let ingredientsList = this.state.listEdit.list.split("\n").filter(function (el) {
+      return el !== "";
+    });
 
+    ingredientsList = ingredientsList.join("\n");
+
+    console.log({
+      listEdit: {
+        ...this.state.listEdit,
+        list: ingredientsList
+      }
+    });
+
+    // close the modal
+    this.props.onClose();
+    this.setState({
+      recipeEdit: {},
+      closed: true,
+      warningIsOpen: false
+    });
   };
 
   render () {
@@ -117,7 +130,7 @@ class GroceryListEditor extends React.Component {
                 this.parseInput(event.target.value);
               }}
               className={'edit-list-modal-textarea'}
-              value={this.state.listEdit.ingredients}
+              value={this.state.listEdit.list}
               multiline
             />
           </div>

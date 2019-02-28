@@ -11,10 +11,12 @@ class GroceryList extends React.Component {
   }
 
   render() {
+    const ingredients = this.props.list.list.split("\n");
+
     const ingredientsTable = (
       <Table>
         <TableBody>
-          {this.props.list.ingredients.map(row => (
+          {ingredients.map(row => (
             <TableRow key={row}>
               <TableCell component="th" scope="row">
                 {row}

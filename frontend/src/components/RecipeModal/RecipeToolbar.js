@@ -4,6 +4,7 @@ import RecipePrinter from "../RecipePrinter/RecipePrinter";
 import { connect } from "react-redux";
 import "./RecipeModal.css";
 import Axios from "axios";
+import AlertDialog from "../AlertDialog/AlertDialog";
 
 class RecipeToolbar extends Component {
   constructor(props) {
@@ -12,6 +13,8 @@ class RecipeToolbar extends Component {
       a:false,
       q:false,
     }
+
+    this.groceryListAlert = React.createRef();
   }
 
   saveRecipe = () => {
@@ -39,6 +42,27 @@ class RecipeToolbar extends Component {
 
       if (this.props.onDelete)
         this.props.onDelete();
+    });
+  };
+
+  addToGrocery = () => {
+    const ingredientList = [];
+    const recipe = this.props.recipe;
+
+    for (let i = 0; i < recipe.extendedIngredients.length; i++) {
+      ingredientList.push(
+        recipe.extendedIngredients[i].original
+      );
+    }
+
+    Axios.post("http://localhost:8080/groceryLists", {
+      googleId: this.props.auth,
+      list: {
+        title: this.props.recipe.title,
+        list: ingredientList.join("\n")
+      }
+    }).then(()=>{
+      this.groceryListAlert.current.open();
     });
   };
 
@@ -96,11 +120,22 @@ class RecipeToolbar extends Component {
       <div id={"recipe-modal-toolbar"}>
         {this.renderSave()}
 
-        <Button variant="contained">Add to Groceries</Button>
+        <Button
+          variant="contained"
+          onClick={this.addToGrocery}
+        >
+          Add to Groceries
+        </Button>
 
         <RecipePrinter recipe={this.props.recipe} />
 
         {this.props.type === 'saved' ? <Button variant="contained" onClick={this.props.saveNote} >Save Notes</Button> : null}
+
+        <AlertDialog
+          title={"Success"}
+          text={"Added ingredients for " + this.props.recipe.title + " to a new grocery list"}
+          ref={this.groceryListAlert}
+        />
       </div>
     );
   }
