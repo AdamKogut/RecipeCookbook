@@ -18,7 +18,8 @@ class mainGrocery extends Component {
       listToDelete: null,
       listToEdit: null,
       deleteDialogIsOpen: false,
-      displayingEditModal: false
+      displayingEditModal: false,
+      displayingAddModal: false
     };
   }
 
@@ -52,7 +53,8 @@ class mainGrocery extends Component {
   onEditClose = () => {
     this.setState({
       listToEdit: null,
-      displayingEditModal: false
+      displayingEditModal: false,
+      displayingAddModal: false
     });
   };
 
@@ -67,6 +69,11 @@ class mainGrocery extends Component {
     this.setState({
       deleteDialogIsOpen: false
     });
+  };
+
+  onSaveEdit = () => {
+    this.getGroceryLists();
+    this.onEditClose();
   };
 
   render() {
@@ -100,7 +107,7 @@ class mainGrocery extends Component {
               color={"primary"}
               onClick={() => {
                 this.setState({
-                  displayingEditModal: true,
+                  displayingAddModal: true,
                   listToEdit: {
                     title: "",
                     list: ""
@@ -119,6 +126,13 @@ class mainGrocery extends Component {
           list={this.state.displayingEditModal ? this.state.listToEdit : null}
           onClose={this.onEditClose}
           onSave={this.onSaveEdit}
+        />
+
+        <GroceryListEditor
+          list={this.state.displayingAddModal ? this.state.listToEdit : null}
+          onClose={this.onEditClose}
+          onSave={this.onSaveEdit}
+          add
         />
 
         <ConfirmationDialog

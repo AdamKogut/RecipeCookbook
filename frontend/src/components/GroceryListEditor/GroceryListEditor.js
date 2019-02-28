@@ -56,12 +56,22 @@ class GroceryListEditor extends React.Component {
 
     ingredientsList = ingredientsList.join("\n");
 
-    console.log({
-      listEdit: {
-        ...this.state.listEdit,
-        list: ingredientsList
-      }
-    });
+    if (this.props.add) {
+      Axios.post("http://localhost:8080/groceryLists", {
+        googleId: this.props.auth,
+        list: this.state.listEdit
+      }).then(()=>{
+        if (this.props.onSave)
+          this.props.onSave();
+      });
+    } else {
+      console.log({
+        listEdit: {
+          ...this.state.listEdit,
+          list: ingredientsList
+        }
+      });
+    }
 
     // close the modal
     this.props.onClose();
