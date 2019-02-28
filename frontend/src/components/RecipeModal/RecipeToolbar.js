@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Button } from "@material-ui/core";
 import RecipePrinter from "../RecipePrinter/RecipePrinter";
 import { connect } from "react-redux";
+import PlanningModal from './PlanningModal';
 import "./RecipeModal.css";
 import Axios from "axios";
 
@@ -11,8 +12,13 @@ class RecipeToolbar extends Component {
     this.state = {
       a: false,
       q: false,
-      p: false
+      p: false,
+      modal:false,
     };
+  }
+
+  closeModal=()=>{
+    this.setState({modal:false});
   }
 
   saveRecipe = () => {
@@ -62,17 +68,17 @@ class RecipeToolbar extends Component {
   };
 
   //Fix this when route is implemented
-  removePlanning=()=>{
-    let that=this;
-    Axios.post('http://localhost:8080/removeMealPlan',{
-      id:that.props.id,
-      meal:that.props.meal,
-      date:that.props.date
-    }).then(response=>{
-      console.log(response.data)
+  removePlanning = () => {
+    let that = this;
+    Axios.post("http://localhost:8080/removeMealPlan", {
+      id: that.props.id,
+      meal: that.props.meal,
+      date: that.props.date
+    }).then(response => {
+      console.log(response.data);
       that.props.handleClose();
-    })
-  }
+    });
+  };
 
   renderSave = () => {
     let that = this;
@@ -81,7 +87,7 @@ class RecipeToolbar extends Component {
     if (that.props.auth == null || that.props.auth == false) {
       return <div />;
     } else {
-      if ((that.props.type == "Planning")) {
+      if (that.props.type == "Planning") {
         test = (
           <Button
             variant="contained"
@@ -128,6 +134,13 @@ class RecipeToolbar extends Component {
               Save Notes
             </Button>
           : null}
+
+        {this.props.type === "saved"
+          ? <Button variant="contained" onClick={()=>this.setState({modal:true})}>
+              Add to meal plan
+            </Button>
+          : null}
+        <PlanningModal {...this.props} modal={this.state.modal} closeModal={this.closeModal}/>
       </div>
     );
   }
