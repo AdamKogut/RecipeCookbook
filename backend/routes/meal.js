@@ -14,8 +14,8 @@ MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
 });
 
 router.get('/month', function(req, res, next) {
-  const user = req.body.googleId;
-  const date = req.body.date;
+  const user = req.header("googleId");
+  const date = req.header("udate");
   myDBO.collection("users").findOne({googleId: user},{ projection: { mealPlans: 1 }}, function(err, document){
     if(err){
       const resp = {
@@ -50,8 +50,8 @@ router.get('/month', function(req, res, next) {
 });
 
 router.get('/day', function(req, res, next) {
-  const user = req.body.googleId;
-  const date = req.body.date;
+  const user = req.header("googleId");
+  const date = req.header("udate");
   myDBO.collection("users").findOne({googleId: user},{ projection: { mealPlans: 1 }}, function(err, document){
     if(err){
       const resp = {
@@ -176,9 +176,17 @@ router.post('/delete', function(req,res,next){
         }
       }
       meals[meal] = recipes;
+      var setobj = {};
       var obj = {};
-      obj[date] = meals;
-      myDBO.collection("users").updateOne({googleId: user},{$set: {mealPlans: obj}}, function(err, result){
+      if(meals["Breakfast"].length == 0 && meals["Lunch"].length == 0 && meals["Dinner"].length == 0){
+        setobj = {$unset: {[date]:1}};
+      }
+      else{
+        obj[date] = meals;
+        setobj = {$set: {mealPlans: obj}};
+      }
+      
+      myDBO.collection("users").updateOne({googleId: user},setobj, function(err, result){
         if(err){
           const resp = {
             success: false,
