@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Grid } from "@material-ui/core";
 import SavedSearch from "./SavedSearch";
-import RecipeTiles from "./RecipeTiles";
 import RecipeCard from "../RecipeCard/RecipeCard";
 import "./mainSave.css";
 import Axios from "axios";

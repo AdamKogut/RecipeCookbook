@@ -4,6 +4,7 @@ import RecipePrinter from "../RecipePrinter/RecipePrinter";
 import { connect } from "react-redux";
 import "./RecipeModal.css";
 import Axios from "axios";
+import AlertDialog from "../AlertDialog/AlertDialog";
 
 class RecipeToolbar extends Component {
   constructor(props) {
@@ -11,7 +12,10 @@ class RecipeToolbar extends Component {
     this.state={
       a:false,
       q:false,
-    }
+    };
+
+    this.groceryListAlert = React.createRef();
+    this.saveSuccessAlert = React.createRef();
   }
 
   saveRecipe = () => {
@@ -21,11 +25,7 @@ class RecipeToolbar extends Component {
       recipe: that.props.recipe
     }).then(()=>{
       that.setState({p:!that.state.p});
-      alert('Successfully saved!');
-
-      if (this.props.onSave)
-        this.props.onSave();
-      that.props.handleClose();
+      this.saveSuccessAlert.current.open();
     });
   };
 
@@ -39,6 +39,27 @@ class RecipeToolbar extends Component {
 
       if (this.props.onDelete)
         this.props.onDelete();
+    });
+  };
+
+  addToGrocery = () => {
+    const ingredientList = [];
+    const recipe = this.props.recipe;
+
+    for (let i = 0; i < recipe.extendedIngredients.length; i++) {
+      ingredientList.push(
+        recipe.extendedIngredients[i].original
+      );
+    }
+
+    Axios.post("http://localhost:8080/groceryLists", {
+      googleId: this.props.auth,
+      list: {
+        title: this.props.recipe.title,
+        list: ingredientList.join("\n")
+      }
+    }).then(()=>{
+      this.groceryListAlert.current.open();
     });
   };
 
@@ -96,11 +117,34 @@ class RecipeToolbar extends Component {
       <div id={"recipe-modal-toolbar"}>
         {this.renderSave()}
 
-        <Button variant="contained">Add to Groceries</Button>
+        <Button
+          variant="contained"
+          onClick={this.addToGrocery}
+        >
+          Add to Groceries
+        </Button>
 
         <RecipePrinter recipe={this.props.recipe} />
 
         {this.props.type === 'saved' ? <Button variant="contained" onClick={this.props.saveNote} >Save Notes</Button> : null}
+
+        <AlertDialog
+          title={"Success"}
+          text={"Added ingredients for " + this.props.recipe.title + " to a new grocery list"}
+          ref={this.groceryListAlert}
+        />
+
+        <AlertDialog
+          title={"Success"}
+          text={this.props.recipe.title + " has been successfully saved to your recipes!"}
+          ref={this.saveSuccessAlert}
+          onClose={() => {
+            if (this.props.onSave)
+              this.props.onSave();
+
+            this.props.handleClose();
+          }}
+        />
       </div>
     );
   }
