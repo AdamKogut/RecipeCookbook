@@ -12,9 +12,10 @@ class RecipeToolbar extends Component {
     this.state={
       a:false,
       q:false,
-    }
+    };
 
     this.groceryListAlert = React.createRef();
+    this.saveSuccessAlert = React.createRef();
   }
 
   saveRecipe = () => {
@@ -24,11 +25,7 @@ class RecipeToolbar extends Component {
       recipe: that.props.recipe
     }).then(()=>{
       that.setState({p:!that.state.p});
-      alert('Successfully saved!');
-
-      if (this.props.onSave)
-        this.props.onSave();
-      that.props.handleClose();
+      this.saveSuccessAlert.current.open();
     });
   };
 
@@ -135,6 +132,18 @@ class RecipeToolbar extends Component {
           title={"Success"}
           text={"Added ingredients for " + this.props.recipe.title + " to a new grocery list"}
           ref={this.groceryListAlert}
+        />
+
+        <AlertDialog
+          title={"Success"}
+          text={this.props.recipe.title + " has been successfully saved to your recipes!"}
+          ref={this.saveSuccessAlert}
+          onClose={() => {
+            if (this.props.onSave)
+              this.props.onSave();
+
+            this.props.handleClose();
+          }}
         />
       </div>
     );

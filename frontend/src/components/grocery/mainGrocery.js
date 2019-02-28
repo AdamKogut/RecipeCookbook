@@ -7,6 +7,7 @@ import ConfirmationDialog from "../ConfirmationDialog/ConfirmationDialog";
 import GroceryListEditor from "../GroceryListEditor/GroceryListEditor";
 import Axios from "axios";
 import connect from "react-redux/es/connect/connect";
+import { Button } from "@material-ui/core";
 
 class mainGrocery extends Component {
   constructor (props) {
@@ -93,6 +94,24 @@ class mainGrocery extends Component {
     return (
       <div className='BigDivArea'>
         <BodyContainer>
+          <div id={'save-toolbar'}>
+            <Button
+              variant="contained"
+              color={"primary"}
+              onClick={() => {
+                this.setState({
+                  displayingEditModal: true,
+                  listToEdit: {
+                    title: "",
+                    list: ""
+                  }
+                });
+              }}
+            >
+              Add New
+            </Button>
+          </div>
+
           {groceryLists}
         </BodyContainer>
 
