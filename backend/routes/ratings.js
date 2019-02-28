@@ -17,7 +17,7 @@ MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
 router.get('/', function(req,res,next){
   console.log("GETTING");
   const user = req.body.googleId;
-  myDBO.collection("users").findOne({googleId: user}, function(err, document){
+  myDBO.collection("users").findOne({googleId: user}, {projection: {ratings: 1}}, function(err, document){
     if(err){
       console.log(err);
     }

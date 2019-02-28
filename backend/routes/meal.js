@@ -154,4 +154,46 @@ router.post('/', function(req, res, next) {
   });
 });
 
+router.post('/delete', function(req,res,next){
+  const user = req.body.googleId;
+  const date = req.body.date;
+  const meal = req.body.meal;
+  const recipeId = req.body.recipeId;
+  myDBO.collection("users").findOne({googleId: user},{ projection: { mealPlans: 1 }}, function(err, document){
+    if(err){
+      const resp = {
+        success: false,
+      };
+      console.log("Error finding user");
+      res.json(resp);
+    }
+    if(document.mealPlans && document.mealPlans[date]){ //if document has a plan for that particular date
+      var meals = document.mealPlans[date]; //get meals object for that date
+      var recipes = meals[meal]; //get recipes for particular meal from meal object
+      for(var i=0; i < recipes.length; i++){
+        if(recipes[i].recipeId == recipeId){
+          recipes.splice(i,1);
+        }
+      }
+      meals[meal] = recipes;
+      var obj = {};
+      obj[date] = meals;
+      myDBO.collection("users").updateOne({googleId: user},{$set: {mealPlans: obj}}, function(err, result){
+        if(err){
+          const resp = {
+            success: false,
+          };
+          console.log("Error Updating recipes in plan");
+          res.json(resp);
+        }
+        const resp = {
+          success: true,
+        };
+        console.log("Recipes for meal updated");
+        res.json(resp);
+      });
+    }
+  });
+});
+
 module.exports = router;
