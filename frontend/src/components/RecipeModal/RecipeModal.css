@@ -47,6 +47,16 @@
   margin-right: 10px;
 }
 
+#recipe-modal-quantity {
+	float: right;
+}
+
+#recipe-modal-quantity-input {
+	position: relative;
+	top: -10px;
+	margin-right: 10px;
+}
+
 #recipe-modal-description {
   position: relative;
   width: calc(90% - 20px);

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button } from "@material-ui/core";
+import {Button, TextField} from "@material-ui/core";
 import RecipePrinter from "../RecipePrinter/RecipePrinter";
 import { connect } from "react-redux";
 import "./RecipeModal.css";
@@ -12,7 +12,8 @@ class RecipeToolbar extends Component {
     this.state={
       a:false,
       q:false,
-      displayingEditModal: false
+      displayingEditModal: false,
+      quantity: 1
     }
   }
 
@@ -119,7 +120,44 @@ class RecipeToolbar extends Component {
     this.props.onSaveEdit();
   };
 
+  updateQuantity = () => {
+    console.log(this.state.quantity);
+  };
+
   render() {
+    let quantityInput = null;
+
+    // If this is not a custom recipe
+    if (this.props.recipe.id.toString().length !== 10)
+      quantityInput = (
+        <span id={"recipe-modal-quantity"}>
+          <span id={"recipe-modal-quantity-input"}>
+            <TextField
+              value={this.state.quantity}
+              type="number"
+              label={'Quantity'}
+              onChange={(event) => {
+                this.setState({
+                  quantity: event.target.value
+                })
+              }}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') {
+                  this.updateQuantity();
+                }
+              }}
+            />
+          </span>
+
+          <Button
+            variant="contained"
+            onClick={this.updateQuantity}
+          >
+            Update
+          </Button>
+        </span>
+      );
+
     return (
       <div id={"recipe-modal-toolbar"}>
         {this.renderSave()}
@@ -129,6 +167,8 @@ class RecipeToolbar extends Component {
         <RecipePrinter recipe={this.props.recipe} />
 
         {this.props.type === 'saved' ? <Button variant="contained" onClick={this.props.saveNote} >Save Notes</Button> : null}
+
+        { quantityInput }
 
         <EditRecipeModal
           recipe={this.state.displayingEditModal ? this.props.recipe : null}
