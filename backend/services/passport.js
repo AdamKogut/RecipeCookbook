@@ -38,10 +38,12 @@ passport.use(
                 new User({
                     googleId: profile.id,
                     name: profile.name.givenName,
+                    diet: "",
                     recipes: [],
                     notes: [],
                     excludedIngredients: [],
                     onhandIngredients: [],
+                    groceryLists: []
                 })
                 .save()
                 .then( user => done(null, user))
