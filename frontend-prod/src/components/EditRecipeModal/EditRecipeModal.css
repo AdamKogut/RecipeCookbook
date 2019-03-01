@@ -1,0 +1,67 @@
+.modal-container {
+  position: relative;
+  width: 70vw;
+  padding: 25px;
+  margin: 100px 0;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+}
+
+.edit-recipe-modal-textarea {
+  border: 1px solid lightgray;
+  border-top: none;
+  padding: 10px;
+	margin: 0;
+	width: 100%;
+}
+
+#edit-recipe-modal-title {
+  margin-top: 0;
+  font-size: 40px;
+  border-bottom: 2px solid lightgray;
+}
+
+#edit-recipe-modal-image {
+  position: relative;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+  box-shadow: 5px 5px 10px grey;
+	max-width: 1000px;
+}
+
+#edit-recipe-modal-link {
+	position: relative;
+	width: calc(90% - 20px);
+	left: 50%;
+	-webkit-transform: translateX(-50%);
+	transform: translateX(-50%);
+}
+
+#edit-recipe-modal-toolbar {
+  position: relative;
+  width: 90%;
+  margin-top: 20px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+}
+
+#edit-recipe-modal-toolbar button {
+  margin-right: 10px;
+}
+
+#edit-recipe-modal-description {
+  position: relative;
+  width: calc(90% - 20px);
+  margin-top: 20px;
+  padding: 10px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+}
+
+[role="presentation"] {
+    overflow-y: scroll;
+}

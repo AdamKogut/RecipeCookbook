@@ -1,0 +1,11 @@
+.BigDivArea {
+  /* background-color: blue; */
+  height:calc(100vh - 48px);
+  width:100vw;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#grocery-toolbar button {
+    margin-right: 10px;
+}
