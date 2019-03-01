@@ -73,8 +73,15 @@ class mainGrocery extends Component {
   };
 
   deleteList = (name) => {
-    this.setState({
-      deleteDialogIsOpen: false
+    Axios.post("http://localhost:8080/deleteGroceryList", {
+      googleId: this.props.auth,
+      title: name
+    }).then(()=>{
+      this.setState({
+        deleteDialogIsOpen: false
+      });
+
+      this.getGroceryLists();
     });
   };
 

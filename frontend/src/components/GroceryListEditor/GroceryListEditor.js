@@ -19,6 +19,7 @@ class GroceryListEditor extends React.Component {
     };
 
     this.noChangesAlert = React.createRef();
+    this.badTitleAlert = React.createRef();
   }
 
   handleClose = () => {
@@ -31,6 +32,10 @@ class GroceryListEditor extends React.Component {
       return;
     }
 
+    this.close();
+  };
+
+  close = () => {
     // close the modal
     this.props.onClose();
     this.setState({
@@ -64,27 +69,37 @@ class GroceryListEditor extends React.Component {
     if (this.props.add) {
       Axios.post("http://localhost:8080/groceryLists", {
         googleId: this.props.auth,
-        list: this.state.listEdit
-      }).then(()=>{
+        list: {
+          ...this.state.listEdit,
+          list: ingredientsList
+        },
+        edit: false
+      }).then((response)=>{
+        if (response.data.success !== true) {
+          this.badTitleAlert.current.open();
+          return;
+        }
+
+        this.close();
+
         if (this.props.onSave)
           this.props.onSave();
       });
     } else {
-      console.log({
-        listEdit: {
+      Axios.post("http://localhost:8080/groceryLists", {
+        googleId: this.props.auth,
+        list: {
           ...this.state.listEdit,
           list: ingredientsList
-        }
+        },
+        edit: true
+      }).then((response)=>{
+        this.close();
+
+        if (this.props.onSave)
+          this.props.onSave();
       });
     }
-
-    // close the modal
-    this.props.onClose();
-    this.setState({
-      recipeEdit: {},
-      closed: true,
-      warningIsOpen: false
-    });
   };
 
   render () {
@@ -192,6 +207,12 @@ class GroceryListEditor extends React.Component {
           title={"Alert"}
           text={"There are no changes to be saved for the current list"}
           ref={this.noChangesAlert}
+        />
+
+        <AlertDialog
+          title={"Alert"}
+          text={"You cannot add a list with the same title as another!"}
+          ref={this.badTitleAlert}
         />
       </div>
     );
