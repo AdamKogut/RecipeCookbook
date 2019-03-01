@@ -19,16 +19,22 @@ class AddItemModal extends Component {
     super(props);
     this.state = {
       item: "",
-      date: new Date(),
+      date: null,
       amt: "",
       amtUnit: "choose",
-      date2:'none',
+      date2: "none"
     };
   }
 
   changeDate = date => {
-    let date2=''+(date.getMonth()+1)+'/'+date.getDate()+'/'+date.getFullYear();
-    this.setState({ date:date, date2:date2 });
+    let date2 =
+      "" +
+      (date.getMonth() + 1) +
+      "/" +
+      date.getDate() +
+      "/" +
+      date.getFullYear();
+    this.setState({ date: date, date2: date2 });
     // console.log(date2)
   };
 
@@ -37,20 +43,41 @@ class AddItemModal extends Component {
   };
 
   handleSubmit = () => {
-    //todo: fix this when routes are in place
     let that = this;
-    Axios.post("http://localhost:8080/freshness", {
-      user: that.props.auth,
-      item: that.state.item,
-      date: that.state.date2
+    // console.log(this.state);
+    Axios.post("http://localhost:8080/onhandIngredients", {
+      googleId: that.props.auth,
+      ingredients: [{
+        ingredient: that.state.item.selectedItem[0],
+        unit: that.state.amtUnit,
+        quantity: that.state.amt,
+        date: that.state.date2
+      }]
     }).then(response => {
-      that.props.closeModal();
+      // console.log(response.data);
+      if(response.data.success)
+        that.closeModal();
+      else
+        alert('Something went wrong, please try again')
     });
+  };
+
+  closeModal = () => {
+    this.setState(
+      {
+        item: "",
+        date: null,
+        amt: "",
+        amtUnit: "choose",
+        date2: "none"
+      },
+      this.props.closeModal
+    );
   };
 
   render() {
     return (
-      <Modal open={this.props.modal} onClose={this.props.closeModal}>
+      <Modal open={this.props.modal} onClose={this.closeModal}>
         <Paper
           style={{
             position: "absolute",
@@ -104,7 +131,7 @@ class AddItemModal extends Component {
           <br />
           <div>
             <Button onClick={this.handleSubmit}>Submit</Button>
-            <Button onClick={this.props.closeModal}>Close</Button>
+            <Button onClick={this.closeModal}>Close</Button>
           </div>
         </Paper>
       </Modal>

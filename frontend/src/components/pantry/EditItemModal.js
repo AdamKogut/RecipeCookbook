@@ -19,25 +19,28 @@ class AddItemModal extends Component {
     super(props);
     this.state = {
       item: "",
-      date: new Date(),
+      date: null,
       amt: "",
       amtUnit: "choose",
       date2: "none"
     };
   }
 
-  fillData = () => {
-    if (this.props.current != null && this.state.item == "") {
+  componentDidUpdate = prevProps => {
+    if (this.props.current != prevProps.current && this.props.current!=null) {
       this.setState({
         item: this.props.current.ingredient,
         date2: this.props.current.date,
-        date: new Date(
-          this.props.current.date.split("/")[2],
-          this.props.current.date.split("/")[0],
-          this.props.current.date.split("/")[1]
-        ),
-        amt: this.props.current.amt,
-        amtUnit: this.props.current.amtUnit
+        date:
+          this.props.current.date != "none"
+            ? new Date(
+                this.props.current.date.split("/")[2],
+                this.props.current.date.split("/")[0],
+                this.props.current.date.split("/")[1]
+              )
+            : null,
+        amt: this.props.current.quantity,
+        amtUnit: this.props.current.unit
       });
     }
   };
@@ -59,14 +62,18 @@ class AddItemModal extends Component {
   };
 
   handleSubmit = () => {
-    //todo: fix this when routes are in place
+    
     let that = this;
-    Axios.post("http://localhost:8080/editFreshness", {
-      user: that.props.auth,
-      item: that.state.item,
-      date: that.state.date2
+    Axios.post("http://localhost:8080/onhandIngredients/update", {
+      googleId: that.props.auth,
+      ingredients:[{
+        ingredient: that.state.item,
+        unit: that.state.amtUnit,
+        quantity: that.state.amt,
+        date: that.state.date2
+      }]
     }).then(response => {
-      that.props.closeEdit();
+      that.closeModal();
     });
   };
 
@@ -74,7 +81,7 @@ class AddItemModal extends Component {
     this.setState(
       {
         item: "",
-        date: new Date(),
+        date: null,
         amt: "",
         amtUnit: "choose",
         date2: "none"
@@ -84,7 +91,7 @@ class AddItemModal extends Component {
   };
 
   render() {
-    this.fillData();
+    // this.fillData();
     return (
       <Modal open={this.props.editModal} onClose={this.closeModal}>
         <Paper
@@ -96,9 +103,10 @@ class AddItemModal extends Component {
             padding: "30px"
           }}
         >
-          <Typography variant="h5">Add item to pantry</Typography>
+          <Typography variant="h5">Edit pantry item</Typography>
+          <br />
           <div style={{ paddingLeft: "10px" }}>
-            <TextField onChange={this.handleChange} label="Amount" />
+            <TextField onChange={this.handleChange} value={this.state.amt} label="Amount" />
             &nbsp;
             <Select
               value={this.state.amtUnit}
@@ -122,14 +130,8 @@ class AddItemModal extends Component {
               <MenuItem value="kilogram">Kilogram(s)</MenuItem>
             </Select>
           </div>
-          <IngredientsAutocomplete
-            label={"Item"}
-            onChange={item => {
-              this.setState({
-                item
-              });
-            }}
-          />
+          <br />
+          <Typography variant='h6' style={{paddingLeft:'15px'}}>Ingredient: {this.state.item}</Typography>
           <div style={{ paddingLeft: "10px" }}>
             <DateFormatInput
               value={this.state.date}
@@ -140,6 +142,7 @@ class AddItemModal extends Component {
           <br />
           <div>
             <Button onClick={this.handleSubmit}>Save Changes</Button>
+            <Button onClick={()=>this.props.remove(this.props.current)}>Remove Item</Button>
             <Button onClick={this.closeModal}>Cancel</Button>
           </div>
         </Paper>
