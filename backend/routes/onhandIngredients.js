@@ -78,7 +78,7 @@ router.post('/update', function(req, res, next){
 });
 
 /*route to delete all ingredients from on hand array*/
-router.purge('/', function(req, res, next){
+router.post('/purge', function(req, res, next){
   let user = req.body.googleId;
   myDBO.collection("users").updateOne({googleId: user}, {$set: {"onhandIngredients": []}});
 
