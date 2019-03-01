@@ -69,14 +69,20 @@ class RecipeToolbar extends Component {
 
   //Fix this when route is implemented
   removePlanning = () => {
+    // console.log(this.props)
     let that = this;
-    Axios.post("http://localhost:8080/removeMealPlan", {
-      id: that.props.id,
+    Axios.post("http://localhost:8080/meal/delete", {
+      googleId: that.props.auth,
       meal: that.props.meal,
-      date: that.props.date
+      date: that.props.date,
+      recipeId:that.props.id,
     }).then(response => {
-      console.log(response.data);
-      that.props.handleClose();
+      // console.log(response.data);
+      if(response.data.success){
+        that.props.handleClose();
+      }else{
+        alert('Something went wrong, please try again');
+      }
     });
   };
 

@@ -30,7 +30,7 @@ class PlanningModal extends Component {
       alert('Please fill out all forms')
       return;
     }
-    console.log(this.props)
+    //console.log(this.props)
     let that=this;
     Axios.post("http://localhost:8080/meal",{
       googleId:that.props.auth,
@@ -42,7 +42,7 @@ class PlanningModal extends Component {
       if(response.data.success){
         that.handleClose();
       }else{
-        alert('Something went wrong, pleas try again')
+        alert('Something went wrong, please try again')
       }
     })
   }
