@@ -208,7 +208,32 @@ class mainHome extends Component {
     });
   };
 
+  myIngredientsSearch = () => {
+    this.clearResults();
+
+    // Render the loader while we wait for results
+    this.setState({
+      isLoadingSearch: true
+    });
+
+    // Set the results once we get them back from the server
+    axios.post("http://localhost:8080/onhandSearch", {
+      googleId: this.props.auth
+    }).then(response => {
+      console.log(response);
+
+      if (this.state.searchType === "myIngredients") {
+        this.setState({
+          results: response.data.body,
+          isLoadingSearch: false
+        });
+      }
+    });
+  };
+
   render() {
+    let noResultsWarning = null;
+
     // Build out the Results list
     const cards = [];
     if (this.state.isLoadingSearch) {
@@ -218,19 +243,28 @@ class mainHome extends Component {
         </Grid>
       );
     } else if (this.state.results) {
-      for (let i = 0; i < this.state.results.length; i++) {
-        const recipe = this.state.results[i];
 
-        cards.push(
-          <Grid item xs={3} key={"Recipe" + i}>
-            <RecipeCard
-              title={recipe.title}
-              image={recipe.image}
-              id={recipe.id}
-              onClick={this.onRecipeClick}
-            />
-          </Grid>
+      if (this.state.results.length === 0) {
+        noResultsWarning = (
+          <div>
+            No Results ): Try adding some ingredients to your Pantry
+          </div>
         );
+      } else {
+        for (let i = 0; i < this.state.results.length; i++) {
+          const recipe = this.state.results[i];
+
+          cards.push(
+            <Grid item xs={3} key={"Recipe" + i}>
+              <RecipeCard
+                title={recipe.title}
+                image={recipe.image}
+                id={recipe.id}
+                onClick={this.onRecipeClick}
+              />
+            </Grid>
+          );
+        }
       }
     }
 
@@ -293,7 +327,7 @@ class mainHome extends Component {
               onClick={() => {
                 if (this.state.searchType !== "myIngredients") {
                   this.setState({ searchType: "myIngredients" });
-                  this.clearResults();
+                  this.myIngredientsSearch();
                 } else {
                   this.setState({ searchType: "default" });
                 }
@@ -341,6 +375,8 @@ class mainHome extends Component {
               });
             }}
           />
+
+          { noResultsWarning }
 
           <Grid id={"search-results"} container spacing={24}>
             {cards}
