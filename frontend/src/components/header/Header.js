@@ -42,17 +42,36 @@ class Header extends Component {
   renderTab = () => {
     switch (this.props.auth) {
       case null:
-        return null;
       case false:
-        return null;
+        return (
+          <Tabs
+            value={this.state.tabValue}
+            onChange={this.handleTabChange}
+            variant="scrollable"
+            scrollButtons="auto"
+          >
+            <Tab label="Home" value={0} />
+          </Tabs>
+        );
       default:
-        return <Tab label="Saved Recipes" value={4} />;
+        return (
+          <Tabs
+            value={this.state.tabValue}
+            onChange={this.handleTabChange}
+            variant="scrollable"
+            scrollButtons="auto"
+          >
+            <Tab label="Home" value={0} />
+            <Tab label="Grocery List" value={1} />
+            <Tab label="Pantry" value={2} />
+            <Tab label="Meal Planning" value={3} />
+            <Tab label="Saved Recipes" value={4} />
+          </Tabs>
+        );
     }
   };
 
   renderButton = () => {
-    // console.log(this.props.auth)
-
     switch (this.props.auth) {
       case null:
         return <LoginButton />;
@@ -72,19 +91,7 @@ class Header extends Component {
     return (
       <AppBar position="static">
         <Toolbar variant="dense">
-          <Tabs
-            value={this.state.tabValue}
-            onChange={this.handleTabChange}
-            variant="scrollable"
-            scrollButtons="auto"
-          >
-            <Tab label="Home" value={0} />
-            <Tab label="Grocery List" value={1} />
-            <Tab label="Pantry" value={2} />
-            <Tab label="Meal Planning" value={3} />
-            {/* <Tab label="Saved Recipes" value={4} /> */}
-            {this.renderTab()}
-          </Tabs>
+          {this.renderTab()}
           {this.renderButton()}
         </Toolbar>
       </AppBar>

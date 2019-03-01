@@ -317,24 +317,26 @@ class mainHome extends Component {
               Random
             </Button>
 
-            <Button
-              variant="contained"
-              color={
-                this.state.searchType === "myIngredients"
-                  ? "secondary"
-                  : "default"
-              }
-              onClick={() => {
-                if (this.state.searchType !== "myIngredients") {
-                  this.setState({ searchType: "myIngredients" });
-                  this.myIngredientsSearch();
-                } else {
-                  this.setState({ searchType: "default" });
+            { this.props.auth ?
+              <Button
+                variant="contained"
+                color={
+                  this.state.searchType === "myIngredients"
+                    ? "secondary"
+                    : "default"
                 }
-              }}
-            >
-              Using my Ingredients
-            </Button>
+                onClick={() => {
+                  if (this.state.searchType !== "myIngredients") {
+                    this.setState({ searchType: "myIngredients" });
+                    this.myIngredientsSearch();
+                  } else {
+                    this.setState({ searchType: "default" });
+                  }
+                }}
+              >
+                Using my Ingredients
+              </Button>
+            : null}
 
             <Button
               variant="contained"

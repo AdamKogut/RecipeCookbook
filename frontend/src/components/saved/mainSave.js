@@ -63,7 +63,8 @@ class mainSave extends Component {
           allCards: tempCard,
           shownCards: tempCard,
           names: tempName,
-          id: null
+          id: null,
+          isLoading: false
         });
       } else {
         for (let i in response.data) {
