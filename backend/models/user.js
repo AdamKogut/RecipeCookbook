@@ -7,6 +7,9 @@ const userSchema = new Schema({
     recipes: [Schema.Types.Mixed],
     notes: [String],
     excludedIngredients: [String],
+    mealPlans: Schema.Types.Mixed,
+    ratings: Schema.Types.Mixed,
+    onhandIngredients: [Schema.Types.Mixed],
 });
 
 mongoose.model('users', userSchema)

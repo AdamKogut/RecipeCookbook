@@ -5,7 +5,7 @@ const keys = require('../config/keys');
 const User = mongoose.model('users');
 
 passport.serializeUser((user,done) => {
-    done(null, user.id); 
+    done(null, user.id);
 });
 
 passport.deserializeUser((id ,done) => {
@@ -23,7 +23,7 @@ passport.use(
         clientID: keys.googleClientID, //change later
         clientSecret: keys.googleClientSecret, //change later
         callbackURL: '/auth/google/callback'
-    }, 
+    },
     (accessToken, refreshToken, profile, done) => {
         console.log(typeof(profile.id));
         //console.log(accessToken);
@@ -41,10 +41,11 @@ passport.use(
                     recipes: [],
                     notes: [],
                     excludedIngredients: [],
+                    onhandIngredients: [],
                 })
                 .save()
                 .then( user => done(null, user))
-                .catch(err => console.log(err));     
+                .catch(err => console.log(err));
             }
 
         })

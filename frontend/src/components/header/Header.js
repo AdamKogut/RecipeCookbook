@@ -3,6 +3,7 @@ import { AppBar, Toolbar, Tabs, Tab } from "@material-ui/core";
 import { connect } from "react-redux";
 import LoginButton from "./LoginButton";
 import LogoutButton from "./LogoutButton";
+import SettingsButton from './SettingsButton';
 import History from "../../history";
 
 class Header extends Component {
@@ -38,27 +39,32 @@ class Header extends Component {
     }
   };
 
-  renderTab=()=>{
-    switch(this.props.auth){
+  renderTab = () => {
+    switch (this.props.auth) {
       case null:
-        return <div></div>;
+        return null;
       case false:
-        return <div></div>;
+        return null;
       default:
         return <Tab label="Saved Recipes" value={4} />;
     }
   };
 
-  renderButton=()=>{
+  renderButton = () => {
     // console.log(this.props.auth)
 
-    switch(this.props.auth){
+    switch (this.props.auth) {
       case null:
         return <LoginButton />;
       case false:
         return <LoginButton />;
       default:
-        return <LogoutButton />;
+        return (
+          <div style={{position:'absolute',right:'0px',top:'7px'}}>
+            <SettingsButton />
+            <LogoutButton />
+          </div>
+        );
     }
   };
 

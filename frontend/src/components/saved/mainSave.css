@@ -5,3 +5,7 @@
   overflow-y: auto;
   overflow-x: hidden;
 }
+
+#save-toolbar {
+	margin-bottom: 20px;
+}
