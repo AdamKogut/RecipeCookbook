@@ -69,6 +69,9 @@ var testRouter = require('./routes/test');
 var mealRouter = require('./routes/meal');
 var ratings = require('./routes/ratings');
 var onhandSearch = require('./routes/onhandSearch');
+var ingredientSubstitution = require('./routes/ingredientSubstitution');
+var reduceIngredients = require('./routes/reduceIngredients');
+
 var multiplyIngredients = require('./routes/multiplyIngredients');
 var allowCrossDomain = function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
@@ -108,6 +111,8 @@ app.use('/groceryLists', groceryLists);
 app.use('/deleteGroceryList', deleteGroceryList);
 app.use('/ratings', ratings);
 app.use('/onhandSearch', onhandSearch);
+app.use('/ingredientSubstitution', ingredientSubstitution);
+app.use('/reduceIngredients', reduceIngredients);
 app.use('/multiplyIngredients', multiplyIngredients);
 
 

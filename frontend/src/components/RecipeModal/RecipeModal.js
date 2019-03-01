@@ -177,7 +177,10 @@ class RecipeModal extends React.Component {
             <span
               className={"recipe-modal-ingredient"}
               onClick={() => {
-                this.getSubstitute(recipe.extendedIngredients[i].original);
+                if (recipe.extendedIngredients[i].name)
+                  this.getSubstitute(recipe.extendedIngredients[i].name);
+                else
+                  this.getSubstitute(recipe.extendedIngredients[i].original);
               }}
             >
               { recipe.extendedIngredients[i].original }

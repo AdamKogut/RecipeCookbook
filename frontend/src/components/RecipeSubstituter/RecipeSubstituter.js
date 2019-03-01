@@ -5,6 +5,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import axios from "axios/index";
 
 class RecipeSubstituter extends React.Component {
   state = {
@@ -17,14 +18,17 @@ class RecipeSubstituter extends React.Component {
       open: true
     });
 
-    // Grab the data from the api
-    this.setState({
-      substitutes: [
-        "1 cup = 7/8 cup shortening and 1/2 tsp salt",
-        "1/2 cup = 1/4 cup buttermilk + 1/4 cup unsweetened applesauce",
-        "1 cup = 7/8 cup vegetable oil + 1/2 tsp salt",
-        "1 cup = 1 cup margarine"
-      ]
+    axios.get(
+      'http://localhost:8080/ingredientSubstitution',
+      {
+        headers: {
+          name: this.props.ingredientName
+        }
+      }
+    ).then((response) => {
+      this.setState({
+        substitutes: response.data.body.substitutes
+      });
     });
   };
 
@@ -37,9 +41,9 @@ class RecipeSubstituter extends React.Component {
 
   render() {
     const substitutions = [];
-    let substitutionList = null;
+    let substitutionList;
 
-    if (this.state.substitutes.length === 0) {
+    if (!this.state.substitutes) {
       substitutions.push(
         <li key={'substitute'}>
           <em>None Found</em>

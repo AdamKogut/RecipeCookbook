@@ -17,6 +17,7 @@
   border: 1px solid lightgray;
   border-top: none;
   padding: 10px;
+  overflow: hidden;
 }
 
 #recipe-modal-title {
