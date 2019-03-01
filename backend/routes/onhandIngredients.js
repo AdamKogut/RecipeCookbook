@@ -39,6 +39,7 @@ router.post('/', function(req, res, next){
     ...
   ]*/
   let ingredients = req.body.ingredients;
+  console.log(ingredients)
 
   for(var i = 0; i < ingredients.length; i++){
     myDBO.collection("users").updateOne({googleId: user}, {$push: {"onhandIngredients": ingredients[i]}});
@@ -52,6 +53,7 @@ router.post('/', function(req, res, next){
 
 /*route to delete a single ingredient from on hand array*/
 router.delete('/', function(req, res, next){
+  console.log(req.body)
   let user = req.body.googleId;
   let ingredient = req.body.ingredients.ingredient; //a single object that contains an ingredient
   myDBO.collection("users").updateOne({googleId: user}, {$pull: {onhandIngredients: {ingredient: ingredient}}});
@@ -63,7 +65,7 @@ router.delete('/', function(req, res, next){
 });
 
 /*route to UPDATE an ingredient*/
-router.patch('/', function(req, res, next){
+router.post('/update', function(req, res, next){
   let user = req.body.googleId;
   let ingredient = req.body.ingredients; //the full ingredient object with updated values
 
