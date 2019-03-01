@@ -64,11 +64,13 @@ var recipeNote = require('./routes/recipeNote');
 var excludedIngredients = require('./routes/excludedIngredients');
 var onhandIngredients = require('./routes/onhandIngredients');
 var groceryLists = require('./routes/groceryLists');
+var deleteGroceryList = require('./routes/deleteGroceryList');
 var testRouter = require('./routes/test');
 var mealRouter = require('./routes/meal');
 var ratings = require('./routes/ratings');
 var onhandSearch = require('./routes/onhandSearch');
 var ingredientSubstitution = require('./routes/ingredientSubstitution');
+var reduceIngredients = require('./routes/reduceIngredients');
 
 var allowCrossDomain = function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
@@ -105,10 +107,11 @@ app.use('/recipeNote', recipeNote);
 app.use('/excludedIngredients', excludedIngredients);
 app.use('/onhandIngredients', onhandIngredients);
 app.use('/groceryLists', groceryLists);
+app.use('/deleteGroceryList', deleteGroceryList);
 app.use('/ratings', ratings);
 app.use('/onhandSearch', onhandSearch);
 app.use('/ingredientSubstitution', ingredientSubstitution);
-
+app.use('/reduceIngredients', reduceIngredients);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
