@@ -278,6 +278,9 @@ class RecipeModal extends React.Component {
           {image}
 
           <RecipeToolbar
+            date={this.props.date}
+            meal={this.props.meal}
+            id={this.props.id}
             recipe={recipe}
             type={this.props.type}
             saveNote={this.saveNotes}

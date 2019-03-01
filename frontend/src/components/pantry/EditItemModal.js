@@ -26,6 +26,25 @@ class AddItemModal extends Component {
     };
   }
 
+  componentDidUpdate = prevProps => {
+    if (this.props.current != prevProps.current && this.props.current!=null) {
+      this.setState({
+        item: this.props.current.ingredient,
+        date2: this.props.current.date,
+        date:
+          this.props.current.date != "none"
+            ? new Date(
+                this.props.current.date.split("/")[2],
+                this.props.current.date.split("/")[0],
+                this.props.current.date.split("/")[1]
+              )
+            : null,
+        amt: this.props.current.quantity,
+        amtUnit: this.props.current.unit
+      });
+    }
+  };
+
   changeDate = date => {
     let date2 =
       "" +
@@ -43,22 +62,18 @@ class AddItemModal extends Component {
   };
 
   handleSubmit = () => {
+    
     let that = this;
-    // console.log(this.state);
-    Axios.post("http://localhost:8080/onhandIngredients", {
+    Axios.post("http://localhost:8080/onhandIngredients/update", {
       googleId: that.props.auth,
-      ingredients: [{
-        ingredient: that.state.item.selectedItem[0],
+      ingredients:[{
+        ingredient: that.state.item,
         unit: that.state.amtUnit,
         quantity: that.state.amt,
         date: that.state.date2
       }]
     }).then(response => {
-      // console.log(response.data);
-      if(response.data.success)
-        that.closeModal();
-      else
-        alert('Something went wrong, please try again')
+      that.closeModal();
     });
   };
 
@@ -71,13 +86,14 @@ class AddItemModal extends Component {
         amtUnit: "choose",
         date2: "none"
       },
-      this.props.closeModal
+      this.props.closeEdit
     );
   };
 
   render() {
+    // this.fillData();
     return (
-      <Modal open={this.props.modal} onClose={this.closeModal}>
+      <Modal open={this.props.editModal} onClose={this.closeModal}>
         <Paper
           style={{
             position: "absolute",
@@ -87,9 +103,10 @@ class AddItemModal extends Component {
             padding: "30px"
           }}
         >
-          <Typography variant="h5">Add item to pantry</Typography>
+          <Typography variant="h5">Edit pantry item</Typography>
+          <br />
           <div style={{ paddingLeft: "10px" }}>
-            <TextField onChange={this.handleChange} label="Amount" />
+            <TextField onChange={this.handleChange} value={this.state.amt} label="Amount" />
             &nbsp;
             <Select
               value={this.state.amtUnit}
@@ -113,14 +130,8 @@ class AddItemModal extends Component {
               <MenuItem value="kilogram">Kilogram(s)</MenuItem>
             </Select>
           </div>
-          <IngredientsAutocomplete
-            label={"Item"}
-            onChange={item => {
-              this.setState({
-                item
-              });
-            }}
-          />
+          <br />
+          <Typography variant='h6' style={{paddingLeft:'15px'}}>Ingredient: {this.state.item}</Typography>
           <div style={{ paddingLeft: "10px" }}>
             <DateFormatInput
               value={this.state.date}
@@ -130,8 +141,9 @@ class AddItemModal extends Component {
           </div>
           <br />
           <div>
-            <Button onClick={this.handleSubmit}>Submit</Button>
-            <Button onClick={this.closeModal}>Close</Button>
+            <Button onClick={this.handleSubmit}>Save Changes</Button>
+            <Button onClick={()=>this.props.remove(this.props.current)}>Remove Item</Button>
+            <Button onClick={this.closeModal}>Cancel</Button>
           </div>
         </Paper>
       </Modal>
