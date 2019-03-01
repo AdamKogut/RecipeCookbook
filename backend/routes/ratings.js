@@ -54,7 +54,7 @@ router.post('/', function(req,res,next){
       var ratings = document.ratings;
       var recipeId = req.body.recipeId;
       var rating = req.body.rating;
-      console.log(obj);
+      //console.log(obj);
       ratings[recipeId]=rating;
       console.log(ratings);
       myDBO.collection("users").updateOne({googleId: user},{$set: {ratings: ratings}}, function(err, result){
