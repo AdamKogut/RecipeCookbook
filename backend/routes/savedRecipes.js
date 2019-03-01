@@ -38,7 +38,7 @@ router.get('/', function(req, res, next) {
         console.log("ratings");
         res.json(resp);
       }
-      console.log(savedRecipes[i].id);
+
       var rating = ratings[savedRecipes[i].id];
       var noratings = [];
       if(typeof rating == undefined || rating == null){
