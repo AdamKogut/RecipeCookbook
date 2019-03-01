@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { connect } from 'react-redux';
 import Calendar from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import RecipeModal from "../RecipeModal/RecipeModal";
@@ -87,4 +88,8 @@ class mainPlanning extends Component {
   }
 }
 
-export default mainPlanning;
+function mapStatesToProps({ auth }) {
+  return { auth: auth };
+}
+
+export default connect(mapStatesToProps)(mainPlanning);
