@@ -179,6 +179,9 @@ class RecipeModal extends React.Component {
           <img id={'recipe-modal-image'} src={recipe.image} alt={`recipe: ${recipe.title}`} />
 
           <RecipeToolbar
+            date={this.props.date}
+            meal={this.props.meal}
+            id={this.props.id}
             recipe={recipe}
             type={this.props.type}
             saveNote={this.saveNotes}
