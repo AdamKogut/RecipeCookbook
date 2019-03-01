@@ -96,7 +96,9 @@ router.post('/', function(req, res, next) {
       console.log("Error finding user");
       res.json(resp);
     }
+    console.log(document.mealPlans[date]);
     if(document.mealPlans && document.mealPlans[date]){ //if document has a plan for that particular date
+      var mealPlans = document.mealPlans;
       var meals = document.mealPlans[date]; //get meals object for that date
       var recipes = meals[meal]; //get recipes for particular meal from meal object
       var recipeobj = {
@@ -107,8 +109,8 @@ router.post('/', function(req, res, next) {
       recipes.push(recipeobj); //update recipes for that meal
       meals[meal]=recipes; //update meal with updated recipes
       var obj = {};
-      obj[date] = meals;
-      myDBO.collection("users").updateOne({googleId: user},{$set: {mealPlans: obj}}, function(err, result){
+      mealPlans[date] = meals;
+      myDBO.collection("users").updateOne({googleId: user},{$set: {mealPlans: mealPlans}}, function(err, result){
         if(err){
           const resp = {
             success: false,
@@ -124,6 +126,13 @@ router.post('/', function(req, res, next) {
       });
     }
     else if(document){ //create plan for that particular date
+      var mealPlans;
+      if(document.mealPlans){
+        mealPlans = document.mealPlans;
+      }
+      else{
+        mealPlans = {};
+      }
       var meals = {}; //make new meals object
       meals["Breakfast"]=[]; //set meal fields in meals obj with empty arrays for values
       meals["Lunch"]=[];
@@ -136,9 +145,8 @@ router.post('/', function(req, res, next) {
       }
       recipes.push(recipeobj); //push new recipe ID onto the desired meal
       var obj = {};
-      obj[date] = meals; //create new object with date as field and meals object as value
-      
-      myDBO.collection("users").updateOne({googleId: user},{$set: {mealPlans: obj}}, function(err, result){
+      mealPlans[date] = meals; //create new object with date as field and meals object as value
+      myDBO.collection("users").updateOne({googleId: user},{$set: {mealPlans: mealPlans}}, function(err, result){
         if(err){
           const resp = {
             success: false,
