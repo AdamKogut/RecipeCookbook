@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {Button, Grid} from "@material-ui/core";
+import { Button, Grid, Select, MenuItem } from "@material-ui/core";
 import SavedSearch from "./SavedSearch";
 import RecipeCard from "../RecipeCard/RecipeCard";
 import "./mainSave.css";
@@ -9,6 +9,7 @@ import BodyContainer from "../BodyContainer/BodyContainer";
 import filter from "fuzzaldrin";
 import { connect } from "react-redux";
 import EditRecipeModal from "../EditRecipeModal/EditRecipeModal";
+import Loader from "../Loader/Loader";
 
 class mainSave extends Component {
   constructor(props) {
@@ -19,7 +20,9 @@ class mainSave extends Component {
       id: null,
       names: [],
       info: [],
-      displayingEditModal: false
+      displayingEditModal: false,
+      sort: "null",
+      isLoading:false,
     };
   }
 
@@ -32,8 +35,7 @@ class mainSave extends Component {
   };
 
   componentDidMount = () => {
-    if (this.state.auth)
-      this.updateList();
+    if (this.state.auth) this.updateList();
     else
       setTimeout(() => {
         this.updateList();
@@ -42,19 +44,26 @@ class mainSave extends Component {
 
   updateList = () => {
     let that = this;
-
+    this.setState({isLoading:true,shownCards:[]})
     Axios.get("http://localhost:8080/savedRecipes", {
-      headers: { googleId: that.props.auth }
+      headers: {
+        googleId: that.props.auth,
+        sort: that.state.sort === "null" ? null : that.state.sort
+      }
     }).then(function(response) {
       let tempCard = [];
       let tempName = [];
-      if (response.data.length===0) {
-        tempCard.push(<h3 style={{margin:'auto',paddingTop:'5vh'}} key={1}>Save some recipes to see them here!</h3>);
+      if (response.data.length === 0) {
+        tempCard.push(
+          <h3 style={{ margin: "auto", paddingTop: "5vh" }} key={1}>
+            Save some recipes to see them here!
+          </h3>
+        );
         that.setState({
           allCards: tempCard,
           shownCards: tempCard,
           names: tempName,
-          id:null
+          id: null
         });
       } else {
         for (let i in response.data) {
@@ -75,7 +84,8 @@ class mainSave extends Component {
           shownCards: tempCard,
           names: tempName,
           info: response.data,
-          id:null,
+          id: null,
+          isLoading:false
         });
       }
     });
@@ -98,7 +108,7 @@ class mainSave extends Component {
 
   onSaveNew = () => {
     this.setState({
-      displayingEditModal: false,
+      displayingEditModal: false
     });
 
     this.updateList();
@@ -112,7 +122,7 @@ class mainSave extends Component {
             <SavedSearch {...this.state} searchSaved={this.searchSaved} />
           </div>
 
-          <div id={'save-toolbar'}>
+          <div id={"save-toolbar"}>
             <Button
               variant="contained"
               color={"primary"}
@@ -124,7 +134,18 @@ class mainSave extends Component {
             >
               Add Custom
             </Button>
+            <Select
+              value={this.state.sort}
+              onChange={event => this.setState({ sort: event.target.value },this.updateList)}
+              style={{ marginLeft: "30px" }}
+            >
+              <MenuItem value="null">Sort: None</MenuItem>
+              <MenuItem value="ascending">Sort: Ascending</MenuItem>
+              <MenuItem value="descending">Sort: Descending</MenuItem>
+            </Select>
           </div>
+
+          {this.state.isLoading?<Loader/>:null}
 
           <Grid id={"search-results"} container spacing={24}>
             {this.state.shownCards}
@@ -138,14 +159,20 @@ class mainSave extends Component {
           />
 
           <EditRecipeModal
-            recipe={this.state.displayingEditModal ? {
-              extendedIngredients: [],
-              analyzedInstructions: [{
-                steps: []
-              }],
-              image: null,
-              title: ""
-            } : null}
+            recipe={
+              this.state.displayingEditModal
+                ? {
+                    extendedIngredients: [],
+                    analyzedInstructions: [
+                      {
+                        steps: []
+                      }
+                    ],
+                    image: null,
+                    title: ""
+                  }
+                : null
+            }
             onClose={this.onEditClose}
             onSave={this.onSaveNew}
           />

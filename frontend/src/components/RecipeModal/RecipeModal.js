@@ -1,27 +1,42 @@
-import React from 'react';
-import './RecipeModal.css';
+import React from "react";
+import "./RecipeModal.css";
 
-import { Modal, Paper, Button, AppBar, Tabs, Tab, TextField, Table, TableBody, TableHead, TableCell, TableRow } from '@material-ui/core';
+import {
+  Modal,
+  Paper,
+  Button,
+  AppBar,
+  Tabs,
+  Tab,
+  TextField,
+  Table,
+  TableBody,
+  TableHead,
+  TableCell,
+  TableRow
+} from "@material-ui/core";
 import Loader from "../Loader/Loader";
 import axios from "axios/index";
-import RecipeToolbar from './RecipeToolbar';
+import RecipeToolbar from "./RecipeToolbar";
 import { connect } from "react-redux";
-import ConfirmationDialog from '../ConfirmationDialog/ConfirmationDialog';
+import ConfirmationDialog from "../ConfirmationDialog/ConfirmationDialog";
 import AlertDialog from "../AlertDialog/AlertDialog";
 import RecipeSubstituter from "../RecipeSubstituter/RecipeSubstituter";
+import Rating from "react-rating";
+import { StarBorder, Star } from "@material-ui/icons";
 
 class RecipeModal extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.state = {
       recipe: {},
       currentTab: 0,
       closed: true,
-      notes: '',
-      notesOriginal: '',
+      notes: "",
+      notesOriginal: "",
       notesWarningIsOpen: false,
-      substituteName: ""
+      substituteName: "",
     };
 
     this.noChangesAlert = React.createRef();
@@ -30,68 +45,63 @@ class RecipeModal extends React.Component {
   }
 
   getData = () => {
-    if (this.props.type === 'saved') {
+    if (this.props.type === "saved") {
       // Grab the saved list and extract out the necessary data
-      axios.get(
-        'http://localhost:8080/savedRecipes',
-        {
+      axios
+        .get("http://localhost:8080/savedRecipes", {
           headers: {
             googleId: this.props.auth
           }
-        }
-      ).then((response) => {
-        for (let i = 0; i < response.data.length; i++) {
-          const recipe = response.data[i];
-          if (recipe.id === this.props.id) {
-            this.setState({
-              recipe
-            });
+        })
+        .then(response => {
+          for (let i = 0; i < response.data.length; i++) {
+            const recipe = response.data[i];
+            if (recipe.id === this.props.id) {
+              this.setState({
+                recipe
+              });
 
-            break;
+              break;
+            }
           }
-        }
-      });
+        });
 
       // Grab the recipe notes if on the saved page
-      axios.get(
-        'http://localhost:8080/recipeNote',
-        {
+      axios
+        .get("http://localhost:8080/recipeNote", {
           headers: {
             googleId: this.props.auth
           }
-        }
-      ).then((response) => {
-        let note = '';
-        const notes = response.data[0].notes;
-        for (let i = 0; i < notes.length; i++) {
-          if (notes[i].recipeId === this.props.id) {
-            note = notes[i].note;
-            break;
+        })
+        .then(response => {
+          let note = "";
+          const notes = response.data[0].notes;
+          for (let i = 0; i < notes.length; i++) {
+            if (notes[i].recipeId === this.props.id) {
+              note = notes[i].note;
+              break;
+            }
           }
-        }
 
-        this.setState({
-          notes: note,
-          notesOriginal: note
+          this.setState({
+            notes: note,
+            notesOriginal: note
+          });
         });
-      });
-
     } else {
-
       // Grab the recipe data from the api using props.id
-      axios.get(
-        'http://localhost:8080/recipeInfo',
-        {
+      axios
+        .get("http://localhost:8080/recipeInfo", {
           headers: {
             id: this.props.id,
-            includeNutrition: 'true'
+            includeNutrition: "true"
           }
-        }
-      ).then((response) => {
-        this.setState({
-          recipe: response.data.body
+        })
+        .then(response => {
+          this.setState({
+            recipe: response.data.body
+          });
         });
-      });
     }
   };
 
@@ -101,7 +111,10 @@ class RecipeModal extends React.Component {
 
   handleClose = () => {
     // Check for unsaved notes
-    if (this.props.type === "saved" && this.state.notes !== this.state.notesOriginal) {
+    if (
+      this.props.type === "saved" &&
+      this.state.notes !== this.state.notesOriginal
+    ) {
       this.setState({
         notesWarningIsOpen: true
       });
@@ -115,14 +128,14 @@ class RecipeModal extends React.Component {
       recipe: {},
       currentTab: 0,
       closed: true,
-      notes: '',
-      notesOriginal: '',
+      notes: "",
+      notesOriginal: "",
       notesWarningIsOpen: false
     });
   };
 
   saveNotes = () => {
-    if (this.state.notes === this.state.notesOriginal){
+    if (this.state.notes === this.state.notesOriginal) {
       this.noChangesAlert.current.open();
       return;
     }
@@ -131,19 +144,18 @@ class RecipeModal extends React.Component {
       notesOriginal: this.state.notes
     });
 
-    axios.post(
-      'http://localhost:8080/recipeNote',
-      {
+    axios
+      .post("http://localhost:8080/recipeNote", {
         googleId: this.props.auth,
         recipeId: this.props.id,
         note: this.state.notes
-      }
-    ).then((response) => {
-      this.notesAlert.current.open();
-    });
+      })
+      .then(response => {
+        this.notesAlert.current.open();
+      });
   };
 
-  getSubstitute = (substituteName) => {
+  getSubstitute = substituteName => {
     this.setState({
       substituteName
     });
@@ -151,18 +163,39 @@ class RecipeModal extends React.Component {
     this.recipeSubstituter.current.open();
   };
 
-  displayMultipliedRecipe = (recipe) => {
+  displayMultipliedRecipe = recipe => {
     this.setState({
       recipe
     });
   };
 
-  render () {
+  newRating = value => {
+    let that = this;
+
+    axios
+      .post("http://localhost:8080/ratings", {
+        googleId: that.props.auth,
+        recipeId: that.props.id,
+        rating: value
+      })
+      .then(response => {
+        if (response.data.success) {
+          alert("Rating updated successfully!");
+          that.setState({
+            recipe: { ...that.state.recipe, rating: value }
+          });
+        } else {
+          alert("Something went wrong, please try again");
+        }
+      });
+  };
+
+  render() {
     const currentTab = this.state.currentTab;
 
     // If this has just been opened, grab the data from the server
     if (this.props.id && this.state.closed) {
-      this.setState({closed: false});
+      this.setState({ closed: false });
       this.getData();
     }
 
@@ -175,24 +208,36 @@ class RecipeModal extends React.Component {
       let image = null;
 
       if (recipe.image && recipe.image !== "")
-        image = <img id={'recipe-modal-image'} src={recipe.image} alt={"Incorrect Link Format"} />;
+        image = (
+          <img
+            id={"recipe-modal-image"}
+            src={recipe.image}
+            alt={"Incorrect Link Format"}
+          />
+        );
 
-      const ingredientNotification = this.state.recipe.multipliedBy && this.state.recipe.multipliedBy !== 1 ?
-        <span><em>Ingredients Displayed for {this.state.recipe.multipliedBy} Servings</em></span> : null;
+      const ingredientNotification =
+        this.state.recipe.multipliedBy && this.state.recipe.multipliedBy !== 1
+          ? <span>
+              <em>
+                Ingredients Displayed for {this.state.recipe.multipliedBy}{" "}
+                Servings
+              </em>
+            </span>
+          : null;
 
       for (let i = 0; i < recipe.extendedIngredients.length; i++) {
         ingredients.push(
-          <li key={'ingredient' + i} >
+          <li key={"ingredient" + i}>
             <span
               className={"recipe-modal-ingredient"}
               onClick={() => {
                 if (recipe.extendedIngredients[i].name)
                   this.getSubstitute(recipe.extendedIngredients[i].name);
-                else
-                  this.getSubstitute(recipe.extendedIngredients[i].original);
+                else this.getSubstitute(recipe.extendedIngredients[i].original);
               }}
             >
-              { recipe.extendedIngredients[i].original }
+              {recipe.extendedIngredients[i].original}
             </span>
           </li>
         );
@@ -200,15 +245,15 @@ class RecipeModal extends React.Component {
 
       if (recipe.instructions === null) {
         instructions.push(
-          <li key={'ingredient'}>
+          <li key={"ingredient"}>
             <em>None provided ):</em>
           </li>
         );
       } else {
         for (let i = 0; i < recipe.analyzedInstructions[0].steps.length; i++) {
           instructions.push(
-            <li key={'ingredient' + i}>
-              { recipe.analyzedInstructions[0].steps[i].step }
+            <li key={"ingredient" + i}>
+              {recipe.analyzedInstructions[0].steps[i].step}
             </li>
           );
         }
@@ -216,17 +261,17 @@ class RecipeModal extends React.Component {
 
       const nutrients = recipe.nutrition.nutrients;
       for (let i = 0; i < nutrients.length; i++) {
-        nutrition.push(
-            {
-              ...nutrients[i],
-              key: "nutrient" + i
-            }
-        );
+        nutrition.push({
+          ...nutrients[i],
+          key: "nutrient" + i
+        });
       }
 
       const nutrientsTable = (
         <div>
-          <span><em>Nutrients Displayed for One Serving</em></span>
+          <span>
+            <em>Nutrients Displayed for One Serving</em>
+          </span>
 
           <Table>
             <TableHead>
@@ -237,21 +282,26 @@ class RecipeModal extends React.Component {
               </TableRow>
             </TableHead>
             <TableBody>
-              {nutrition.map(row => (
+              {nutrition.map(row =>
                 <TableRow key={row.key}>
                   <TableCell component="th" scope="row">
                     {row.title}
                   </TableCell>
-                  <TableCell align="left">{row.amount + row.unit}</TableCell>
-                  <TableCell align="left">{row.percentOfDailyNeeds}%</TableCell>
+                  <TableCell align="left">
+                    {row.amount + row.unit}
+                  </TableCell>
+                  <TableCell align="left">
+                    {row.percentOfDailyNeeds}%
+                  </TableCell>
                 </TableRow>
-              ))}
+              )}
             </TableBody>
           </Table>
         </div>
       );
 
-      const notesTab = this.props.type === 'saved' ? <Tab label="Notes" /> : null;
+      const notesTab =
+        this.props.type === "saved" ? <Tab label="Notes" /> : null;
       const notesBox = (
         <TextField
           label="Notes"
@@ -261,21 +311,36 @@ class RecipeModal extends React.Component {
           margin="normal"
           variant="outlined"
           fullWidth
-          onChange={(event) => {
+          onChange={event => {
             this.setState({
               notes: event.target.value
-            })
+            });
           }}
         />
       );
 
       content = (
         <div>
-          <h1 id={'recipe-modal-title'}>
+          <h1 id={"recipe-modal-title"}>
             {recipe.title}
           </h1>
-
-          {image}
+          {this.props.type == "saved" || this.props.type == "Planning"
+            ? <div style={{ position: "relative", left: "40px", top: "-20px" }}>
+                <Rating
+                  emptySymbol={<StarBorder />}
+                  fullSymbol={<Star />}
+                  initialRating={
+                    this.state.recipe.rating != null
+                      ? this.state.recipe.rating
+                      : 0
+                  }
+                  onChange={this.newRating}
+                />
+              </div>
+            : null}
+          <div>
+            {image}
+          </div>
 
           <RecipeToolbar
             date={this.props.date}
@@ -285,12 +350,10 @@ class RecipeModal extends React.Component {
             type={this.props.type}
             saveNote={this.saveNotes}
             onSave={() => {
-              if (this.props.type === "saved")
-                this.props.updateSavedList();
+              if (this.props.type === "saved") this.props.updateSavedList();
             }}
             onDelete={() => {
-              if (this.props.type === "saved")
-                this.props.updateSavedList();
+              if (this.props.type === "saved") this.props.updateSavedList();
             }}
             handleClose={this.handleClose}
             onSaveEdit={() => {
@@ -300,33 +363,51 @@ class RecipeModal extends React.Component {
             displayMultipliedRecipe={this.displayMultipliedRecipe}
           />
 
-          <div id={'recipe-modal-description'}>
-            <AppBar position="static" color={'default'}>
-              <Tabs value={currentTab} onChange={this.handleTab} variant={'fullWidth'}>
+          <div id={"recipe-modal-description"}>
+            <AppBar position="static" color={"default"}>
+              <Tabs
+                value={currentTab}
+                onChange={this.handleTab}
+                variant={"fullWidth"}
+              >
                 <Tab label="Ingredients" />
                 <Tab label="Instructions" />
                 <Tab label="Nutrition" />
                 {notesTab}
               </Tabs>
             </AppBar>
-            {currentTab === 0 && <div className={'recipe-modal-tab-content'}>{ingredientNotification}<ul>{ingredients}</ul></div>}
-            {currentTab === 1 && <div className={'recipe-modal-tab-content'}><ol>{instructions}</ol></div>}
-            {currentTab === 2 && <div className={'recipe-modal-tab-content'}>{nutrientsTable}</div>}
-            {currentTab === 3 && <div className={'recipe-modal-tab-content'}>{notesBox}</div>}
+            {currentTab === 0 &&
+              <div className={"recipe-modal-tab-content"}>
+                {ingredientNotification}
+                <ul>
+                  {ingredients}
+                </ul>
+              </div>}
+            {currentTab === 1 &&
+              <div className={"recipe-modal-tab-content"}>
+                <ol>
+                  {instructions}
+                </ol>
+              </div>}
+            {currentTab === 2 &&
+              <div className={"recipe-modal-tab-content"}>
+                {nutrientsTable}
+              </div>}
+            {currentTab === 3 &&
+              <div className={"recipe-modal-tab-content"}>
+                {notesBox}
+              </div>}
           </div>
         </div>
       );
     } else {
-      content = <Loader/>
+      content = <Loader />;
     }
 
     return (
       <div>
-        <Modal
-          open={this.props.id !== null}
-          onClose={this.handleClose}
-        >
-          <Paper className={'modal-container'}>
+        <Modal open={this.props.id !== null} onClose={this.handleClose}>
+          <Paper className={"modal-container"}>
             {content}
           </Paper>
         </Modal>
@@ -349,8 +430,8 @@ class RecipeModal extends React.Component {
               recipe: {},
               currentTab: 0,
               closed: true,
-              notes: '',
-              notesOriginal: '',
+              notes: "",
+              notesOriginal: "",
               notesWarningIsOpen: false
             });
           }}

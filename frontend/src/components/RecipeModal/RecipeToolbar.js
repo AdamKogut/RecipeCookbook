@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import {Button, TextField} from "@material-ui/core";
+import { Button, TextField } from "@material-ui/core";
 import RecipePrinter from "../RecipePrinter/RecipePrinter";
 import { connect } from "react-redux";
-import PlanningModal from './PlanningModal';
+import PlanningModal from "./PlanningModal";
 import "./RecipeModal.css";
 import Axios from "axios";
 import AlertDialog from "../AlertDialog/AlertDialog";
@@ -15,7 +15,7 @@ class RecipeToolbar extends Component {
       a: false,
       q: false,
       p: false,
-      modal:false,
+      modal: false,
       displayingEditModal: false,
       quantity: 1
     };
@@ -23,9 +23,9 @@ class RecipeToolbar extends Component {
     this.saveSuccessAlert = React.createRef();
   }
 
-  closeModal=()=>{
-    this.setState({modal:false});
-  }
+  closeModal = () => {
+    this.setState({ modal: false });
+  };
 
   saveRecipe = () => {
     let that = this;
@@ -58,9 +58,7 @@ class RecipeToolbar extends Component {
     const recipe = this.props.recipe;
 
     for (let i = 0; i < recipe.extendedIngredients.length; i++) {
-      ingredientList.push(
-        recipe.extendedIngredients[i].original
-      );
+      ingredientList.push(recipe.extendedIngredients[i].original);
     }
 
     Axios.post("http://localhost:8080/groceryLists", {
@@ -69,7 +67,7 @@ class RecipeToolbar extends Component {
         title: this.props.recipe.title,
         list: ingredientList.join("\n")
       }
-    }).then(()=>{
+    }).then(() => {
       this.groceryListAlert.current.open();
     });
   };
@@ -82,13 +80,13 @@ class RecipeToolbar extends Component {
       // console.log(response.data)
       that.setState({
         p:
-          response.data==undefined||response.data.length === 0
+          response.data == undefined || response.data.length === 0
             ? false
             : response.data.find(obj => {
-              return obj.id === that.props.recipe.id;
-            }) != undefined
-            ? true
-            : false
+                return obj.id === that.props.recipe.id;
+              }) != undefined
+              ? true
+              : false
       });
     });
   };
@@ -101,13 +99,13 @@ class RecipeToolbar extends Component {
       googleId: that.props.auth,
       meal: that.props.meal,
       date: that.props.date,
-      recipeId:that.props.id,
+      recipeId: that.props.id
     }).then(response => {
       // console.log(response.data);
-      if(response.data.success){
+      if (response.data.success) {
         that.props.handleClose();
-      }else{
-        alert('Something went wrong, please try again');
+      } else {
+        alert("Something went wrong, please try again");
       }
     });
   };
@@ -174,7 +172,7 @@ class RecipeToolbar extends Component {
 
   onSaveEdit = () => {
     this.setState({
-      displayingEditModal: false,
+      displayingEditModal: false
     });
 
     this.props.onSaveEdit();
@@ -184,10 +182,26 @@ class RecipeToolbar extends Component {
     Axios.post("http://localhost:8080/multiplyIngredients", {
       recipe: this.props.recipe,
       multiplier: this.state.quantity
-    }).then((response)=>{
+    }).then(response => {
       this.props.displayMultipliedRecipe(response.data);
     });
   };
+
+  handleSubtract=()=>{
+    // console.log(this.props.recipe)
+    let that=this;
+    Axios.post('http://localhost:8080/reduceIngredients',{
+      googleId:that.props.auth,
+      ingredients:that.props.recipe.extendedIngredients
+    }).then(response=>{
+      console.log(response.data)
+      if(response.data.success){
+        alert('Ingredients successfully subtracted');
+      }else{
+        alert('Something happened, please try again');
+      }
+    })
+  }
 
   render() {
     let quantityInput = null;
@@ -201,24 +215,21 @@ class RecipeToolbar extends Component {
             <TextField
               value={this.state.quantity}
               type="number"
-              label={'Quantity'}
-              onChange={(event) => {
+              label={"Quantity"}
+              onChange={event => {
                 this.setState({
                   quantity: event.target.value
-                })
+                });
               }}
-              onKeyPress={(e) => {
-                if (e.key === 'Enter') {
+              onKeyPress={e => {
+                if (e.key === "Enter") {
                   this.updateQuantity();
                 }
               }}
             />
           </span>
 
-          <Button
-            variant="contained"
-            onClick={this.updateQuantity}
-          >
+          <Button variant="contained" onClick={this.updateQuantity}>
             Update
           </Button>
         </span>
@@ -228,10 +239,7 @@ class RecipeToolbar extends Component {
       <div id={"recipe-modal-toolbar"}>
         {this.renderSave()}
 
-        <Button
-          variant="contained"
-          onClick={this.addToGrocery}
-        >
+        <Button variant="contained" onClick={this.addToGrocery}>
           Add to Groceries
         </Button>
 
@@ -244,17 +252,31 @@ class RecipeToolbar extends Component {
           : null}
 
         {this.props.type === "saved"
-          ? <Button variant="contained" onClick={()=>this.setState({modal:true})}>
+          ? <Button
+              variant="contained"
+              onClick={() => this.setState({ modal: true })}
+            >
               Add to meal plan
             </Button>
           : null}
-        <PlanningModal {...this.props} modal={this.state.modal} closeModal={this.closeModal}/>
+        <PlanningModal
+          {...this.props}
+          modal={this.state.modal}
+          closeModal={this.closeModal}
+        />
+        {this.props.type === "saved" || this.props.type === "Planning"
+          ? <Button onClick={this.handleSubtract} variant="contained">
+              Subtract ingredients from pantry
+            </Button>
+          : null}
 
-        { quantityInput }
+        {quantityInput}
 
         <AlertDialog
           title={"Success"}
-          text={"Added ingredients for " + recipe.title + " to a new grocery list"}
+          text={
+            "Added ingredients for " + recipe.title + " to a new grocery list"
+          }
           ref={this.groceryListAlert}
         />
 
@@ -263,8 +285,7 @@ class RecipeToolbar extends Component {
           text={recipe.title + " has been successfully saved to your recipes!"}
           ref={this.saveSuccessAlert}
           onClose={() => {
-            if (this.props.onSave)
-              this.props.onSave();
+            if (this.props.onSave) this.props.onSave();
           }}
         />
 

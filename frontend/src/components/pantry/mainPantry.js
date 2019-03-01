@@ -64,7 +64,7 @@ class mainPantry extends Component {
       Axios.get("http://localhost:8080/onhandIngredients", {
         headers: { googleId: that.props.auth }
       }).then(response => {
-        console.log(response.data[0].onhandIngredients);
+        // console.log(response.data[0].onhandIngredients);
         let e = [];
         for (let i in response.data[0].onhandIngredients) {
           e.push(
@@ -103,7 +103,7 @@ class mainPantry extends Component {
             </Paper>
           );
         }
-        console.log(e)
+        // console.log(e)
         if (e.length == 0) {
           e.push(
             <Paper
