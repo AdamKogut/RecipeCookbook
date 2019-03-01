@@ -102,6 +102,7 @@ router.post('/', function(req, res, next) {
       var recipeobj = {
         recipeId : recipeId,
         recipeName: recipeName,
+        meal: meal,
       }
       recipes.push(recipeobj); //update recipes for that meal
       meals[meal]=recipes; //update meal with updated recipes
@@ -131,6 +132,7 @@ router.post('/', function(req, res, next) {
       var recipeobj = {
         recipeId : recipeId,
         recipeName: recipeName,
+        meal: meal,
       }
       recipes.push(recipeobj); //push new recipe ID onto the desired meal
       var obj = {};
