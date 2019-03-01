@@ -9,9 +9,9 @@ var myDBO;
 
 MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
   if(err) throw err
-  console.log("Database opened!");
+  //console.log("Database opened!");
   myDBO = db.db("CookbookBase");
-  console.log("Databse obj is " + myDBO);
+  //console.log("Databse obj is " + myDBO);
 });
 
 router.get('/', function(req,res,next){
@@ -26,19 +26,19 @@ router.get('/', function(req,res,next){
       const resp = {
         success: true
       };
-    
+
       res.json(resp);
     }
     else{
       const resp = {
         success: false,
       };
-    
+
       res.json(resp);
     }
   })
-  
-}) 
+
+})
 
 router.post('/', function(req,res,next){
   //console.log(req.query.googleId);
@@ -64,7 +64,7 @@ router.post('/', function(req,res,next){
           };
           console.log("Error updating ratings\n");
           res.json(resp);
-          
+
         }
         else{
           const resp = {
@@ -72,7 +72,7 @@ router.post('/', function(req,res,next){
           };
           console.log("Ratings updated\n");
           res.json(resp);
-          
+
         }
       })
   }
@@ -92,13 +92,13 @@ router.post('/', function(req,res,next){
             };
             console.log("Error updating ratings\n");
             res.json(resp);
-            
+
           }
           else{
             const resp = {
               success: true
             };
-            console.log("Ratings updated\n");   
+            console.log("Ratings updated\n");
             res.json(resp);
           }
         })
@@ -107,7 +107,7 @@ router.post('/', function(req,res,next){
         const resp = {
           success: false
         };
-        console.log("User does not exist\n");    
+        console.log("User does not exist\n");
         res.json(resp);
 
       }
