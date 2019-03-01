@@ -13,7 +13,7 @@ class RecipeModal extends React.Component {
     super(props);
 
     this.state = {
-      recipeEdit: props.recipe,
+      recipeEdit: {},
       currentTab: 0,
       closed: true,
       warningIsOpen: false
@@ -143,7 +143,10 @@ class RecipeModal extends React.Component {
 
     // If this has just been opened, initialize stuff
     if (this.props.recipe && this.state.closed) {
-      const recipe = this.props.recipe;
+      const recipe = {
+        ...this.props.recipe
+      };
+
       let ingredientsString = "";
       let instructionsString = "";
 
@@ -165,7 +168,9 @@ class RecipeModal extends React.Component {
 
       this.setState({
         closed: false,
-        recipeEdit: this.props.recipe,
+        recipeEdit: {
+          ...this.props.recipe
+        },
         ingredientsString,
         instructionsString
       });

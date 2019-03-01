@@ -68,6 +68,8 @@ var testRouter = require('./routes/test');
 var mealRouter = require('./routes/meal');
 var ratings = require('./routes/ratings');
 var onhandSearch = require('./routes/onhandSearch');
+var ingredientSubstitution = require('./routes/ingredientSubstitution');
+
 var allowCrossDomain = function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
@@ -105,6 +107,7 @@ app.use('/onhandIngredients', onhandIngredients);
 app.use('/groceryLists', groceryLists);
 app.use('/ratings', ratings);
 app.use('/onhandSearch', onhandSearch);
+app.use('/ingredientSubstitution', ingredientSubstitution);
 
 
 // view engine setup
