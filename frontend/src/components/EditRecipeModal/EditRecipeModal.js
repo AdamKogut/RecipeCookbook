@@ -28,7 +28,7 @@ class RecipeModal extends React.Component {
 
   handleClose = () => {
     // Check for unsaved notes
-    if (this.props.recipe !== this.state.recipeEdit) {
+    if (JSON.stringify(this.props.recipe) !== JSON.stringify(this.state.recipeEdit)) {
       this.setState({
         warningIsOpen: true
       });
@@ -88,7 +88,7 @@ class RecipeModal extends React.Component {
   };
 
   saveRecipe = () => {
-    if (this.state.recipeEdit === this.props.recipe) {
+    if (JSON.stringify(this.props.recipe) === JSON.stringify(this.state.recipeEdit)) {
       this.noChangesAlert.current.open();
       return;
     }

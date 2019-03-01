@@ -144,14 +144,20 @@ class RecipeToolbar extends Component {
   };
 
   updateQuantity = () => {
-    console.log(this.state.quantity);
+    Axios.post("http://localhost:8080/multiplyIngredients", {
+      recipe: this.props.recipe,
+      multiplier: this.state.quantity
+    }).then((response)=>{
+      this.props.displayMultipliedRecipe(response.data);
+    });
   };
 
   render() {
     let quantityInput = null;
+    let recipe = this.props.recipe;
 
     // If this is not a custom recipe
-    if (this.props.recipe.id.toString().length !== 10)
+    if (recipe.id.toString().length !== 10 && this.props.type !== "saved")
       quantityInput = (
         <span id={"recipe-modal-quantity"}>
           <span id={"recipe-modal-quantity-input"}>
@@ -192,7 +198,7 @@ class RecipeToolbar extends Component {
           Add to Groceries
         </Button>
 
-        <RecipePrinter recipe={this.props.recipe} />
+        <RecipePrinter recipe={recipe} />
 
         {this.props.type === 'saved' ? <Button variant="contained" onClick={this.props.saveNote} >Save Notes</Button> : null}
 
@@ -200,13 +206,13 @@ class RecipeToolbar extends Component {
 
         <AlertDialog
           title={"Success"}
-          text={"Added ingredients for " + this.props.recipe.title + " to a new grocery list"}
+          text={"Added ingredients for " + recipe.title + " to a new grocery list"}
           ref={this.groceryListAlert}
         />
 
         <AlertDialog
           title={"Success"}
-          text={this.props.recipe.title + " has been successfully saved to your recipes!"}
+          text={recipe.title + " has been successfully saved to your recipes!"}
           ref={this.saveSuccessAlert}
           onClose={() => {
             if (this.props.onSave)

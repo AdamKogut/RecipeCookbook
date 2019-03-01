@@ -151,6 +151,12 @@ class RecipeModal extends React.Component {
     this.recipeSubstituter.current.open();
   };
 
+  displayMultipliedRecipe = (recipe) => {
+    this.setState({
+      recipe
+    });
+  };
+
   render () {
     const currentTab = this.state.currentTab;
 
@@ -170,6 +176,9 @@ class RecipeModal extends React.Component {
 
       if (recipe.image && recipe.image !== "")
         image = <img id={'recipe-modal-image'} src={recipe.image} alt={"Incorrect Link Format"} />;
+
+      const ingredientNotification = this.state.recipe.multipliedBy && this.state.recipe.multipliedBy !== 1 ?
+        <span><em>Ingredients Displayed for {this.state.recipe.multipliedBy} Servings</em></span> : null;
 
       for (let i = 0; i < recipe.extendedIngredients.length; i++) {
         ingredients.push(
@@ -216,26 +225,30 @@ class RecipeModal extends React.Component {
       }
 
       const nutrientsTable = (
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell align="left">Name</TableCell>
-              <TableCell align="left">Amount</TableCell>
-              <TableCell align="left">Daily Percent</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {nutrition.map(row => (
-              <TableRow key={row.key}>
-                <TableCell component="th" scope="row">
-                  {row.title}
-                </TableCell>
-                <TableCell align="left">{row.amount + row.unit}</TableCell>
-                <TableCell align="left">{row.percentOfDailyNeeds}%</TableCell>
+        <div>
+          <span><em>Nutrients Displayed for One Serving</em></span>
+
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell align="left">Name</TableCell>
+                <TableCell align="left">Amount</TableCell>
+                <TableCell align="left">Daily Percent</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHead>
+            <TableBody>
+              {nutrition.map(row => (
+                <TableRow key={row.key}>
+                  <TableCell component="th" scope="row">
+                    {row.title}
+                  </TableCell>
+                  <TableCell align="left">{row.amount + row.unit}</TableCell>
+                  <TableCell align="left">{row.percentOfDailyNeeds}%</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       );
 
       const notesTab = this.props.type === 'saved' ? <Tab label="Notes" /> : null;
@@ -281,6 +294,7 @@ class RecipeModal extends React.Component {
               this.getData();
               this.props.updateSavedList();
             }}
+            displayMultipliedRecipe={this.displayMultipliedRecipe}
           />
 
           <div id={'recipe-modal-description'}>
@@ -292,7 +306,7 @@ class RecipeModal extends React.Component {
                 {notesTab}
               </Tabs>
             </AppBar>
-            {currentTab === 0 && <div className={'recipe-modal-tab-content'}><ul>{ingredients}</ul></div>}
+            {currentTab === 0 && <div className={'recipe-modal-tab-content'}>{ingredientNotification}<ul>{ingredients}</ul></div>}
             {currentTab === 1 && <div className={'recipe-modal-tab-content'}><ol>{instructions}</ol></div>}
             {currentTab === 2 && <div className={'recipe-modal-tab-content'}>{nutrientsTable}</div>}
             {currentTab === 3 && <div className={'recipe-modal-tab-content'}>{notesBox}</div>}

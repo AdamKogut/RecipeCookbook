@@ -24,17 +24,22 @@ router.post('/', function(req, res, next) {
     let amount = ingredients[i].amount;
     let original = ingredients[i].original;
 
-    if(ingredients[i].unit != "servings") {
+    if(ingredients[i].unit !== "servings") {
       amount *= multiplier;
-      original = original.substr(original.indexOf(" ") + 1);
-      original = amount + " " + original;
+      amount = Math.round(amount * 100) / 100;
+      original = amount.toString();
 
-      ingredients[i].amount = amount;
+      if (ingredients[i].unit.length !== 0)
+        original += " " + ingredients[i].unit;
+
+      original += " " + ingredients[i].originalName;
+
       ingredients[i].original = original;
     }
   }
 
   recipe.extendedIngredients = ingredients;
+  recipe.multipliedBy = multiplier;
 
   res.json(recipe);
 
