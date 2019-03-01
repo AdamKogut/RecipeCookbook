@@ -111,6 +111,7 @@ class mainGrocery extends Component {
             onUpdate={this.getGroceryLists}
             onDelete={this.onDeleteList}
             onEdit={this.onEditList}
+            key={i}
           />
         );
       }

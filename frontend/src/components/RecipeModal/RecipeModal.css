@@ -40,12 +40,14 @@
   width: 90%;
   margin-top: 20px;
   left: 50%;
+  margin-left: 10px;
   -webkit-transform: translateX(-50%);
   transform: translateX(-50%);
 }
 
 #recipe-modal-toolbar button {
   margin-right: 10px;
+  margin-bottom: 5px;
 }
 
 #recipe-modal-quantity {
