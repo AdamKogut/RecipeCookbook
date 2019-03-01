@@ -44,7 +44,6 @@ router.post('/', function(req, res, next) {
     unirest.get(url)
     .header("X-RapidAPI-Key", keys.spoonacularKey) //MAJOR KEY ALERT
     .end(function (result) {
-      console.log(result.status, result.headers, result.body);
 
       const resp = {
         status: result.status,

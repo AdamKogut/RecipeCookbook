@@ -9,6 +9,7 @@ import Axios from "axios";
 import connect from "react-redux/es/connect/connect";
 import { Button } from "@material-ui/core";
 import Loader from "../Loader/Loader";
+import ReactToPrint from 'react-to-print';
 
 class mainGrocery extends Component {
   constructor (props) {
@@ -21,7 +22,8 @@ class mainGrocery extends Component {
       deleteDialogIsOpen: false,
       displayingEditModal: false,
       displayingAddModal: false,
-      isLoading: false
+      isLoading: false,
+      isPrinting: false
     };
   }
 
@@ -110,7 +112,7 @@ class mainGrocery extends Component {
     return (
       <div className='BigDivArea'>
         <BodyContainer>
-          <div id={'save-toolbar'}>
+          <div id={'grocery-toolbar'}>
             <Button
               variant="contained"
               color={"primary"}
@@ -126,9 +128,28 @@ class mainGrocery extends Component {
             >
               Add New
             </Button>
+
+            <ReactToPrint
+              trigger={() => <Button variant="contained">Print</Button>}
+              content={() => this.componentRef}
+              onBeforePrint={() => {
+                this.setState({
+                  isPrinting: true
+                });
+              }}
+              onAfterPrint={() => {
+                this.setState({
+                  isPrinting: false
+                });
+              }}
+            />
           </div>
 
-          {groceryLists}
+          <div
+            ref={el => (this.componentRef = el)}
+          >
+            {groceryLists}
+          </div>
         </BodyContainer>
 
         <GroceryListEditor
