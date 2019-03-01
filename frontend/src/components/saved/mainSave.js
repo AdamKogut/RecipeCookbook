@@ -57,24 +57,24 @@ class mainSave extends Component {
           id:null
         });
       } else {
-        for (let i in response.data[0].recipes) {
+        for (let i in response.data) {
           tempCard.push(
             <Grid item xs={3} key={i}>
               <RecipeCard
-                title={response.data[0].recipes[i].title}
-                image={response.data[0].recipes[i].image}
-                id={response.data[0].recipes[i].id}
-                onClick={() => that.openRecipe(response.data[0].recipes[i].id)}
+                title={response.data[i].title}
+                image={response.data[i].image}
+                id={response.data[i].id}
+                onClick={() => that.openRecipe(response.data[i].id)}
               />
             </Grid>
           );
-          tempName.push({ name: response.data[0].recipes[i].title, id: i });
+          tempName.push({ name: response.data[i].title, id: i });
         }
         that.setState({
           allCards: tempCard,
           shownCards: tempCard,
           names: tempName,
-          info: response.data[0].recipes,
+          info: response.data,
           id:null,
         });
       }

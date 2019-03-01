@@ -21,7 +21,6 @@ router.get('/', function(req, res, next){
   result.toArray(function(err, result){
     if (err) throw err;
 
-    console.log(result);
     const resp = {
       list: result[0].groceryLists
     };
@@ -42,34 +41,42 @@ router.post('/', function(req, res, next){
 
     lists = result[0].groceryLists;
 
-    //console.log(lists);
     let exists = false;
+    let position = lists.length;
 
     for(let i = 0; i < lists.length; i++) {
-      if(lists[i].title == list.title) {
+      if(lists[i].title === list.title) {
         exists = true;
+        position = i;
       }
     }
 
-    if(!edit && exists){
+    if (!edit && exists) {
       const resp = {
         success: "Title must be unique"
       };
 
       res.json(resp);
-    }
-    else {
+    } else {
       if(edit) {
-        myDBO.collection("users").updateOne({ googleId: user }, { $pull: { groceryLists: { title: list.title } } });
+        myDBO.collection("users").updateOne({ googleId: user }, { $pull: { groceryLists: { title: list.title } } }, () => {
+          myDBO.collection("users").updateOne({googleId: user}, {$push:{"groceryLists": { $each: [list], $position: position}}}, () => {
+            const resp = {
+              success: true
+            };
+
+            res.json(resp);
+          });
+        });
+      } else {
+        myDBO.collection("users").updateOne({googleId: user}, {$push:{"groceryLists": list}}, () => {
+          const resp = {
+            success: true
+          };
+
+          res.json(resp);
+        });
       }
-
-      myDBO.collection("users").updateOne({googleId: user}, {$push:{"groceryLists": list}}, () => {
-        const resp = {
-          success: true
-        };
-
-        res.json(resp);
-      });
     }
   });
 });

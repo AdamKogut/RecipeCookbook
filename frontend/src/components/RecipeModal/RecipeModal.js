@@ -40,8 +40,8 @@ class RecipeModal extends React.Component {
           }
         }
       ).then((response) => {
-        for (let i = 0; i < response.data[0].recipes.length; i++) {
-          const recipe = response.data[0].recipes[i];
+        for (let i = 0; i < response.data.length; i++) {
+          const recipe = response.data[i];
           if (recipe.id === this.props.id) {
             this.setState({
               recipe
