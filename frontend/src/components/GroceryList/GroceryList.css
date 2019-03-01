@@ -1,0 +1,12 @@
+.grocery-list-header {
+	border-bottom: 2px solid lightgray;
+}
+
+.grocery-list-edit-button {
+	float: right;
+}
+
+.grocery-list-ingredients-container {
+	width: 95%;
+	margin: auto;
+}

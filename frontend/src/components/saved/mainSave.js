@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import { Grid } from "@material-ui/core";
+import {Button, Grid} from "@material-ui/core";
 import SavedSearch from "./SavedSearch";
-import RecipeTiles from "./RecipeTiles";
 import RecipeCard from "../RecipeCard/RecipeCard";
 import "./mainSave.css";
 import Axios from "axios";
@@ -9,6 +8,7 @@ import RecipeModal from "../RecipeModal/RecipeModal";
 import BodyContainer from "../BodyContainer/BodyContainer";
 import filter from "fuzzaldrin";
 import { connect } from "react-redux";
+import EditRecipeModal from "../EditRecipeModal/EditRecipeModal";
 
 class mainSave extends Component {
   constructor(props) {
@@ -18,7 +18,8 @@ class mainSave extends Component {
       allCards: [],
       id: null,
       names: [],
-      info: []
+      info: [],
+      displayingEditModal: false
     };
   }
 
@@ -56,24 +57,24 @@ class mainSave extends Component {
           id:null
         });
       } else {
-        for (let i in response.data[0].recipes) {
+        for (let i in response.data) {
           tempCard.push(
             <Grid item xs={3} key={i}>
               <RecipeCard
-                title={response.data[0].recipes[i].title}
-                image={response.data[0].recipes[i].image}
-                id={response.data[0].recipes[i].id}
-                onClick={() => that.openRecipe(response.data[0].recipes[i].id)}
+                title={response.data[i].title}
+                image={response.data[i].image}
+                id={response.data[i].id}
+                onClick={() => that.openRecipe(response.data[i].id)}
               />
             </Grid>
           );
-          tempName.push({ name: response.data[0].recipes[i].title, id: i });
+          tempName.push({ name: response.data[i].title, id: i });
         }
         that.setState({
           allCards: tempCard,
           shownCards: tempCard,
           names: tempName,
-          info: response.data[0].recipes,
+          info: response.data,
           id:null,
         });
       }
@@ -89,6 +90,20 @@ class mainSave extends Component {
     this.setState({ shownCards: tempCard });
   };
 
+  onEditClose = () => {
+    this.setState({
+      displayingEditModal: false
+    });
+  };
+
+  onSaveNew = () => {
+    this.setState({
+      displayingEditModal: false,
+    });
+
+    this.updateList();
+  };
+
   render() {
     return (
       <div className="BigDivArea">
@@ -96,14 +111,43 @@ class mainSave extends Component {
           <div className="save-search-bar">
             <SavedSearch {...this.state} searchSaved={this.searchSaved} />
           </div>
+
+          <div id={'save-toolbar'}>
+            <Button
+              variant="contained"
+              color={"primary"}
+              onClick={() => {
+                this.setState({
+                  displayingEditModal: true
+                });
+              }}
+            >
+              Add Custom
+            </Button>
+          </div>
+
           <Grid id={"search-results"} container spacing={24}>
             {this.state.shownCards}
           </Grid>
+
           <RecipeModal
             {...this.state}
             onClose={this.onClose}
             type="saved"
             updateSavedList={this.updateList}
+          />
+
+          <EditRecipeModal
+            recipe={this.state.displayingEditModal ? {
+              extendedIngredients: [],
+              analyzedInstructions: [{
+                steps: []
+              }],
+              image: null,
+              title: ""
+            } : null}
+            onClose={this.onEditClose}
+            onSave={this.onSaveNew}
           />
         </BodyContainer>
       </div>

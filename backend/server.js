@@ -62,8 +62,17 @@ var deleteSavedRecipeRouter = require('./routes/deleteSavedRecipe');
 var randomsearch = require('./routes/randomsearch');
 var recipeNote = require('./routes/recipeNote');
 var excludedIngredients = require('./routes/excludedIngredients');
+var onhandIngredients = require('./routes/onhandIngredients');
 var groceryLists = require('./routes/groceryLists');
+var deleteGroceryList = require('./routes/deleteGroceryList');
 var testRouter = require('./routes/test');
+var mealRouter = require('./routes/meal');
+var ratings = require('./routes/ratings');
+var onhandSearch = require('./routes/onhandSearch');
+var ingredientSubstitution = require('./routes/ingredientSubstitution');
+var reduceIngredients = require('./routes/reduceIngredients');
+
+var multiplyIngredients = require('./routes/multiplyIngredients');
 var allowCrossDomain = function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
@@ -79,6 +88,7 @@ var allowCrossDomain = function(req, res, next) {
 };
 app.use(allowCrossDomain);
 
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -87,6 +97,7 @@ app.use(bodyParser.json({ limit: '10gb' }));
 app.use(bodyParser.urlencoded({ limit: "10gb", extended: true }))
 
 app.use('/test', testRouter);
+app.use('/meal', mealRouter);
 app.use('/hello', helloRouter);
 app.use('/search', searchRouter);
 app.use('/recipeInfo', recipeInfoRouter);
@@ -95,8 +106,14 @@ app.use('/deleteSavedRecipe', deleteSavedRecipeRouter);
 app.use('/randomsearch', randomsearch);
 app.use('/recipeNote', recipeNote);
 app.use('/excludedIngredients', excludedIngredients);
+app.use('/onhandIngredients', onhandIngredients);
 app.use('/groceryLists', groceryLists);
-
+app.use('/deleteGroceryList', deleteGroceryList);
+app.use('/ratings', ratings);
+app.use('/onhandSearch', onhandSearch);
+app.use('/ingredientSubstitution', ingredientSubstitution);
+app.use('/reduceIngredients', reduceIngredients);
+app.use('/multiplyIngredients', multiplyIngredients);
 
 
 // view engine setup

@@ -13,3 +13,7 @@
   -webkit-transform: translateX(-50%);
   transform: translateX(-50%);
 }
+
+#search-toolbar button {
+    margin-right: 10px;
+}

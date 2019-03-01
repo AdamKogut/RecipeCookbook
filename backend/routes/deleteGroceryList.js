@@ -14,16 +14,15 @@ MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
 });
 
 router.post('/', function(req, res, next) {
-  const deleteID = req.body.deleteID; //id of recipe to be deleted
+  const title = req.body.title; //id of list to be deleted
   const name = req.body.googleId; //username
 
-  myDBO.collection("users").updateOne({ googleId: name }, { $pull: { recipes: { id: deleteID } } }, () => {
-    const resp = {
-      success: true
-    };
+  myDBO.collection("users").updateOne({ googleId: name }, { $pull: { groceryLists: { title: title } } });
 
-    res.json(resp);
-  });
+  const resp = {
+    success: true
+  };
+  res.json(resp);
 });
 
 module.exports = router;

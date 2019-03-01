@@ -8,34 +8,38 @@
   transform: translateX(-50%);
 }
 
-.recipe-modal-ingredient:hover {
-  cursor: pointer;
-  text-decoration: underline;
-}
-
-.recipe-modal-tab-content {
+.edit-recipe-modal-textarea {
   border: 1px solid lightgray;
   border-top: none;
   padding: 10px;
-  overflow: hidden;
+	margin: 0;
+	width: 100%;
 }
 
-#recipe-modal-title {
+#edit-recipe-modal-title {
   margin-top: 0;
   font-size: 40px;
   border-bottom: 2px solid lightgray;
 }
 
-#recipe-modal-image {
+#edit-recipe-modal-image {
   position: relative;
   left: 50%;
   -webkit-transform: translateX(-50%);
   transform: translateX(-50%);
   box-shadow: 5px 5px 10px grey;
-  max-width: 1000px;
+	max-width: 1000px;
 }
 
-#recipe-modal-toolbar {
+#edit-recipe-modal-link {
+	position: relative;
+	width: calc(90% - 20px);
+	left: 50%;
+	-webkit-transform: translateX(-50%);
+	transform: translateX(-50%);
+}
+
+#edit-recipe-modal-toolbar {
   position: relative;
   width: 90%;
   margin-top: 20px;
@@ -44,21 +48,11 @@
   transform: translateX(-50%);
 }
 
-#recipe-modal-toolbar button {
+#edit-recipe-modal-toolbar button {
   margin-right: 10px;
 }
 
-#recipe-modal-quantity {
-  float: right;
-}
-
-#recipe-modal-quantity-input {
-  position: relative;
-  top: -10px;
-  margin-right: 10px;
-}
-
-#recipe-modal-description {
+#edit-recipe-modal-description {
   position: relative;
   width: calc(90% - 20px);
   margin-top: 20px;
@@ -69,5 +63,5 @@
 }
 
 [role="presentation"] {
-  overflow-y: scroll;
+    overflow-y: scroll;
 }

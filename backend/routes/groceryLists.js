@@ -16,11 +16,11 @@ MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
 
 router.get('/', function(req, res, next){
   const user = req.header("googleId");
+
   let result = myDBO.collection("users").find({googleId: user});
   result.toArray(function(err, result){
     if (err) throw err;
 
-    console.log(result);
     const resp = {
       list: result[0].groceryLists
     };
@@ -32,13 +32,52 @@ router.get('/', function(req, res, next){
 router.post('/', function(req, res, next){
   let user = req.body.googleId;
   let list = req.body.list;
+  const edit = req.body.edit;
+  let lists = [];
 
-  myDBO.collection("users").updateOne({googleId: user}, {$push:{"groceryLists": list}}, () => {
-    const resp = {
-      success: true
-    };
+  let result = myDBO.collection("users").find({googleId: user});
+  result.toArray(function(err, result){
+    if (err) throw err;
 
-    res.json(resp);
+    lists = result[0].groceryLists;
+
+    let exists = false;
+    let position = lists.length;
+
+    for(let i = 0; i < lists.length; i++) {
+      if(lists[i].title === list.title) {
+        exists = true;
+        position = i;
+      }
+    }
+
+    if (!edit && exists) {
+      const resp = {
+        success: "Title must be unique"
+      };
+
+      res.json(resp);
+    } else {
+      if(edit) {
+        myDBO.collection("users").updateOne({ googleId: user }, { $pull: { groceryLists: { title: list.title } } }, () => {
+          myDBO.collection("users").updateOne({googleId: user}, {$push:{"groceryLists": { $each: [list], $position: position}}}, () => {
+            const resp = {
+              success: true
+            };
+
+            res.json(resp);
+          });
+        });
+      } else {
+        myDBO.collection("users").updateOne({googleId: user}, {$push:{"groceryLists": list}}, () => {
+          const resp = {
+            success: true
+          };
+
+          res.json(resp);
+        });
+      }
+    }
   });
 });
 

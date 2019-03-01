@@ -1,0 +1,40 @@
+.modal-container {
+	position: relative;
+	width: 70vw;
+	padding: 25px;
+	margin: 100px 0;
+	left: 50%;
+	-webkit-transform: translateX(-50%);
+	transform: translateX(-50%);
+}
+
+.edit-list-modal-textarea {
+	border: 1px solid lightgray;
+	border-top: none;
+	padding: 10px;
+	margin: 0;
+	width: 100%;
+}
+
+#edit-list-modal-title {
+	margin-top: 0;
+	font-size: 40px;
+	border-bottom: 2px solid lightgray;
+}
+
+#edit-list-modal-toolbar {
+	position: relative;
+	width: 90%;
+	margin-top: 20px;
+	left: 50%;
+	-webkit-transform: translateX(-50%);
+	transform: translateX(-50%);
+}
+
+#edit-list-modal-toolbar button {
+	margin-right: 10px;
+}
+
+[role="presentation"] {
+	overflow-y: scroll;
+}
