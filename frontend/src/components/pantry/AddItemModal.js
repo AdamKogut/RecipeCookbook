@@ -35,7 +35,6 @@ class AddItemModal extends Component {
       "/" +
       date.getFullYear();
     this.setState({ date: date, date2: date2 });
-    // console.log(date2)
   };
 
   handleChange = event => {
@@ -44,7 +43,6 @@ class AddItemModal extends Component {
 
   handleSubmit = () => {
     let that = this;
-    // console.log(this.state);
     Axios.post("http://localhost:8080/onhandIngredients", {
       googleId: that.props.auth,
       ingredients: [{
@@ -54,7 +52,6 @@ class AddItemModal extends Component {
         date: that.state.date2
       }]
     }).then(response => {
-      // console.log(response.data);
       if(response.data.success)
         that.closeModal();
       else
@@ -138,7 +135,7 @@ class AddItemModal extends Component {
     );
   }
 }
-// export default AddItemModal;
+
 function mapStatesToProps({ auth }) {
   return { auth: auth };
 }

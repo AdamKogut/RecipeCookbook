@@ -9,7 +9,6 @@ import {
   MenuItem
 } from "@material-ui/core";
 import { DateFormatInput } from "material-ui-next-pickers";
-import IngredientsAutocomplete from "../IngredientsAutocomplete/IngredientsAutocomplete";
 import { connect } from "react-redux";
 import "./mainPantry.css";
 import Axios from "axios";
@@ -27,12 +26,12 @@ class AddItemModal extends Component {
   }
 
   componentDidUpdate = prevProps => {
-    if (this.props.current != prevProps.current && this.props.current!=null) {
+    if (this.props.current !== prevProps.current && this.props.current!=null) {
       this.setState({
         item: this.props.current.ingredient,
         date2: this.props.current.date,
         date:
-          this.props.current.date != "none"
+          this.props.current.date !== "none"
             ? new Date(
                 this.props.current.date.split("/")[2],
                 this.props.current.date.split("/")[0],
@@ -54,7 +53,6 @@ class AddItemModal extends Component {
       "/" +
       date.getFullYear();
     this.setState({ date: date, date2: date2 });
-    // console.log(date2)
   };
 
   handleChange = event => {
@@ -62,7 +60,6 @@ class AddItemModal extends Component {
   };
 
   handleSubmit = () => {
-    
     let that = this;
     Axios.post("http://localhost:8080/onhandIngredients/update", {
       googleId: that.props.auth,
@@ -91,7 +88,6 @@ class AddItemModal extends Component {
   };
 
   render() {
-    // this.fillData();
     return (
       <Modal open={this.props.editModal} onClose={this.closeModal}>
         <Paper
@@ -150,7 +146,7 @@ class AddItemModal extends Component {
     );
   }
 }
-// export default AddItemModal;
+
 function mapStatesToProps({ auth }) {
   return { auth: auth };
 }

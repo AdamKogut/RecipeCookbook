@@ -58,13 +58,11 @@ class mainPantry extends Component {
   };
 
   componentDidMount = () => {
-    //todo: fix this when routes are in place
     let that = this;
     setTimeout(() => {
       Axios.get("http://localhost:8080/onhandIngredients", {
         headers: { googleId: that.props.auth }
       }).then(response => {
-        // console.log(response.data[0].onhandIngredients);
         let e = [];
         for (let i in response.data[0].onhandIngredients) {
           e.push(
@@ -85,7 +83,7 @@ class mainPantry extends Component {
                 variant="subtitle2"
                 style={{ paddingLeft: "40px", paddingRight: "20px" }}
               >
-                {response.data[0].onhandIngredients[i].date != "none"
+                {response.data[0].onhandIngredients[i].date !== "none"
                   ? "Best By: " + response.data[0].onhandIngredients[i].date
                   : ""}
               </Typography>
@@ -103,8 +101,8 @@ class mainPantry extends Component {
             </Paper>
           );
         }
-        // console.log(e)
-        if (e.length == 0) {
+
+        if (e.length === 0) {
           e.push(
             <Paper
               elevation={1}
@@ -123,7 +121,7 @@ class mainPantry extends Component {
     }, 20);
   };
 
-  render() {
+  render () {
     return (
       <div className="BigDivArea">
         <AddItemModal {...this.state} closeModal={this.closeModal} />

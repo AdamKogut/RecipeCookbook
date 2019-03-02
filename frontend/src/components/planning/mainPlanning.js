@@ -8,7 +8,7 @@ import "./mainPlanning.css";
 import Axios from "axios";
 
 const localizer = Calendar.momentLocalizer(moment);
-//Fix this when route is implemented
+
 class mainPlanning extends Component {
   constructor(props) {
     super(props);
@@ -25,7 +25,6 @@ class mainPlanning extends Component {
   };
 
   click = event => {
-    // console.log(event);
     this.setState({ id: event.id, date: event.start, meal: event.meal });
   };
 
@@ -38,7 +37,6 @@ class mainPlanning extends Component {
           udate: `${new Date().getMonth() + 1}/1/${new Date().getFullYear()}`
         }
       }).then(response => {
-        // console.log(response.data);
         let k = [];
         for (let i in response.data.mealPlans) {
           for (let date in response.data.mealPlans[i]) {
@@ -99,9 +97,9 @@ class mainPlanning extends Component {
           onSelectEvent={this.click}
           resizable
           views={{ month: true }}
-          // onRangeChange={this.changeMonth}
           onNavigate={this.changeMonth}
         />
+
         <RecipeModal
           date={this.state.date}
           id={this.state.id}
