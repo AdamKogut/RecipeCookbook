@@ -5,3 +5,7 @@
   overflow-y: auto;
   overflow-x: hidden;
 }
+
+#pantry-button-row button {
+	margin-right: 10px;
+}

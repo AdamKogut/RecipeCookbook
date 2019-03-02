@@ -128,10 +128,26 @@ class mainPantry extends Component {
       <div className="BigDivArea">
         <AddItemModal {...this.state} closeModal={this.closeModal} />
         <BodyContainer>
-          <Button onClick={() => this.setState({ modal: true })}>
-            Add Item
-          </Button>
-          <Button onClick={this.removeAll}>Remove all items</Button>
+
+          <div id={"pantry-button-row"}>
+            <Button
+              onClick={() => this.setState({
+                modal: true
+              })}
+              variant={"contained"}
+              color={"primary"}
+            >
+              Add Item
+            </Button>
+
+            <Button
+              onClick={this.removeAll}
+              variant={"contained"}
+            >
+              Remove all items
+            </Button>
+          </div>
+
           {this.state.items}
         </BodyContainer>
         <EditItemModal

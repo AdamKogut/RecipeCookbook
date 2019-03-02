@@ -141,8 +141,8 @@ class mainSave extends Component {
               style={{ marginLeft: "30px" }}
             >
               <MenuItem value="null">Sort: None</MenuItem>
-              <MenuItem value="ascending">Sort: Ascending</MenuItem>
-              <MenuItem value="descending">Sort: Descending</MenuItem>
+              <MenuItem value="ascending">Sort: Rating, Ascending</MenuItem>
+              <MenuItem value="descending">Sort: Rating, Descending</MenuItem>
             </Select>
           </div>
 
