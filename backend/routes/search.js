@@ -161,8 +161,9 @@ router.post('/', function(req, res, next) {
   });
 });
 
- function cleanQuery(query){
+function cleanQuery(query){
   var cleanedQuery = query.replace(/[!@#$%^&*()_+\-=|\\\[\]"':;`~<>?,./☼¶§æÆ¢☺£¥₧ƒªº¿¬½¼¡«»ßµ±°∙·²€◙☻♥♦♣♠•◘○◙]/gi, '')
   return cleanedQuery;
 }
+
 module.exports = router;

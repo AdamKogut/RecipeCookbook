@@ -198,7 +198,7 @@ class RecipeModal extends React.Component {
       const ingredients = (
         <TextField
           onChange={(event) => {
-            this.parseInput("ingredients", event.target.value);
+            this.parseInput("ingredients", cleanString(event.target.value));
           }}
           className={'edit-recipe-modal-textarea'}
           value={this.state.ingredientsString}
@@ -209,7 +209,7 @@ class RecipeModal extends React.Component {
       const instructions = (
         <TextField
           onChange={(event) => {
-            this.parseInput("instructions", event.target.value);
+            this.parseInput("instructions", cleanString(event.target.value));
           }}
           className={'edit-recipe-modal-textarea'}
           value={this.state.instructionsString}
@@ -225,7 +225,7 @@ class RecipeModal extends React.Component {
               this.setState({
                 recipeEdit: {
                   ...this.state.recipeEdit,
-                  title: event.target.value
+                  title: cleanString(event.target.value)
                 }
               });
             }}
@@ -342,6 +342,11 @@ class RecipeModal extends React.Component {
 
 function mapStatesToProps({ auth }) {
   return { auth: auth };
+}
+
+function cleanString (string) {
+  const cleanedString = string.replace(/[!@#$%^&*()_+\-=|\\\[\]"':;`~<>?,./☼¶§æÆ¢☺£¥₧ƒªº¿¬½¼¡«»ßµ±°∙·²€◙☻♥♦♣♠•◘○◙]/gi, '');
+  return cleanedString;
 }
 
 export default connect(mapStatesToProps)(RecipeModal);
