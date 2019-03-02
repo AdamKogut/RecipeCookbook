@@ -21,6 +21,7 @@ class RecipeToolbar extends Component {
     };
     this.groceryListAlert = React.createRef();
     this.saveSuccessAlert = React.createRef();
+    this.quantityAlert = React.createRef();
   }
 
   closeModal = () => {
@@ -179,6 +180,11 @@ class RecipeToolbar extends Component {
   };
 
   updateQuantity = () => {
+    if (this.state.quantity <= 0 || this.state.quantity > 100) {
+      this.quantityAlert.current.open();
+      return;
+    }
+
     Axios.post("http://localhost:8080/multiplyIngredients", {
       recipe: this.props.recipe,
       multiplier: this.state.quantity
@@ -194,14 +200,13 @@ class RecipeToolbar extends Component {
       googleId:that.props.auth,
       ingredients:that.props.recipe.extendedIngredients
     }).then(response=>{
-      console.log(response.data)
       if(response.data.success){
         alert('Ingredients successfully subtracted');
       }else{
         alert('Something happened, please try again');
       }
     })
-  }
+  };
 
   render() {
     let quantityInput = null;
@@ -287,6 +292,12 @@ class RecipeToolbar extends Component {
           onClose={() => {
             if (this.props.onSave) this.props.onSave();
           }}
+        />
+
+        <AlertDialog
+          title={"Error"}
+          text={"Please specify a quantity between 0 and 100"}
+          ref={this.quantityAlert}
         />
 
         <EditRecipeModal
