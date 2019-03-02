@@ -43,6 +43,7 @@ class AddItemModal extends Component {
 
   handleSubmit = () => {
     let that = this;
+    if(typeof that.state.item.selectedItem != undefined && that.state.item.selectedItem != null){
     Axios.post("http://localhost:8080/onhandIngredients", {
       googleId: that.props.auth,
       ingredients: [{
@@ -57,6 +58,10 @@ class AddItemModal extends Component {
       else
         alert('Something went wrong, please try again')
     });
+    }
+    else{
+      alert('Please choose a pre-defined ingredient');
+    }
   };
 
   closeModal = () => {
