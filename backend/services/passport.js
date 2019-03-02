@@ -42,8 +42,12 @@ passport.use(
                     recipes: [],
                     notes: [],
                     excludedIngredients: [],
-                    mealPlans: {},
-                    ratings: {},
+                    mealPlans: {
+                      "0/0/0": "test"
+                    },
+                    ratings: {
+                      0: 0
+                    },
                     onhandIngredients: [],
                     groceryLists: []
                 })
