@@ -20,6 +20,7 @@ class RecipeModal extends React.Component {
     };
 
     this.noChangesAlert = React.createRef();
+    this.emptyAlert = React.createRef();
   }
 
   handleTab = (event, value) => {
@@ -90,6 +91,14 @@ class RecipeModal extends React.Component {
   saveRecipe = () => {
     if (JSON.stringify(this.props.recipe) === JSON.stringify(this.state.recipeEdit)) {
       this.noChangesAlert.current.open();
+      return;
+    }
+
+    if (this.state.recipeEdit.extendedIngredients.length === 0
+      || this.state.recipeEdit.analyzedInstructions[0].steps.length === 0
+      || this.state.recipeEdit.title.length === 0)
+    {
+      this.emptyAlert.current.open();
       return;
     }
 
@@ -319,6 +328,12 @@ class RecipeModal extends React.Component {
           title={"Alert"}
           text={"There are no changes to be saved for the current recipe"}
           ref={this.noChangesAlert}
+        />
+
+        <AlertDialog
+          title={"Alert"}
+          text={"You cannot leave a text field empty!"}
+          ref={this.emptyAlert}
         />
       </div>
     );
