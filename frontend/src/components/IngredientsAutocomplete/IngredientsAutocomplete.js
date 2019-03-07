@@ -52,6 +52,13 @@ class IngredientsAutocomplete extends React.Component {
     });
   };
 
+  clear = () => {
+    this.setState({
+      inputValue: '',
+      selectedItem: []
+    });
+  };
+
   render() {
     const { classes } = this.props;
     const { inputValue, selectedItem } = this.state;

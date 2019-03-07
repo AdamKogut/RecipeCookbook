@@ -10,6 +10,7 @@ import {
 import IngredientsAutocomplete from "../IngredientsAutocomplete/IngredientsAutocomplete";
 import { connect } from "react-redux";
 import Axios from "axios";
+import AlertDialog from "../AlertDialog/AlertDialog";
 
 class SettingsButton extends Component {
   constructor(props) {
@@ -22,6 +23,10 @@ class SettingsButton extends Component {
       clear: false,
       diet: "none"
     };
+
+    this.ingredientAutocomplete = React.createRef();
+    this.successAlert = React.createRef();
+    this.doubleIngredientAlert = React.createRef();
   }
 
   getExcluded = () => {
@@ -94,12 +99,7 @@ class SettingsButton extends Component {
       diet: that.state.diet
     }).then(response => {
       if (response.data.success) {
-        that.setState({
-          excludedIngredients: null,
-          settingsModal: false,
-          clear: false,
-          diet: "none"
-        });
+        this.successAlert.current.open();
       } else {
         alert("Error, the data wasn't submitted, try again");
       }
@@ -111,6 +111,9 @@ class SettingsButton extends Component {
     for (let i in item.selectedItem) {
       if (s.search(item.selectedItem[i]) === -1) {
         s += item.selectedItem[i] + ",";
+      } else {
+        this.doubleIngredientAlert.current.open();
+        this.ingredientAutocomplete.current.clear();
       }
     }
     this.setState({ excludedIngredients: s });
@@ -171,11 +174,32 @@ class SettingsButton extends Component {
             <IngredientsAutocomplete
               label={"Excluded Ingredients"}
               onChange={this.handleChange}
+              ref={this.ingredientAutocomplete}
             />
             <Button onClick={this.handleSubmit}>Submit</Button>
             <Button onClick={this.handleCancel}>Cancel</Button>
           </Paper>
         </Modal>
+
+        <AlertDialog
+          title={"Success"}
+          text={"Your setting have been saved successfully."}
+          ref={this.successAlert}
+          onClose={() => {
+            this.setState({
+              excludedIngredients: null,
+              settingsModal: false,
+              clear: false,
+              diet: "none"
+            });
+          }}
+        />
+
+        <AlertDialog
+          title={"Error"}
+          text={"You cannot enter an ingredient multiple times!"}
+          ref={this.doubleIngredientAlert}
+        />
       </div>
     );
   }
