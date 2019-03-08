@@ -300,7 +300,7 @@ class RecipeToolbar extends Component {
 
         <AlertDialog
           title={"Error"}
-          text={"Please specify a quantity between 0 and 100"}
+          text={"Please specify a quantity between 1 and 100"}
           ref={this.quantityAlert}
         />
 
