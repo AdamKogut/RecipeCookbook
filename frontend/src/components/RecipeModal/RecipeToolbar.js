@@ -74,22 +74,24 @@ class RecipeToolbar extends Component {
   };
 
   componentDidMount = () => {
-    let that = this;
-    Axios.get("http://localhost:8080/savedRecipes", {
-      headers: { googleId: that.props.auth }
-    }).then(function(response) {
-      // console.log(response.data)
-      that.setState({
-        p:
-          response.data == undefined || response.data.length === 0
-            ? false
-            : response.data.find(obj => {
-                return obj.id === that.props.recipe.id;
-              }) != undefined
-              ? true
-              : false
+    if (this.props.auth) {
+      let that = this;
+      Axios.get("http://localhost:8080/savedRecipes", {
+        headers: { googleId: that.props.auth }
+      }).then(function(response) {
+        // console.log(response.data)
+        that.setState({
+          p:
+            response.data == undefined || response.data.length === 0
+              ? false
+              : response.data.find(obj => {
+                  return obj.id === that.props.recipe.id;
+                }) != undefined
+                ? true
+                : false
+        });
       });
-    });
+    }
   };
 
   //Fix this when route is implemented
@@ -244,9 +246,11 @@ class RecipeToolbar extends Component {
       <div id={"recipe-modal-toolbar"}>
         {this.renderSave()}
 
-        <Button variant="contained" onClick={this.addToGrocery}>
-          Add to Groceries
-        </Button>
+        {this.props.auth
+          ? <Button variant="contained" onClick={this.addToGrocery}>
+            Add to Groceries
+          </Button>
+          : null}
 
         <RecipePrinter recipe={recipe} />
 
