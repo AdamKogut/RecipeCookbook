@@ -27,7 +27,7 @@ class mainPantry extends Component {
   };
 
   closeEdit = () => {
-    this.setState({ editModal: false, current: null });
+    this.setState({ editModal: false, current: null }, this.componentDidMount);
   };
 
   remove = item => {
@@ -84,7 +84,7 @@ class mainPantry extends Component {
                 style={{ paddingLeft: "40px", paddingRight: "20px" }}
               >
                 {response.data[0].onhandIngredients[i].date !== "none"
-                  ? "Best By: " + response.data[0].onhandIngredients[i].date
+                  ? "Bought: " + response.data[0].onhandIngredients[i].date
                   : ""}
               </Typography>
               <Button

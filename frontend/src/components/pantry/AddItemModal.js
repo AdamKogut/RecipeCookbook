@@ -123,6 +123,7 @@ class AddItemModal extends Component {
               <MenuItem value="milligram">Milligram(s)</MenuItem>
               <MenuItem value="gram">Gram(s)</MenuItem>
               <MenuItem value="kilogram">Kilogram(s)</MenuItem>
+              <MenuItem value="unit">Unit(s)</MenuItem>
             </Select>
           </div>
           <IngredientsAutocomplete
@@ -137,8 +138,9 @@ class AddItemModal extends Component {
             <DateFormatInput
               value={this.state.date}
               onChange={this.changeDate}
+              max={new Date()}
             />
-            Optional
+            Optional Bought Date
           </div>
           <br />
           <div>

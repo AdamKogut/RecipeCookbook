@@ -37,16 +37,6 @@ class PlanningModal extends Component {
       alert("Please fill out all forms");
       return;
     }
-    let early = new Date() - this.state.date;
-    let late = new Date((new Date()).getFullYear(),(new Date()).getMonth())-this.state.date;
-    console.log(early,late)
-    console.log(early,late)
-    if (early > 0 || late < 0) {
-      alert(
-        "Please put a date that is later than today and earlier than a year from now"
-      );
-      return;
-    }
     //console.log(this.props)
     let that = this;
     Axios.post("http://localhost:8080/meal", {

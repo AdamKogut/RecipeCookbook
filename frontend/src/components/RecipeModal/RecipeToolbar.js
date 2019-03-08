@@ -106,6 +106,7 @@ class RecipeToolbar extends Component {
     }).then(response => {
       // console.log(response.data);
       if (response.data.success) {
+        alert("Recipe removed from meal plan!")
         that.props.handleClose();
       } else {
         alert("Something went wrong, please try again");

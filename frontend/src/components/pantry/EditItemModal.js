@@ -34,7 +34,7 @@ class AddItemModal extends Component {
           this.props.current.date !== "none"
             ? new Date(
                 this.props.current.date.split("/")[2],
-                this.props.current.date.split("/")[0],
+                this.props.current.date.split("/")[0]-1,
                 this.props.current.date.split("/")[1]
               )
             : null,
@@ -124,6 +124,7 @@ class AddItemModal extends Component {
               <MenuItem value="milligram">Milligram(s)</MenuItem>
               <MenuItem value="gram">Gram(s)</MenuItem>
               <MenuItem value="kilogram">Kilogram(s)</MenuItem>
+              <MenuItem value="unit">Unit(s)</MenuItem>
             </Select>
           </div>
           <br />
@@ -132,8 +133,9 @@ class AddItemModal extends Component {
             <DateFormatInput
               value={this.state.date}
               onChange={this.changeDate}
+              max={new Date()}
             />
-            Optional
+            Optional Bought Date
           </div>
           <br />
           <div>
