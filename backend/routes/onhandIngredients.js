@@ -39,16 +39,32 @@ router.post('/', function(req, res, next){
     ...
   ]*/
   let ingredients = req.body.ingredients;
-  console.log(ingredients)
 
-  for(var i = 0; i < ingredients.length; i++){
-    myDBO.collection("users").updateOne({googleId: user}, {$push: {"onhandIngredients": ingredients[i]}});
-  }
+  let currentIngredients = myDBO.collection("users").find({googleId: user}, { projection: { onhandIngredients: 1}});
+  currentIngredients.toArray((err, currentIngredients) => {
+    currentIngredients = currentIngredients[0].onhandIngredients;
 
-  const resp = {
-    success: true
-  }
-  res.json(resp);
+    for (let i = 0; i < currentIngredients.length; i++) {
+      if (currentIngredients[i].ingredient === ingredients[0].ingredient) {
+        const resp = {
+          success: false
+        };
+
+        console.log("dupe!");
+        res.json(resp);
+        return;
+      }
+    }
+
+    for(var i = 0; i < ingredients.length; i++){
+      myDBO.collection("users").updateOne({googleId: user}, {$push: {"onhandIngredients": ingredients[i]}});
+    }
+
+    const resp = {
+      success: true
+    };
+    res.json(resp);
+  });
 });
 
 /*route to delete a single ingredient from on hand array*/
@@ -67,7 +83,7 @@ router.delete('/', function(req, res, next){
 /*route to UPDATE an ingredient*/
 router.post('/update', function(req, res, next){
   let user = req.body.googleId;
-  let ingredient = req.body.ingredients; //the full ingredient object with updated values
+  let ingredient = req.body.ingredients[0]; //the full ingredient object with updated values
 
   myDBO.collection("users").updateOne({googleId: user, "onhandIngredients.ingredient": ingredient.ingredient}, {$set: {"onhandIngredients.$.quantity": ingredient.quantity, "onhandIngredients.$.unit": ingredient.unit, "onhandIngredients.$.date": ingredient.date}});
 

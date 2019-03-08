@@ -43,7 +43,21 @@ class AddItemModal extends Component {
 
   handleSubmit = () => {
     let that = this;
-    if(typeof that.state.item.selectedItem != undefined && that.state.item.selectedItem != null){
+    if (!that.state.item.selectedItem || that.state.item.selectedItem.length === 0) {
+      alert('Please choose a pre-defined ingredient');
+      return;
+    }
+
+    if (that.state.item.selectedItem.length !== 1) {
+      alert('Only input one ingredient at a time');
+      return;
+    }
+
+    if (that.state.amtUnit === "choose" || that.state.amt === "") {
+      alert('Please specify a unit and amount');
+      return;
+    }
+
     Axios.post("http://localhost:8080/onhandIngredients", {
       googleId: that.props.auth,
       ingredients: [{
@@ -56,12 +70,8 @@ class AddItemModal extends Component {
       if(response.data.success)
         that.closeModal();
       else
-        alert('Something went wrong, please try again')
+        alert('You cannot enter a duplicate ingredient!');
     });
-    }
-    else{
-      alert('Please choose a pre-defined ingredient');
-    }
   };
 
   closeModal = () => {
