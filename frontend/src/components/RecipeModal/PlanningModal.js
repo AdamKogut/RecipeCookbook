@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { Modal, Typography, Paper, Select, MenuItem, Button } from "@material-ui/core";
+import {
+  Modal,
+  Typography,
+  Paper,
+  Select,
+  MenuItem,
+  Button
+} from "@material-ui/core";
 import { DateFormatInput } from "material-ui-next-pickers";
 import Axios from "axios";
 
@@ -25,31 +32,44 @@ class PlanningModal extends Component {
     // console.log(date2)
   };
 
-  handleSubmit=()=>{
-    if(this.state.date==null||this.state.meal=='none'){
-      alert('Please fill out all forms')
+  handleSubmit = () => {
+    if (this.state.date == null || this.state.meal == "none") {
+      alert("Please fill out all forms");
+      return;
+    }
+    let early = new Date() - this.state.date;
+    let late = new Date((new Date()).getFullYear(),(new Date()).getMonth())-this.state.date;
+    console.log(early,late)
+    console.log(early,late)
+    if (early > 0 || late < 0) {
+      alert(
+        "Please put a date that is later than today and earlier than a year from now"
+      );
       return;
     }
     //console.log(this.props)
-    let that=this;
-    Axios.post("http://localhost:8080/meal",{
-      googleId:that.props.auth,
-      recipeId:that.props.recipe.id,
-      recipeName:that.props.recipe.title,
-      meal:that.state.meal,
-      date:that.state.date2,
-    }).then(response=>{
-      if(response.data.success){
+    let that = this;
+    Axios.post("http://localhost:8080/meal", {
+      googleId: that.props.auth,
+      recipeId: that.props.recipe.id,
+      recipeName: that.props.recipe.title,
+      meal: that.state.meal,
+      date: that.state.date2
+    }).then(response => {
+      if (response.data.success) {
         that.handleClose();
-      }else{
-        alert('Something went wrong, please try again')
+      } else {
+        alert("Something went wrong, please try again");
       }
-    })
-  }
+    });
+  };
 
-  handleClose=()=>{
-    this.setState({date:null,date2:null,meal:'none'},this.props.closeModal)
-  }
+  handleClose = () => {
+    this.setState(
+      { date: null, date2: null, meal: "none" },
+      this.props.closeModal
+    );
+  };
 
   render() {
     return (
@@ -65,18 +85,23 @@ class PlanningModal extends Component {
         >
           <Typography variant="h6">Add to meal planning</Typography>
           <br />
-          <DateFormatInput value={this.state.date} onChange={this.changeDate} />
+          <DateFormatInput
+            value={this.state.date}
+            min={new Date()}
+            max={new Date((new Date()).getFullYear()+1,(new Date()).getMonth(),(new Date()).getDate()-1)}
+            onChange={this.changeDate}
+          />
           <br />
           <Select
             value={this.state.meal}
             onChange={event => this.setState({ meal: event.target.value })}
           >
-            <MenuItem value='none'>Please choose meal</MenuItem>
+            <MenuItem value="none">Please choose meal</MenuItem>
             <MenuItem value="Breakfast">Breakfast</MenuItem>
             <MenuItem value="Lunch">Lunch</MenuItem>
             <MenuItem value="Dinner">Dinner</MenuItem>
           </Select>
-          <br/>
+          <br />
           <br />
           <Button onClick={this.handleSubmit}>Submit</Button>
           <Button onClick={this.handleClose}>Close</Button>
