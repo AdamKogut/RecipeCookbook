@@ -345,7 +345,7 @@ function mapStatesToProps({ auth }) {
 }
 
 function cleanString (string) {
-  const cleanedString = string.replace(/[!@#$%^&*()_+\-=|\\\[\]"':;`~<>?,./☼¶§æÆ¢☺£¥₧ƒªº¿¬½¼¡«»ßµ±°∙·²€◙☻♥♦♣♠•◘○◙]/gi, '');
+  const cleanedString = string.replace(/[!@#$%^&*()_+\-=|\\\[\]"':;`~<>?,.☼¶§æÆ¢☺£¥₧ƒªº¿¬½¼¡«»ßµ±°∙·²€◙☻♥♦♣♠•◘○◙]/gi, '');
   return cleanedString;
 }
 
