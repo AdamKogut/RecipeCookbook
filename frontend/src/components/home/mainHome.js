@@ -34,7 +34,7 @@ class mainHome extends Component {
 
   search = () => {
     const searchValue = this.state.searchBarValue;
-    if (this.state.searchType === "random") {
+    if (this.state.searchType === "random" || this.state.searchType === "myIngredients") {
       this.setState({
         searchType: "default"
       });
