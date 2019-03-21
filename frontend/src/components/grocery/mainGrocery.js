@@ -185,7 +185,7 @@ class mainGrocery extends Component {
             });
           }}
           onAgree={() => {
-            this.deleteList(this.state.listToDelete);
+            this.onDeleteList(this.state.listToDelete);
           }}
         />
       </div>

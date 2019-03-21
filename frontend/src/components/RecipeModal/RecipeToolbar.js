@@ -96,7 +96,6 @@ class RecipeToolbar extends Component {
 
   //Fix this when route is implemented
   removePlanning = () => {
-    // console.log(this.props)
     let that = this;
     Axios.post("http://localhost:8080/meal/delete", {
       googleId: that.props.auth,
@@ -183,7 +182,7 @@ class RecipeToolbar extends Component {
   };
 
   updateQuantity = () => {
-    if (this.state.quantity <= 0 || this.state.quantity > 100) {
+    if (this.state.quantity > 100) {
       this.quantityAlert.current.open();
       return;
     }
@@ -197,7 +196,6 @@ class RecipeToolbar extends Component {
   };
 
   handleSubtract=()=>{
-    // console.log(this.props.recipe)
     let that=this;
     Axios.post('http://localhost:8080/reduceIngredients',{
       googleId:that.props.auth,

@@ -56,7 +56,7 @@ class RecipeModal extends React.Component {
       });
 
       for (let i = 0; i < ingredientsList.length; i++) {
-        ingredientsList[i] = {
+        ingredientsList[i++] = {
           original: ingredientsList[i]
         };
       }
