@@ -24,7 +24,7 @@ class GroceryListEditor extends React.Component {
 
   handleClose = () => {
     // Check for unsaved notes
-    if (this.props.list !== this.state.listEdit) {
+    if (this.props.list === this.state.listEdit) {
       this.setState({
         warningIsOpen: true
       });

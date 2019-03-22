@@ -10,7 +10,6 @@ class LogoutButton extends Component {
   };
 
   render() {
-    // console.log(document.cookie)
     return (
       <Button
         onClick={this.handleLogout}

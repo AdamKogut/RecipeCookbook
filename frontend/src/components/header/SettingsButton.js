@@ -43,7 +43,7 @@ class SettingsButton extends Component {
         temparr.push(
           <Button
             onClick={() =>
-              that.handleClear(response.data.excludedIngredients[i])}
+              that.handleIngredientClear(response.data.excludedIngredients[i])}
             key={i}
           >
             {response.data.excludedIngredients[i]}--Clear item
@@ -78,6 +78,11 @@ class SettingsButton extends Component {
       console.log(s2)
     );
   };
+
+  handleIngredientClear=item=>{
+    console.log(item);
+    // Axios.post("",{})
+  }
 
   handleCancel = () => {
     this.setState({

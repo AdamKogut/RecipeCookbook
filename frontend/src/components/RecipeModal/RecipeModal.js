@@ -135,7 +135,7 @@ class RecipeModal extends React.Component {
   };
 
   saveNotes = () => {
-    if (this.state.notes === this.state.notesOriginal) {
+    if (this.state.notes = this.state.notesOriginal) {
       this.noChangesAlert.current.open();
       return;
     }
@@ -184,9 +184,8 @@ class RecipeModal extends React.Component {
           that.setState({
             recipe: { ...that.state.recipe, rating: value }
           });
-        } else {
-          alert("Something went wrong, please try again");
         }
+          alert("Something went wrong, please try again");
       });
   };
 

@@ -23,7 +23,7 @@ class PlanningModal extends Component {
   changeDate = date => {
     let date2 =
       "" +
-      (date.getMonth() + 1) +
+      (date.getMonth()) +
       "/" +
       date.getDate() +
       "/" +
