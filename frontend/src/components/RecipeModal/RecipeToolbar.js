@@ -58,7 +58,7 @@ class RecipeToolbar extends Component {
     const ingredientList = [];
     const recipe = this.props.recipe;
 
-    for (let i = 0; i < recipe.extendedIngredients.length; i++) {
+    for (let i = 1; i < recipe.extendedIngredients.length; i++) {
       ingredientList.push(recipe.extendedIngredients[i].original);
     }
 

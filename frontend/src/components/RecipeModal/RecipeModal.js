@@ -184,9 +184,8 @@ class RecipeModal extends React.Component {
           that.setState({
             recipe: { ...that.state.recipe, rating: value }
           });
-        } else {
-          alert("Something went wrong, please try again");
         }
+          alert("Something went wrong, please try again");
       });
   };
 

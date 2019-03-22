@@ -136,7 +136,6 @@ class AddItemModal extends Component {
           />
           <div style={{ paddingLeft: "10px" }}>
             <DateFormatInput
-              value={this.state.date}
               onChange={this.changeDate}
               max={new Date()}
             />
