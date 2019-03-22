@@ -92,7 +92,7 @@ router.post('/', function(req, res, next) {
     let ingredientsArr = excludeIngredients.split(",");
 
     if(ingredientsArr.length > 1) {
-      url += 'excludeIngredients=';
+      url += 'includeIngredients=';
 
       let i;
       for(i = 0; i < ingredientsArr.length - 1; i++) {
@@ -102,7 +102,7 @@ router.post('/', function(req, res, next) {
       url += ingredientsArr[i] + '&';
     }
     else {
-      url += 'excludeIngredients=' + ingredientsArr[0] + '&';
+      url += 'includeIngredients=' + ingredientsArr[0] + '&';
     }
   }
 

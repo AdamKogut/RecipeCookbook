@@ -72,12 +72,6 @@ router.post('/', function(req, res, next) {
   result.toArray(function(err, result) {
     if (err) throw err;
 
-    for(let i = 0; i < result[0].recipes.length; i++) {
-      if(result[0].recipes[i].id === recipe.id) {
-        flag = false;
-      }
-    }
-
     if(flag) {
       myDBO.collection("users").updateOne({googleId: user}, {$push:{"recipes": recipe}}, () => {
         const resp = {

@@ -51,13 +51,10 @@ router.post('/', function(req, res, next){
       }
     }
 
-    if (!edit && exists) {
-      const resp = {
-        success: "Title must be unique"
-      };
+
 
       res.json(resp);
-    } else {
+    
       if(edit) {
         myDBO.collection("users").updateOne({ googleId: user }, { $pull: { groceryLists: { title: list.title } } }, () => {
           myDBO.collection("users").updateOne({googleId: user}, {$push:{"groceryLists": { $each: [list], $position: position}}}, () => {
@@ -77,7 +74,7 @@ router.post('/', function(req, res, next){
           res.json(resp);
         });
       }
-    }
+
   });
 });
 
