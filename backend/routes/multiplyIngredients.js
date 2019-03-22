@@ -26,7 +26,6 @@ router.post('/', function(req, res, next) {
 
     if(ingredients[i].unit !== "servings") {
       amount *= multiplier;
-      amount = Math.round(amount * 100) / 100;
       original = amount.toString();
 
       if (ingredients[i].unit.length !== 0)
