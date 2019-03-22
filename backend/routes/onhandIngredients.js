@@ -85,7 +85,7 @@ router.post('/update', function(req, res, next){
   let user = req.body.googleId;
   let ingredient = req.body.ingredients[0]; //the full ingredient object with updated values
 
-  myDBO.collection("users").updateOne({googleId: user, "onhandIngredients.ingredient": ingredient.ingredient}, {$set: {"onhandIngredients.$.quantity": ingredient.quantity, "onhandIngredients.$.unit": ingredient.unit, "onhandIngredients.$.date": ingredient.date}});
+  myDBO.collection("users").updateOne({googleId: user, "onhandIngredients.ingredient": ingredient.ingredient}, {$set: {"onhandIngredients.$.unit": ingredient.unit, "onhandIngredients.$.date": ingredient.date}});
 
   const resp = {
     success: true

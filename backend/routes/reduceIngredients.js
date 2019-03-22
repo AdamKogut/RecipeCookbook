@@ -28,11 +28,7 @@ router.post('/', function(req, res, next) {
       for(var j = 0; j < onHandResults.length; j++){
         if(ingredients[i].name === onHandResults[j].ingredient){
           let newAmount = onHandResults[j].quantity - ingredients[i].amount;
-          if(newAmount > 0){
-            myDBO.collection("users").updateOne({googleId: user, "onhandIngredients.ingredient": onHandResults[j].ingredient}, {$set: {"onhandIngredients.$.quantity": newAmount}});
-          }else{
-            myDBO.collection("users").updateOne({googleId: user}, {$pull: {onhandIngredients: {ingredient: onHandResults[j].ingredient}}});
-          }
+          myDBO.collection("users").updateOne({googleId: user, "onhandIngredients.ingredient": onHandResults[j].ingredient}, {$set: {"onhandIngredients.$.quantity": newAmount}});
         }
       }
     }

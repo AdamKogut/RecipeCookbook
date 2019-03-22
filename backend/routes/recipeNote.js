@@ -37,19 +37,6 @@ router.post('/', function(req, res, next){
   result.toArray(function(err, result){
     let notes = result[0].notes;
 
-    let found = false;
-    for (let i = 0; i < notes.length; i++) {
-      if (notes[i].recipeId === recipe) {
-        notes[i].note = note;
-        found = true;
-        break;
-      }
-    }
-
-    if (!found) {
-      notes.push({"recipeId": recipe, "note": note});
-    }
-
     console.log(notes);
 
     myDBO.collection("users").updateOne({googleId: user}, {$set: {"notes": notes}}, () => {

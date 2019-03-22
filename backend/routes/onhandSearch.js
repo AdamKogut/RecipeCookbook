@@ -36,8 +36,6 @@ router.post('/', function(req, res, next) {
         url += onHandIng.onhandIngredients[i].ingredient + '%2C';
         //console.log(onHandIng.onhandIngredients[i].ingredient)
       }
-
-      url += onHandIng.onhandIngredients[i].ingredient;
       //console.log(onHandIng.onhandIngredients[i]);
     }
     console.log(url);
