@@ -188,7 +188,7 @@ router.post('/delete', function(req,res,next){
       meals[meal] = recipes;
       var setobj = {};
       var obj = {};
-      if(meals["Breakfast"].length == 0 && meals["Lunch"].length == 0 && meals["Dinner"].length == 0){
+      if(meals["Breakfast"].length == 0 || meals["Lunch"].length == 0 || meals["Dinner"].length == 0){
         delete document.mealPlans[date];
         setobj = {$set: {mealPlans: document.mealPlans}}
       }

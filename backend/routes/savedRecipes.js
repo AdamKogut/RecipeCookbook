@@ -97,10 +97,18 @@ router.post('/', function(req, res, next) {
 });
 
 function ascend(a,b){
-  if(a.rating < b.rating){
+  if(a.rating === undefined){
+    console.log("\n"+a.rating);
+    return 0;
+  }
+  if(b.rating === undefined){
+    console.log("\n"+b.rating);
+    return 0;
+  }
+  if(a.rating > b.rating){
     return -1;
   }
-  else if(a.rating > b.rating){
+  else if(a.rating < b.rating){
     return 1;
   }
   else{
@@ -109,10 +117,19 @@ function ascend(a,b){
 }
 
 function descend(a,b){
-  if(a.rating < b.rating){
+
+  if(a.rating === undefined){
+    console.log("\n"+a.rating);
+    return 0;
+  }
+  if(typeof b.rating === undefined){
+    console.log("\n"+b.rating);
+    return 0;
+  }
+  if(a.rating > b.rating){
     return 1;
   }
-  else if(a.rating > b.rating){
+  else if(a.rating < b.rating){
     return -1;
   }
   else{

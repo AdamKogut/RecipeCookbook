@@ -5,7 +5,6 @@ import history from "../../history";
 
 class LogoutButton extends Component {
   handleLogout = () => {
-    document.cookie=`user=; expires=Thu, 01 Jan 1970 00:00:00 UTC`;
     window.location.href='http://localhost:3000';
   };
 
