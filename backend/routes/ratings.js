@@ -58,7 +58,7 @@ router.post('/', function(req,res,next){
       ratings[recipeId]=rating;
       console.log(ratings);
       
-      myDBO.collection("users").updateOne({googleId: user},{$set: {ratings: ratings}}, function(err, result){
+      myDBO.collection("users").updateOne({googleId: user},{$setOnInsert: {ratings: ratings}}, function(err, result){
         if(err){
           const resp = {
             success: false

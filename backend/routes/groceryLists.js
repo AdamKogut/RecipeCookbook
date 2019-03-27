@@ -53,7 +53,6 @@ router.post('/', function(req, res, next){
 
 
 
-      res.json(resp);
     
       if(edit) {
         myDBO.collection("users").updateOne({ googleId: user }, { $pull: { groceryLists: { title: list.title } } }, () => {
