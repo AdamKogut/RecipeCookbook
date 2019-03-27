@@ -97,6 +97,12 @@ router.post('/', function(req, res, next) {
 });
 
 function ascend(a,b){
+  if(a.rating === undefined){
+    return -1;
+  }
+  if(b.rating === undefined){
+    return 1;
+  }
   if(a.rating < b.rating){
     return -1;
   }
@@ -109,6 +115,12 @@ function ascend(a,b){
 }
 
 function descend(a,b){
+  if(a.rating === undefined){
+    return 1;
+  }
+  if(b.rating === undefined){
+    return -1;
+  }
   if(a.rating < b.rating){
     return 1;
   }
