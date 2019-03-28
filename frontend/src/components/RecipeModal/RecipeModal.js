@@ -176,7 +176,8 @@ class RecipeModal extends React.Component {
       .post("http://localhost:8080/ratings", {
         googleId: that.props.auth,
         recipeId: that.props.id,
-        rating: value
+        rating: value,
+        first: (that.state.recipe.rating==null)?true:false,
       })
       .then(response => {
         if (response.data.success) {
