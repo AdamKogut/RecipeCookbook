@@ -45,7 +45,7 @@ class mainSave extends Component {
   updateList = () => {
     let that = this;
     this.setState({isLoading:true,shownCards:[]})
-    Axios.get("http://localhost:8080/savedRecipes", {
+    Axios.get("https://nightin.xyz:8080/savedRecipes", {
       headers: {
         googleId: that.props.auth,
         sort: that.state.sort === "null" ? null : that.state.sort

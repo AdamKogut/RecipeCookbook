@@ -19,7 +19,7 @@ class RecipeSubstituter extends React.Component {
     });
 
     axios.get(
-      'http://localhost:8080/ingredientSubstitution',
+      'https://nightin.xyz:8080/ingredientSubstitution',
       {
         headers: {
           name: this.props.ingredientName

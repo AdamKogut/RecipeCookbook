@@ -31,7 +31,7 @@ class mainPlanning extends Component {
   componentDidMount = () => {
     let that = this;
     setTimeout(() => {
-      Axios.get("http://localhost:8080/meal/month", {
+      Axios.get("https://nightin.xyz:8080/meal/month", {
         headers: {
           googleId: that.props.auth,
           udate: `${new Date().getMonth() + 1}/1/${new Date().getFullYear()}`
@@ -60,7 +60,7 @@ class mainPlanning extends Component {
 
   changeMonth = event1 => {
     let that = this;
-    Axios.get("http://localhost:8080/meal/month", {
+    Axios.get("https://nightin.xyz:8080/meal/month", {
       headers: {
         googleId: that.props.auth,
         udate: `${event1.getMonth() + 1}/1/${event1.getFullYear()}`

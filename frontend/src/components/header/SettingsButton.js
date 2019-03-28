@@ -31,7 +31,7 @@ class SettingsButton extends Component {
 
   getExcluded = () => {
     let that = this;
-    Axios.get("http://localhost:8080/excludedIngredients", {
+    Axios.get("https://nightin.xyz:8080/excludedIngredients", {
       headers: { googleId: that.props.auth }
     }).then(function(response) {
       // console.log(response.data);
@@ -95,7 +95,7 @@ class SettingsButton extends Component {
 
   handleSubmit = () => {
     let that = this;
-    Axios.post("http://localhost:8080/excludedIngredients", {
+    Axios.post("https://nightin.xyz:8080/excludedIngredients", {
       googleId: that.props.auth,
       ingredients: that.state.excludedIngredients.substring(
         0,

@@ -48,7 +48,7 @@ class RecipeModal extends React.Component {
     if (this.props.type === "saved") {
       // Grab the saved list and extract out the necessary data
       axios
-        .get("http://localhost:8080/savedRecipes", {
+        .get("https://nightin.xyz:8080/savedRecipes", {
           headers: {
             googleId: this.props.auth
           }
@@ -68,7 +68,7 @@ class RecipeModal extends React.Component {
 
       // Grab the recipe notes if on the saved page
       axios
-        .get("http://localhost:8080/recipeNote", {
+        .get("https://nightin.xyz:8080/recipeNote", {
           headers: {
             googleId: this.props.auth
           }
@@ -91,7 +91,7 @@ class RecipeModal extends React.Component {
     } else {
       // Grab the recipe data from the api using props.id
       axios
-        .get("http://localhost:8080/recipeInfo", {
+        .get("https://nightin.xyz:8080/recipeInfo", {
           headers: {
             id: this.props.id,
             includeNutrition: "true"
@@ -145,7 +145,7 @@ class RecipeModal extends React.Component {
     });
 
     axios
-      .post("http://localhost:8080/recipeNote", {
+      .post("https://nightin.xyz:8080/recipeNote", {
         googleId: this.props.auth,
         recipeId: this.props.id,
         note: this.state.notes
@@ -173,7 +173,7 @@ class RecipeModal extends React.Component {
     let that = this;
 
     axios
-      .post("http://localhost:8080/ratings", {
+      .post("https://nightin.xyz:8080/ratings", {
         googleId: that.props.auth,
         recipeId: that.props.id,
         rating: value,

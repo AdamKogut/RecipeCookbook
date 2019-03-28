@@ -39,7 +39,7 @@ class PlanningModal extends Component {
     }
     //console.log(this.props)
     let that = this;
-    Axios.post("http://localhost:8080/meal", {
+    Axios.post("https://nightin.xyz:8080/meal", {
       googleId: that.props.auth,
       recipeId: that.props.recipe.id,
       recipeName: that.props.recipe.title,

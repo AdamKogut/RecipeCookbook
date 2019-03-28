@@ -32,7 +32,7 @@ class mainPantry extends Component {
 
   remove = item => {
     let that = this;
-    Axios.delete("http://localhost:8080/onhandIngredients", {
+    Axios.delete("https://nightin.xyz:8080/onhandIngredients", {
       data: {
         googleId: that.props.auth,
         ingredients: item
@@ -48,7 +48,7 @@ class mainPantry extends Component {
 
   removeAll = () => {
     let that = this;
-    Axios.post("http://localhost:8080/onhandIngredients/purge", {
+    Axios.post("https://nightin.xyz:8080/onhandIngredients/purge", {
       googleId: that.props.auth
     }).then(response => {
       if (response.data.success) {
@@ -60,7 +60,7 @@ class mainPantry extends Component {
   componentDidMount = () => {
     let that = this;
     setTimeout(() => {
-      Axios.get("http://localhost:8080/onhandIngredients", {
+      Axios.get("https://nightin.xyz:8080/onhandIngredients", {
         headers: { googleId: that.props.auth }
       }).then(response => {
         let e = [];

@@ -58,7 +58,7 @@ class AddItemModal extends Component {
       return;
     }
 
-    Axios.post("http://localhost:8080/onhandIngredients", {
+    Axios.post("https://nightin.xyz:8080/onhandIngredients", {
       googleId: that.props.auth,
       ingredients: [{
         ingredient: that.state.item.selectedItem[0],

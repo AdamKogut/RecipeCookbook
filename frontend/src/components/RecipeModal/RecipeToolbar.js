@@ -30,7 +30,7 @@ class RecipeToolbar extends Component {
 
   saveRecipe = () => {
     let that = this;
-    Axios.post("http://localhost:8080/savedRecipes", {
+    Axios.post("https://nightin.xyz:8080/savedRecipes", {
       googleId: that.props.auth,
       recipe: that.props.recipe
     }).then(() => {
@@ -44,7 +44,7 @@ class RecipeToolbar extends Component {
 
   removeRecipe = () => {
     let that = this;
-    Axios.post("http://localhost:8080/deleteSavedRecipe", {
+    Axios.post("https://nightin.xyz:8080/deleteSavedRecipe", {
       googleId: that.props.auth,
       deleteID: that.props.recipe.id
     }).then(() => {
@@ -62,7 +62,7 @@ class RecipeToolbar extends Component {
       ingredientList.push(recipe.extendedIngredients[i].original);
     }
 
-    Axios.post("http://localhost:8080/groceryLists", {
+    Axios.post("https://nightin.xyz:8080/groceryLists", {
       googleId: this.props.auth,
       list: {
         title: this.props.recipe.title,
@@ -76,7 +76,7 @@ class RecipeToolbar extends Component {
   componentDidMount = () => {
     if (this.props.auth) {
       let that = this;
-      Axios.get("http://localhost:8080/savedRecipes", {
+      Axios.get("https://nightin.xyz:8080/savedRecipes", {
         headers: { googleId: that.props.auth }
       }).then(function(response) {
         // console.log(response.data)
@@ -97,7 +97,7 @@ class RecipeToolbar extends Component {
   //Fix this when route is implemented
   removePlanning = () => {
     let that = this;
-    Axios.post("http://localhost:8080/meal/delete", {
+    Axios.post("https://nightin.xyz:8080/meal/delete", {
       googleId: that.props.auth,
       meal: that.props.meal,
       date: that.props.date,
@@ -187,7 +187,7 @@ class RecipeToolbar extends Component {
       return;
     }
 
-    Axios.post("http://localhost:8080/multiplyIngredients", {
+    Axios.post("https://nightin.xyz:8080/multiplyIngredients", {
       recipe: this.props.recipe,
       multiplier: this.state.quantity
     }).then(response => {
@@ -197,7 +197,7 @@ class RecipeToolbar extends Component {
 
   handleSubtract=()=>{
     let that=this;
-    Axios.post('http://localhost:8080/reduceIngredients',{
+    Axios.post('https://nightin.xyz:8080/reduceIngredients',{
       googleId:that.props.auth,
       ingredients:that.props.recipe.extendedIngredients
     }).then(response=>{

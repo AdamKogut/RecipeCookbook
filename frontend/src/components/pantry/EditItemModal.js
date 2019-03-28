@@ -61,7 +61,7 @@ class AddItemModal extends Component {
 
   handleSubmit = () => {
     let that = this;
-    Axios.post("http://localhost:8080/onhandIngredients/update", {
+    Axios.post("https://nightin.xyz:8080/onhandIngredients/update", {
       googleId: that.props.auth,
       ingredients:[{
         ingredient: that.state.item,

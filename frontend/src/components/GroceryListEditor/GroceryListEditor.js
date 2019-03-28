@@ -67,7 +67,7 @@ class GroceryListEditor extends React.Component {
     ingredientsList = ingredientsList.join("\n");
 
     if (this.props.add) {
-      Axios.post("http://localhost:8080/groceryLists", {
+      Axios.post("https://nightin.xyz:8080/groceryLists", {
         googleId: this.props.auth,
         list: {
           ...this.state.listEdit,
@@ -86,7 +86,7 @@ class GroceryListEditor extends React.Component {
           this.props.onSave();
       });
     } else {
-      Axios.post("http://localhost:8080/groceryLists", {
+      Axios.post("https://nightin.xyz:8080/groceryLists", {
         googleId: this.props.auth,
         list: {
           ...this.state.listEdit,

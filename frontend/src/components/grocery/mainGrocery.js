@@ -37,7 +37,7 @@ class mainGrocery extends Component {
     });
 
     setTimeout(() => {
-      Axios.get("http://localhost:8080/groceryLists", {
+      Axios.get("https://nightin.xyz:8080/groceryLists", {
         headers: {
           googleId: this.props.auth
         }
@@ -73,7 +73,7 @@ class mainGrocery extends Component {
   };
 
   deleteList = (name) => {
-    Axios.post("http://localhost:8080/deleteGroceryList", {
+    Axios.post("https://nightin.xyz:8080/deleteGroceryList", {
       googleId: this.props.auth,
       title: name
     }).then(()=>{

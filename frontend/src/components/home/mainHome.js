@@ -98,7 +98,7 @@ class mainHome extends Component {
     }
 
     // Set the results once we get them back from the server
-    axios.post("http://localhost:8080/search", query).then(response => {
+    axios.post("https://nightin.xyz:8080/search", query).then(response => {
       if (this.state.searchType !== "random")
         this.setState({
           results: response.data.body.results,
@@ -118,7 +118,7 @@ class mainHome extends Component {
         if (this.props.auth&&this.state.eingre) {
           let that = this;
           axios
-            .get("http://localhost:8080/excludedIngredients", {
+            .get("https://nightin.xyz:8080/excludedIngredients", {
               headers: { googleId: that.props.auth }
             })
             .then(function(response) {
@@ -175,7 +175,7 @@ class mainHome extends Component {
 
     // Set the results once we get them back from the server
     axios
-      .post("http://localhost:8080/randomsearch", {
+      .post("https://nightin.xyz:8080/randomsearch", {
         number: 16
       })
       .then(response => {
@@ -217,7 +217,7 @@ class mainHome extends Component {
     });
 
     // Set the results once we get them back from the server
-    axios.post("http://localhost:8080/onhandSearch", {
+    axios.post("https://nightin.xyz:8080/onhandSearch", {
       googleId: this.props.auth
     }).then(response => {
       console.log(response);

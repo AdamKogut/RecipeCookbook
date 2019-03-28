@@ -121,13 +121,13 @@ class RecipeModal extends React.Component {
     }
 
     // Delete the recipe from the db if it exists
-    Axios.post("http://localhost:8080/deleteSavedRecipe", {
+    Axios.post("https://nightin.xyz:8080/deleteSavedRecipe", {
       googleId: this.props.auth,
       deleteID: fillerValues.id
     }).then(()=>{
 
       // Now, actually save the recipe
-      Axios.post("http://localhost:8080/savedRecipes", {
+      Axios.post("https://nightin.xyz:8080/savedRecipes", {
         googleId: this.props.auth,
         recipe: {
           ...this.state.recipeEdit,
