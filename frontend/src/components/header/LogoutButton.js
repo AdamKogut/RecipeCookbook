@@ -5,7 +5,7 @@ import history from "../../history";
 
 class LogoutButton extends Component {
   handleLogout = () => {
-    window.location.href='http://localhost:3000';
+    window.location.href='https://night-in-12.firebaseapp.com/';
   };
 
   render() {
