@@ -54,11 +54,20 @@ router.post('/', function(req,res,next){
       var ratings = document.ratings;
       var recipeId = req.body.recipeId;
       var rating = req.body.rating;
+      var first = req.body.first;
       //console.log(obj);
+      var obj;
       ratings[recipeId]=rating;
+      if(first){
+        obj = {$set: {ratings: ratings}};
+      }
+      else{
+        obj = {$setOnInsert: {ratings: ratings}};
+      }
+      
       console.log(ratings);
       
-      myDBO.collection("users").updateOne({googleId: user},{$setOnInsert: {ratings: ratings}}, function(err, result){
+      myDBO.collection("users").updateOne({googleId: user},obj, function(err, result){
         if(err){
           const resp = {
             success: false
